@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 1024">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #263cc5;
+      }
+    </style>
+  </defs>
+  <g id="ScreenMask_Bleed">
+    <rect id="mask_outline" width="600" height="1024"/>
+    <path id="low_screen" class="cls-1" d="M107.53,523.22h384.95c24.19,0,43.83,19.64,43.83,43.83v384.95c0,24.19-19.64,43.83-43.83,43.83H107.53c-24.19,0-43.83-19.64-43.83-43.83v-384.94c0-24.19,19.64-43.83,43.83-43.83Z"/>
+    <path id="high_screen" class="cls-1" d="M107.53,28.19h384.94c24.19,0,43.83,19.64,43.83,43.83v384.95c0,24.19-19.64,43.83-43.83,43.83H107.53c-24.19,0-43.83-19.64-43.83-43.83V72.01c0-24.19,19.64-43.83,43.83-43.83Z"/>
+  </g>
+</svg>

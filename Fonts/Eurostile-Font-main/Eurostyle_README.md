@@ -1,0 +1,3 @@
+# Eurostile
+
+Eurostile is one of the most important designs from the Italian font designer Aldo Novarese. It was originally produced in 1962 by the Nebiolo foundry as a more complete version of the earlier Microgramma, a caps-only font designed by Novarese and A. Butti. Eurostile reflects the flavor and spirit of the 1950s and 1960s. It has big, squarish shapes with rounded corners that look like television sets from that era. Eurostile has sustained the ability to give text a dynamic, technological aura. It works well for headlines and small bodies of text. The Eurostile font family has 14 weights, from roman to bold and condensed to extended.

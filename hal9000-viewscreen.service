@@ -1,0 +1,22 @@
+[Unit]
+Description=HAL 9000 Viewscreen Display
+After=multi-user.target
+Wants=multi-user.target
+
+[Service]
+Type=simple
+User=pi
+Environment=DISPLAY=:0
+Environment=SDL_VIDEODRIVER=kms
+WorkingDirectory=INSTALL_DIR
+ExecStart=/usr/bin/python3 INSTALL_DIR/hal_viewscreen.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# Give time for display to initialize on boot
+ExecStartPre=/bin/sleep 5
+
+[Install]
+WantedBy=multi-user.target
