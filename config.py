@@ -12,7 +12,8 @@ import os
 # Paths
 # ---------------------------------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-VIDEO_DIR = os.path.join(BASE_DIR, "Video")
+ANIMATIONS_DIR = os.path.join(BASE_DIR, "Animations")
+VIDEO_DIR = ANIMATIONS_DIR if os.path.isdir(ANIMATIONS_DIR) else os.path.join(BASE_DIR, "Video")
 FONT_DIR = os.path.join(
     BASE_DIR, "Fonts", "Eurostile-Font-main",
     "Eurostile KFB (Self-created)"
@@ -77,18 +78,18 @@ FONT_SIZE_SUBTITLE = 17       # Subtitle text (16.72px in SVG)
 # Fallback used only if Function.json is missing/malformed, so the app can
 # still start. Matches the original static design (every panel red).
 _FALLBACK_FUNCTIONS = [
-    {"code": "ATM", "name": "Spacecraft Atmosphere Monitoring", "subtitle": "O2N: 14-RA"},
-    {"code": "CNT", "name": "Control",                         "subtitle": "SYS: 09-MX"},
-    {"code": "COM", "name": "Communications",                  "subtitle": "FRQ: 31-AE"},
+    {"code": "ATM", "name": "Spacecraft Atmosphere Monitoring", "subtitle": "MRN: 80-EJ"},
+    {"code": "CNT", "name": "Control",                         "subtitle": "VER: 80-KJ"},
+    {"code": "COM", "name": "Communications",                  "subtitle": "PMT: 26-07"},
     {"code": "DMG", "name": "System Damage",                   "subtitle": "GPM: 72-KC"},
-    {"code": "FLX", "name": "Flight Dynamics",                 "subtitle": "DYN: 58-PL"},
-    {"code": "GDE", "name": "Guidance Data Extension",         "subtitle": "NAV: 43-QR"},
-    {"code": "HIB", "name": "Hibernation",                     "subtitle": "CRY: 06-TB"},
-    {"code": "LIF", "name": "Life Support",                    "subtitle": "ENV: 21-SG"},
-    {"code": "MEM", "name": "Memory",                          "subtitle": "BNK: 88-FH"},
-    {"code": "NAV", "name": "Navigation",                      "subtitle": "TRJ: 55-WD"},
-    {"code": "NUC", "name": "Nuclear Reactor Status",          "subtitle": "RCT: 37-JN"},
-    {"code": "VEH", "name": "Vehicle Status",                  "subtitle": "HUL: 64-BV"},
+    {"code": "FLX", "name": "Flight Dynamics",                 "subtitle": "ATA: 48-12"},
+    {"code": "GDE", "name": "Guidance Data Extension",         "subtitle": "LIF: 13-AG"},
+    {"code": "HIB", "name": "Hibernation",                     "subtitle": "STA: 35-05"},
+    {"code": "LIF", "name": "Life Support",                    "subtitle": "ATA: 61-08"},
+    {"code": "MEM", "name": "Memory",                          "subtitle": "PMT: 49-XB"},
+    {"code": "NAV", "name": "Navigation",                      "subtitle": "RTE: 09-EF"},
+    {"code": "NUC", "name": "Nuclear Reactor Status",          "subtitle": "AQS: 64-VN"},
+    {"code": "VEH", "name": "Vehicle Status",                  "subtitle": "LIN: 86-QW"},
 ]
 for _f in _FALLBACK_FUNCTIONS:
     _f["color"] = COLOR_PANEL_RED

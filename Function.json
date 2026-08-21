@@ -2,7 +2,7 @@
   {
     "code": "ATM",
     "name": "Spacecraft Atmosphere Monitoring",
-    "subtitle": "O2N: 14-RA",
+    "subtitle": "MRN: 80-EJ",
     "color_name": "Crimson Red",
     "color_category": "Red",
     "hex": "#9D0032",
@@ -17,7 +17,7 @@
   {
     "code": "CNT",
     "name": "Control",
-    "subtitle": "SYS: 09-MX",
+    "subtitle": "VER: 80-KJ",
     "color_name": "Sage Green",
     "color_category": "Green",
     "hex": "#426F49",
@@ -32,7 +32,7 @@
   {
     "code": "COM",
     "name": "Communications",
-    "subtitle": "FRQ: 31-AE",
+    "subtitle": "PMT: 26-07",
     "color_name": "Plum Magenta",
     "color_category": "Purple",
     "hex": "#733863",
@@ -62,7 +62,7 @@
   {
     "code": "FLX",
     "name": "Flight Dynamics",
-    "subtitle": "DYN: 58-PL",
+    "subtitle": "ATA: 48-12",
     "color_name": "Royal Blue",
     "color_category": "Blue",
     "hex": "#294194",
@@ -77,7 +77,7 @@
   {
     "code": "GDE",
     "name": "Guidance Data Extension",
-    "subtitle": "NAV: 43-QR",
+    "subtitle": "LIF: 13-AG",
     "color_name": "Cerulean Blue",
     "color_category": "Blue",
     "hex": "#2C4DA1",
@@ -92,7 +92,7 @@
   {
     "code": "HIB",
     "name": "Hibernation",
-    "subtitle": "CRY: 06-TB",
+    "subtitle": "STA: 35-05",
     "color_name": "Dark Teal",
     "color_category": "Teal / Green",
     "hex": "#074941",
@@ -107,7 +107,7 @@
   {
     "code": "LIF",
     "name": "Life Support",
-    "subtitle": "ENV: 21-SG",
+    "subtitle": "ATA: 61-08",
     "color_name": "Rose Magenta",
     "color_category": "Red / Magenta",
     "hex": "#9E214B",
@@ -122,7 +122,7 @@
   {
     "code": "MEM",
     "name": "Memory",
-    "subtitle": "BNK: 88-FH",
+    "subtitle": "PMT: 49-XB",
     "color_name": "Slate Steel Blue",
     "color_category": "Blue",
     "hex": "#17395A",
@@ -137,7 +137,7 @@
   {
     "code": "NAV",
     "name": "Navigation",
-    "subtitle": "TRJ: 55-WD",
+    "subtitle": "RTE: 09-EF",
     "color_name": "Deep Violet",
     "color_category": "Purple",
     "hex": "#52316B",
@@ -152,7 +152,7 @@
   {
     "code": "NUC",
     "name": "Nuclear Reactor Status",
-    "subtitle": "RCT: 37-JN",
+    "subtitle": "AQS: 64-VN",
     "color_name": "Midnight Navy",
     "color_category": "Blue",
     "hex": "#0F1738",
@@ -167,7 +167,7 @@
   {
     "code": "VEH",
     "name": "Vehicle Status",
-    "subtitle": "HUL: 64-BV",
+    "subtitle": "LIN: 86-QW",
     "color_name": "Cobalt Blue",
     "color_category": "Blue",
     "hex": "#2C4DA1",

@@ -61,20 +61,20 @@ journalctl -u hal9000-viewscreen -f        # Live logs
 
 ## System Functions
 
-| Code | System | Subtitle |
-|---|---|---|
-| ATM | Spacecraft Atmosphere Monitoring | O2N: 14-RA |
-| CNT | Control | SYS: 09-MX |
-| COM | Communications | FRQ: 31-AE |
-| DMG | System Damage | GPM: 72-KC |
-| FLX | Flight Dynamics | DYN: 58-PL |
-| GDE | Guidance Data Extension | NAV: 43-QR |
-| HIB | Hibernation | CRY: 06-TB |
-| LIF | Life Support | ENV: 21-SG |
-| MEM | Memory | BNK: 88-FH |
-| NAV | Navigation | TRJ: 55-WD |
-| NUC | Nuclear Reactor Status | RCT: 37-JN |
-| VEH | Vehicle Status | HUL: 64-BV |
+| Code | System | Subtitle | Panel Color |
+|---|---|---|---|
+| ATM | Spacecraft Atmosphere Monitoring | MRN: 80-EJ | Crimson Red (`#9D0032`) |
+| CNT | Control | VER: 80-KJ | Sage Green (`#426F49`) |
+| COM | Communications | PMT: 26-07 | Plum Magenta (`#733863`) |
+| DMG | System Damage | GPM: 72-KC | Bright Crimson (`#C10341`) |
+| FLX | Flight Dynamics | ATA: 48-12 | Royal Blue (`#294194`) |
+| GDE | Guidance Data Extension | LIF: 13-AG | Cerulean Blue (`#2C4DA1`) |
+| HIB | Hibernation | STA: 35-05 | Dark Teal (`#074941`) |
+| LIF | Life Support | ATA: 61-08 | Rose Magenta (`#9E214B`) |
+| MEM | Memory | PMT: 49-XB | Slate Steel Blue (`#17395A`) |
+| NAV | Navigation | RTE: 09-EF | Deep Violet (`#52316B`) |
+| NUC | Nuclear Reactor Status | AQS: 64-VN | Midnight Navy (`#0F1738`) |
+| VEH | Vehicle Status | LIN: 86-QW | Cobalt Blue (`#2C4DA1`) |
 
 ## Architecture
 
