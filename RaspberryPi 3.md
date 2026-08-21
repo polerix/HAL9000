@@ -103,7 +103,7 @@ hal_viewscreen.py      Main application (Pygame)
 │   │                  │   │
 │   │   LOWER SCREEN   │   │
 │   │   (video area)   │   │
-│   │   mpv playback   │   │
+│   │   video playback │   │
 │   │                  │   │
 │   └──────────────────┘   │  996px
 │          (black)          │
@@ -123,7 +123,8 @@ hal_viewscreen.py      Main application (Pygame)
 
 ## Notes
 
-- Videos are 4K source files played back at 473×473px — mpv handles the downscaling efficiently with hardware decoding
+- Videos are 4K source files decoded via OpenCV and drawn directly onto the pygame surface (in-process, same window as the rest of the UI — no separate player window). Frames are resized down to 473×473px each draw call.
+- This is software decoding, not hardware-accelerated. On a Pi 3 this may not sustain smooth playback of full 4K source files — if you see dropped frames or high CPU, pre-transcode the videos in `Video/` down to roughly panel resolution (e.g. `ffmpeg -i in.mp4 -vf scale=473:473 out.mp4`) so decode cost matches what's actually displayed.
 - The `set_function()` API in `FunctionController` is ready for external control (Arduino serial, network, etc.)
 - Cycle interval is configurable in `config.py` (`CYCLE_INTERVAL_SEC`)
 - Font rendering uses Eurostile KFB Bold Extended (matching the movie prop typography)

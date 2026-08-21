@@ -89,9 +89,3 @@ FUNCTIONS = [
 # ---------------------------------------------------------------------------
 CYCLE_INTERVAL_SEC = 30       # Seconds between function changes
 FPS = 30                      # Pygame framerate cap
-
-# ---------------------------------------------------------------------------
-# Video Player
-# ---------------------------------------------------------------------------
-# mpv is preferred for RPi hardware decoding; omxplayer as fallback
-VIDEO_PLAYER = "mpv"          # or "omxplayer"

@@ -94,7 +94,8 @@ hal_viewscreen.py      Main application (Pygame)
 
 ## Notes
 
-- Videos are 4K source files played back at 473×473px — mpv handles the downscaling efficiently with hardware decoding
+- Video playback is fully in-window: frames are decoded with OpenCV and drawn directly onto the same pygame surface as the rest of the UI, rather than shelling out to an external player. There is no separate OS-level video window to position — the whole display is one window.
+- This is software decoding. See [`RaspberryPi 3.md`](RaspberryPi%203.md) for a note on Pi 3 performance if you deploy there.
 - The `set_function()` API in `FunctionController` is ready for external control (Arduino serial, network, etc.)
 - Cycle interval is configurable in `config.py` (`CYCLE_INTERVAL_SEC`)
 - Font rendering uses Eurostile KFB Bold Extended (matching the movie prop typography)

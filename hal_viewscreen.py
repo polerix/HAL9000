@@ -18,10 +18,10 @@ import sys
 import glob
 import random
 import signal
-import subprocess
 import time
 import argparse
 
+import cv2
 import pygame
 import pygame.gfxdraw
 
@@ -33,7 +33,7 @@ from config import (
     FONT_BOLD_EXTENDED, FONT_EXTENDED, FONT_REGULAR,
     FONT_SIZE_CODE, FONT_SIZE_SUBTITLE,
     FUNCTIONS, VIDEO_DIR,
-    CYCLE_INTERVAL_SEC, FPS, VIDEO_PLAYER,
+    CYCLE_INTERVAL_SEC, FPS,
 )
 
 
@@ -80,27 +80,16 @@ def scan_videos(video_dir: str) -> dict:
 # Rounded Rectangle Drawing
 # ---------------------------------------------------------------------------
 
-def draw_rounded_rect(surface, rect, color, radius):
+def draw_rounded_rect(surface, rect, color, radius=None):
     """
-    Draw a filled rounded rectangle using pygame.gfxdraw for anti-aliased edges.
+    Draw a filled rectangle with square corners.
+
+    (Corners were previously rounded via pygame.gfxdraw circles, but the
+    anti-aliased corner circles blended against the surface's existing
+    pixels and left a faint dark outline. Square corners avoid that
+    artifact entirely, so the rounding path was removed.)
     """
-    x, y, w, h = rect
-    r = min(radius, w // 2, h // 2)
-
-    # Central rectangles (no overlap with corners)
-    pygame.draw.rect(surface, color, (x + r, y, w - 2 * r, h))
-    pygame.draw.rect(surface, color, (x, y + r, w, h - 2 * r))
-
-    # Four corner circles
-    corners = [
-        (x + r,     y + r),          # top-left
-        (x + w - r - 1, y + r),      # top-right
-        (x + r,     y + h - r - 1),  # bottom-left
-        (x + w - r - 1, y + h - r - 1),  # bottom-right
-    ]
-    for cx, cy in corners:
-        pygame.gfxdraw.aacircle(surface, cx, cy, r, color)
-        pygame.gfxdraw.filled_circle(surface, cx, cy, r, color)
+    pygame.draw.rect(surface, color, rect)
 
 
 # ---------------------------------------------------------------------------
@@ -172,121 +161,94 @@ class HighScreenPanel:
 
 class VideoPlayer:
     """
-    Manages video playback in the lower screen area using mpv (subprocess).
-    mpv is positioned/sized to match the low_screen panel bounds and
-    uses hardware decoding on Raspberry Pi.
+    Decodes video frames (via OpenCV) and draws them directly onto the
+    lower screen panel of the main pygame surface.
+
+    This renders in-process rather than shelling out to an external
+    player, so playback is always part of the same window as the rest
+    of the UI — there is no separate OS-level player window to
+    position, and no window chrome (title bar, rounded corners,
+    dragging) to fight with.
     """
 
     def __init__(self):
-        self._process = None
+        self._cap = None
         self._current_path = None
+        self._frame_interval = 1.0 / 30.0
+        self._next_frame_at = 0.0
+        self._surface = None
 
     def play(self, video_path: str):
         """Start playing a video file. Stops any current playback first."""
-        if video_path == self._current_path and self._is_playing():
+        if video_path == self._current_path and self._cap is not None:
             return  # Already playing this video
 
         self.stop()
-        self._current_path = video_path
 
         if not os.path.isfile(video_path):
             print(f"[WARN] Video file not found: {video_path}")
             return
 
+        cap = cv2.VideoCapture(video_path)
+        if not cap.isOpened():
+            print(f"[WARN] Failed to open video: {video_path}")
+            cap.release()
+            return
+
+        self._cap = cap
+        self._current_path = video_path
+        fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
+        self._frame_interval = 1.0 / fps
+        self._next_frame_at = 0.0
+        self._surface = None
         print(f"[INFO] Playing: {os.path.basename(video_path)}")
 
-        if VIDEO_PLAYER == "mpv":
-            self._play_mpv(video_path)
-        else:
-            self._play_omxplayer(video_path)
-
-    def _play_mpv(self, video_path: str):
-        """Launch mpv with geometry matching the lower screen panel."""
-        # mpv geometry: WxH+X+Y
-        geometry = f"{PANEL_WIDTH}x{PANEL_HEIGHT}+{LOW_SCREEN_X}+{LOW_SCREEN_Y}"
-
-        cmd = [
-            "mpv",
-            "--no-terminal",
-            "--no-osc",                    # No on-screen controls
-            "--no-input-default-bindings",  # Disable keyboard shortcuts
-            "--loop-file=inf",              # Loop indefinitely
-            "--hwdec=auto",                 # Hardware decoding (RPi MMAL/V4L2)
-            "--vo=gpu",                     # GPU video output
-            f"--geometry={geometry}",
-            "--no-border",                  # Borderless window
-            "--ontop",                      # Keep on top
-            "--no-keepaspect",              # Fill the panel exactly
-            "--really-quiet",
-            video_path,
-        ]
-
-        try:
-            self._process = subprocess.Popen(
-                cmd,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-        except FileNotFoundError:
-            print("[ERROR] mpv not found. Install with: sudo apt install mpv")
-            self._process = None
-
-    def _play_omxplayer(self, video_path: str):
-        """Fallback: launch omxplayer with window bounds."""
-        # omxplayer uses --win "x1 y1 x2 y2"
-        x1, y1 = LOW_SCREEN_X, LOW_SCREEN_Y
-        x2 = x1 + PANEL_WIDTH
-        y2 = y1 + PANEL_HEIGHT
-
-        cmd = [
-            "omxplayer",
-            "--loop",
-            "--no-osd",
-            "--aspect-mode", "stretch",
-            "--win", f"{x1} {y1} {x2} {y2}",
-            video_path,
-        ]
-
-        try:
-            self._process = subprocess.Popen(
-                cmd,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-        except FileNotFoundError:
-            print("[ERROR] omxplayer not found. Install with: sudo apt install omxplayer")
-            self._process = None
-
-    def _is_playing(self) -> bool:
-        """Check if the video subprocess is still running."""
-        return self._process is not None and self._process.poll() is None
-
     def stop(self):
-        """Terminate the current video playback."""
-        if self._process is not None:
-            try:
-                self._process.terminate()
-                self._process.wait(timeout=3)
-            except subprocess.TimeoutExpired:
-                self._process.kill()
-                self._process.wait()
-            except Exception:
-                pass
-            self._process = None
-            self._current_path = None
+        """Release the current video."""
+        if self._cap is not None:
+            self._cap.release()
+        self._cap = None
+        self._current_path = None
+        self._surface = None
 
-    def draw_placeholder(self, screen):
+    def update(self):
         """
-        Draw a black rounded rect in the lower screen area when no video plays.
-        The video player window overlays on top of this.
+        Advance playback if enough real time has passed for the next
+        frame, looping back to the start on end-of-stream. Call once
+        per app frame before draw().
         """
-        draw_rounded_rect(
-            screen,
-            (LOW_SCREEN_X, LOW_SCREEN_Y, PANEL_WIDTH, PANEL_HEIGHT),
-            COLOR_BLACK,
-            PANEL_CORNER_RADIUS,
+        if self._cap is None:
+            return
+
+        now = time.monotonic()
+        if self._surface is not None and now < self._next_frame_at:
+            return  # Not time for the next frame yet
+
+        ok, frame = self._cap.read()
+        if not ok:
+            self._cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            ok, frame = self._cap.read()
+            if not ok:
+                return  # Corrupt/empty video; keep showing last good frame
+
+        frame = cv2.resize(frame, (PANEL_WIDTH, PANEL_HEIGHT), interpolation=cv2.INTER_AREA)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        self._surface = pygame.image.frombuffer(
+            frame.tobytes(), (PANEL_WIDTH, PANEL_HEIGHT), "RGB"
         )
+        self._next_frame_at = now + self._frame_interval
+
+    def draw(self, screen):
+        """Draw the current video frame, or a black placeholder if none."""
+        if self._surface is not None:
+            screen.blit(self._surface, (LOW_SCREEN_X, LOW_SCREEN_Y))
+        else:
+            draw_rounded_rect(
+                screen,
+                (LOW_SCREEN_X, LOW_SCREEN_Y, PANEL_WIDTH, PANEL_HEIGHT),
+                COLOR_BLACK,
+                PANEL_CORNER_RADIUS,
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -447,7 +409,8 @@ class HALViewscreen:
             # Render frame
             self._screen.fill(COLOR_BLACK)
             self._high_panel.draw(self._screen)
-            self._video_player.draw_placeholder(self._screen)
+            self._video_player.update()
+            self._video_player.draw(self._screen)
 
             pygame.display.flip()
             self._clock.tick(FPS)

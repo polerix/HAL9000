@@ -25,11 +25,11 @@ apt-get install -y -qq \
     python3 \
     python3-pip \
     python3-pygame \
-    mpv \
+    python3-opencv \
     fonts-freefont-ttf \
     > /dev/null 2>&1
 
-echo "  ✓ python3, pygame, mpv installed"
+echo "  ✓ python3, pygame, opencv installed"
 
 # ---------------------------------------------------------------------------
 # 2. Python dependencies
@@ -37,7 +37,7 @@ echo "  ✓ python3, pygame, mpv installed"
 echo "[2/6] Installing Python dependencies..."
 pip3 install -r "${SCRIPT_DIR}/requirements.txt" --quiet 2>/dev/null || \
     pip3 install -r "${SCRIPT_DIR}/requirements.txt" --quiet --break-system-packages 2>/dev/null || \
-    echo "  ⚠ pip install skipped (system pygame should suffice)"
+    echo "  ⚠ pip install skipped (system python3-pygame/python3-opencv should suffice)"
 
 echo "  ✓ Python dependencies ready"
 
