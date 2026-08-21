@@ -5,6 +5,7 @@ Layout constants extracted from 600x1024_VideoScreen_Layout_bleed.svg
 and example_panel.svg. All coordinates are in pixels for 600x1024 portrait display.
 """
 
+import json
 import os
 
 # ---------------------------------------------------------------------------
@@ -16,6 +17,7 @@ FONT_DIR = os.path.join(
     BASE_DIR, "Fonts", "Eurostile-Font-main",
     "Eurostile KFB (Self-created)"
 )
+FUNCTION_DATA_PATH = os.path.join(BASE_DIR, "Function.json")
 
 # Eurostile KFB font files (matching the example_panel.svg styles)
 FONT_BOLD_EXTENDED = os.path.join(FONT_DIR, "Eurostile KFB Bold Extended.ttf")
@@ -66,10 +68,15 @@ FONT_SIZE_SUBTITLE = 17       # Subtitle text (16.72px in SVG)
 # ---------------------------------------------------------------------------
 # Function Definitions
 # ---------------------------------------------------------------------------
-# Each function has: code, full name, subtitle (HAL-authentic identifier)
+# Each function has: code, full name, subtitle (HAL-authentic identifier),
+# and its own high-screen panel color. Loaded from Function.json, which is
+# the source of truth for this data (colors curated per-system: reds for
+# damage/life-critical systems, blues for navigation/reactor, etc).
 # Subtitles follow the example_panel.svg pattern: "GPM: 72-KC"
 
-FUNCTIONS = [
+# Fallback used only if Function.json is missing/malformed, so the app can
+# still start. Matches the original static design (every panel red).
+_FALLBACK_FUNCTIONS = [
     {"code": "ATM", "name": "Spacecraft Atmosphere Monitoring", "subtitle": "O2N: 14-RA"},
     {"code": "CNT", "name": "Control",                         "subtitle": "SYS: 09-MX"},
     {"code": "COM", "name": "Communications",                  "subtitle": "FRQ: 31-AE"},
@@ -83,6 +90,41 @@ FUNCTIONS = [
     {"code": "NUC", "name": "Nuclear Reactor Status",          "subtitle": "RCT: 37-JN"},
     {"code": "VEH", "name": "Vehicle Status",                  "subtitle": "HUL: 64-BV"},
 ]
+for _f in _FALLBACK_FUNCTIONS:
+    _f["color"] = COLOR_PANEL_RED
+    _f["text_color"] = COLOR_TEXT_WHITE
+
+
+def _hex_to_rgb(hex_str):
+    hex_str = hex_str.lstrip("#")
+    return tuple(int(hex_str[i:i + 2], 16) for i in (0, 2, 4))
+
+
+def _load_functions():
+    try:
+        with open(FUNCTION_DATA_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        functions = []
+        for entry in data:
+            color = tuple(entry["rgb"]) if "rgb" in entry else _hex_to_rgb(entry["hex"])
+            text_color = _hex_to_rgb(entry["text_color"]) if "text_color" in entry else COLOR_TEXT_WHITE
+            functions.append({
+                "code": entry["code"],
+                "name": entry["name"],
+                "subtitle": entry["subtitle"],
+                "color": color,
+                "text_color": text_color,
+            })
+        if not functions:
+            raise ValueError("Function.json contained no entries")
+        return functions
+    except (OSError, ValueError, KeyError, TypeError) as e:
+        print(f"[WARN] Could not load {FUNCTION_DATA_PATH} ({e}); using default red panels")
+        return _FALLBACK_FUNCTIONS
+
+
+FUNCTIONS = _load_functions()
+FUNCTION_BY_CODE = {f["code"]: f for f in FUNCTIONS}
 
 # ---------------------------------------------------------------------------
 # Timing

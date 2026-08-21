@@ -32,7 +32,7 @@ from config import (
     COLOR_BLACK, COLOR_PANEL_RED, COLOR_TEXT_WHITE,
     FONT_BOLD_EXTENDED, FONT_EXTENDED, FONT_REGULAR,
     FONT_SIZE_CODE, FONT_SIZE_SUBTITLE,
-    FUNCTIONS, VIDEO_DIR,
+    FUNCTIONS, FUNCTION_BY_CODE, VIDEO_DIR,
     CYCLE_INTERVAL_SEC, FPS,
 )
 
@@ -115,9 +115,18 @@ class HighScreenPanel:
             self.font_code = pygame.font.SysFont("monospace", FONT_SIZE_CODE, bold=True)
             self.font_subtitle = pygame.font.SysFont("monospace", FONT_SIZE_SUBTITLE)
 
-        # Pre-render panel background surface (reused across frames)
-        self._bg_surface = pygame.Surface((PANEL_WIDTH, PANEL_HEIGHT), pygame.SRCALPHA)
-        draw_rounded_rect(self._bg_surface, (0, 0, PANEL_WIDTH, PANEL_HEIGHT),
+        # Pre-render one colored background per function (color sourced from
+        # Function.json via config.FUNCTION_BY_CODE), so each system gets
+        # its own panel color instead of a single fixed red.
+        self._bg_surfaces = {}
+        for code, func in FUNCTION_BY_CODE.items():
+            surface = pygame.Surface((PANEL_WIDTH, PANEL_HEIGHT), pygame.SRCALPHA)
+            draw_rounded_rect(surface, (0, 0, PANEL_WIDTH, PANEL_HEIGHT),
+                              func.get("color", COLOR_PANEL_RED), PANEL_CORNER_RADIUS)
+            self._bg_surfaces[code] = surface
+
+        self._default_bg = pygame.Surface((PANEL_WIDTH, PANEL_HEIGHT), pygame.SRCALPHA)
+        draw_rounded_rect(self._default_bg, (0, 0, PANEL_WIDTH, PANEL_HEIGHT),
                           COLOR_PANEL_RED, PANEL_CORNER_RADIUS)
 
         self._current_code = None
@@ -132,19 +141,22 @@ class HighScreenPanel:
         self._current_code = code
         self._current_subtitle = subtitle
 
+        func = FUNCTION_BY_CODE.get(code, {})
+        text_color = func.get("text_color", COLOR_TEXT_WHITE)
+
         # Compose panel surface
-        self._panel_surface = self._bg_surface.copy()
+        self._panel_surface = self._bg_surfaces.get(code, self._default_bg).copy()
 
         # Render the 3-letter code – centered, slightly below vertical center
         # (matching SVG: text at y=267.83 out of 472.5 → ~56.6% down)
-        code_surface = self.font_code.render(code, True, COLOR_TEXT_WHITE)
+        code_surface = self.font_code.render(code, True, text_color)
         code_x = (PANEL_WIDTH - code_surface.get_width()) // 2
         code_y = int(PANEL_HEIGHT * 0.45) - code_surface.get_height() // 2
         self._panel_surface.blit(code_surface, (code_x, code_y))
 
         # Render subtitle – centered, above the code
         # (matching SVG: text at y=189.92 out of 472.5 → ~40.2% down)
-        sub_surface = self.font_subtitle.render(subtitle, True, COLOR_TEXT_WHITE)
+        sub_surface = self.font_subtitle.render(subtitle, True, text_color)
         sub_x = (PANEL_WIDTH - sub_surface.get_width()) // 2
         sub_y = int(PANEL_HEIGHT * 0.34) - sub_surface.get_height() // 2
         self._panel_surface.blit(sub_surface, (sub_x, sub_y))
