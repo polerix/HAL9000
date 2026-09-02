@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HAL 9000 Terminal — Viewscreen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: #000000;
+      color: #f1f1f1;
+      font-family: 'Eurostile', 'Microgramma', 'Michroma', 'Orbitron', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background-image: radial-gradient(circle at 50% 50%, #0a0a0f 0%, #000000 100%);
+    }
+
+    /* Outer bezel container to simulate the exact 600x1024 portrait display */
+    #terminal-wrapper {
+      position: relative;
+      width: 600px;
+      height: 1024px;
+      max-width: 100vw;
+      max-height: 100vh;
+      background-color: #000000;
+      box-shadow: 0 0 50px rgba(193, 3, 65, 0.2), 0 0 100px rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform-origin: center center;
+    }
+
+    /* Screen Panels */
+    .screen-panel {
+      position: absolute;
+      left: 64px;
+      width: 473px;
+      height: 473px;
+      border-radius: 44px;
+      overflow: hidden;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.45);
+    }
+
+    /* High Screen - System Function Panel */
+    #high-screen {
+      top: 28px;
+      background-color: #c10341;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: absolute;
+      cursor: pointer;
+    }
+
+    /* Authentic panel subtle CRT / matte finish */
+    #high-screen::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 44px;
+      background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.12) 0%, transparent 65%),
+                  linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(0, 0, 0, 0.15) 100%);
+      pointer-events: none;
+    }
+
+    /* Panel Telemetry Accents */
+    .panel-header-tech {
+      position: absolute;
+      top: 48px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 55px;
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      color: rgba(241, 241, 241, 0.65);
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .function-subtitle {
+      position: absolute;
+      top: 152px;
+      width: 100%;
+      text-align: center;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      color: #f1f1f1;
+      text-transform: uppercase;
+      font-family: 'Michroma', 'Orbitron', sans-serif;
+    }
+
+    .function-code {
+      position: absolute;
+      top: 200px;
+      width: 100%;
+      text-align: center;
+      font-size: 71px;
+      font-weight: 900;
+      letter-spacing: 8px;
+      color: #f1f1f1;
+      line-height: 1;
+      text-transform: uppercase;
+      font-family: 'Orbitron', 'Michroma', sans-serif;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .function-title {
+      position: absolute;
+      top: 295px;
+      width: 100%;
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: rgba(241, 241, 241, 0.85);
+      font-family: 'Share Tech Mono', monospace;
+      padding: 0 40px;
+      text-transform: uppercase;
+    }
+
+    /* Cycle Progress bar */
+    .progress-bar-container {
+      position: absolute;
+      bottom: 50px;
+      width: 320px;
+      height: 4px;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: #f1f1f1;
+      transition: width 0.1s linear;
+    }
+
+    /* Low Screen - Video / Animated Visuals */
+    #low-screen {
+      top: 523px;
+      background-color: #000000;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #low-screen video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    #low-screen canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Bezel / HAL 9000 Badge Overlay */
+    .hal-center-badge {
+      position: absolute;
+      top: 501px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 28px;
+      height: 28px;
+      background: #111;
+      border-radius: 50%;
+      border: 2px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+      z-index: 10;
+    }
+
+    .hal-eye {
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle at 35% 35%, #fff 0%, #ff3b30 40%, #8b0000 85%, #000 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ff2a2a, 0 0 16px rgba(255, 42, 42, 0.6);
+      animation: pulse-eye 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse-eye {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.15); opacity: 1; filter: brightness(1.2); }
+    }
+
+    /* Controls Bar & Floating HUD (Hover / Touch) */
+    #hud-controls {
+      position: fixed;
+      bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(15, 15, 20, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 8px 18px;
+      border-radius: 30px;
+      z-index: 100;
+      opacity: 0.4;
+      transition: opacity 0.3s;
+    }
+
+    #hud-controls:hover {
+      opacity: 1;
+    }
+
+    .btn-control {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-control:hover {
+      background: #c10341;
+      border-color: #ff3366;
+    }
+
+    .btn-control.active {
+      background: #c10341;
+    }
+
+    #timer-display {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      color: #aaa;
+      min-width: 55px;
+      text-align: center;
+    }
+
+    /* Responsive scaling helper */
+    @media (max-height: 1040px) or (max-width: 620px) {
+      #terminal-wrapper {
+        transform: scale(calc(min(100vh / 1030, 100vw / 610)));
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="terminal-wrapper">
+    <!-- High Screen Panel: 473x473 at X=64, Y=28 -->
+    <div id="high-screen" class="screen-panel" title="Click to advance to next function">
+      <div class="panel-header-tech">
+        <span>CHK. PROG. 601</span>
+        <span id="screen-index-badge">01 / 12</span>
+      </div>
+      <div class="function-subtitle" id="function-subtitle">MRN: 80-EJ</div>
+      <div class="function-code" id="function-code">ATM</div>
+      <div class="function-title" id="function-title">Spacecraft Atmosphere Monitoring</div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </div>
+
+    <!-- HAL Center Eye Badge between panels -->
+    <div class="hal-center-badge">
+      <div class="hal-eye"></div>
+    </div>
+
+    <!-- Low Screen Panel: 473x473 at X=64, Y=523 -->
+    <div id="low-screen" class="screen-panel">
+      <!-- Standard HTML5 Video element for native repo MP4 video loops -->
+      <video id="function-video" loop muted playsinline></video>
+      <!-- Canvas Procedural Fallback / Standalone Graphics Generator -->
+      <canvas id="function-canvas" width="473" height="473"></canvas>
+    </div>
+  </div>
+
+  <!-- HUD Quick Controls -->
+  <div id="hud-controls">
+    <button class="btn-control" id="prev-btn" title="Previous Function (Left Arrow)">◀ PREV</button>
+    <button class="btn-control" id="play-pause-btn" title="Pause/Resume (Spacebar)">⏸ PAUSE</button>
+    <button class="btn-control" id="next-btn" title="Next Function (Right Arrow)">NEXT ▶</button>
+    <div id="timer-display">30s</div>
+    <button class="btn-control" id="sound-btn" title="Toggle Terminal Audio">🔊 SOUND</button>
+    <button class="btn-control" id="mode-btn" title="Toggle Video / Procedural Simulation">MODE: AUTO</button>
+    <button class="btn-control" id="fs-btn" title="Fullscreen">⛶ FULL</button>
+  </div>
+
+  <script>
+    /* System Functions Specification matching polerix/HAL9000 Function.json & config.py */
+    const SYSTEM_FUNCTIONS = [
+      {
+        code: "ATM",
+        subtitle: "MRN: 80-EJ",
+        fallbackSub: "O2N: 14-RA",
+        name: "Spacecraft Atmosphere Monitoring",
+        video: "Video/ATM.mp4",
+        anim: "Animations/ATM.mp4"
+      },
+      {
+        code: "CNT",
+        subtitle: "VER: 80-KJ",
+        fallbackSub: "SYS: 09-MX",
+        name: "Control Dynamics & Thrusters",
+        video: "Video/CNT.mp4",
+        anim: "Animations/CNT.mp4"
+      },
+      {
+        code: "COM",
+        subtitle: "PMT: 26-O7",
+        fallbackSub: "FRQ: 31-AE",
+        name: "Communications Telemetry",
+        video: "Video/COM.mp4",
+        anim: "Animations/COM.mp4"
+      },
+      {
+        code: "DMG",
+        subtitle: "GPM: 72-KC",
+        fallbackSub: "DMG: 72-KC",
+        name: "System Damage Analysis",
+        video: "Video/DMG.mp4",
+        anim: "Animations/DMG.mp4"
+      },
+      {
+        code: "FLX",
+        subtitle: "ATA: 48-12",
+        fallbackSub: "DYN: 58-PL",
+        name: "Flight Dynamics & Flexion",
+        video: "Video/FLX.mp4",
+        anim: "Animations/FLX.mp4"
+      },
+      {
+        code: "GDE",
+        subtitle: "LIF: 13-AG",
+        fallbackSub: "NAV: 43-QR",
+        name: "Guidance Data Extension",
+        video: "Video/GDE.mp4",
+        anim: "Animations/GDE.mp4"
+      },
+      {
+        code: "HIB",
+        subtitle: "STA: 35-O5",
+        fallbackSub: "CRY: 06-TB",
+        name: "Hibernation Life Telemetry",
+        video: "Video/HIB.mp4",
+        anim: "Animations/HIB.mp4"
+      },
+      {
+        code: "LIF",
+        subtitle: "ATA: 61-O8",
+        fallbackSub: "ENV: 21-SG",
+        name: "Life Support Regulation",
+        video: "Video/LIF.mp4",
+        anim: "Animations/LIF.mp4"
+      },
+      {
+        code: "MEM",
+        subtitle: "PMT: 49-XB",
+        fallbackSub: "BNK: 88-FH",
+        name: "Memory Core Matrix",
+        video: "Video/MEM.mp4",
+        anim: "Animations/MEM.mp4"
+      },
+      {
+        code: "NAV",
+        subtitle: "RTE: 09-EF",
+        fallbackSub: "TRJ: 55-WD",
+        name: "Navigation Orbital Course",
+        video: "Video/NAV.mp4",
+        anim: "Animations/NAV.mp4"
+      },
+      {
+        code: "NUC",
+        subtitle: "AQS: 64-VN",
+        fallbackSub: "RCT: 37-JN",
+        name: "Nuclear Reactor Core Status",
+        video: "Video/NUC.mp4",
+        anim: "Animations/NUC.mp4"
+      },
+      {
+        code: "VEH",
+        subtitle: "LIN: 86-QW",
+        fallbackSub: "HUL: 64-BV",
+        name: "Vehicle Discovery One Status",
+        video: "Video/VEH.mp4",
+        anim: "Animations/VEH.mp4"
+      }
+    ];
+
+    const CYCLE_INTERVAL_SEC = 30;
+    let currentIndex = 0;
+    let isPaused = false;
+    let timeElapsedInCycle = 0;
+    let audioEnabled = false;
+    let mode = "AUTO"; // "AUTO", "VIDEO", "CANVAS"
+    let audioCtx = null;
+
+    /* DOM elements */
+    const codeEl = document.getElementById('function-code');
+    const subtitleEl = document.getElementById('function-subtitle');
+    const titleEl = document.getElementById('function-title');
+    const indexBadgeEl = document.getElementById('screen-index-badge');
+    const progressBarEl = document.getElementById('progress-bar');
+    const timerDisplay = document.getElementById('timer-display');
+    const highScreen = document.getElementById('high-screen');
+    const videoEl = document.getElementById('function-video');
+    const canvas = document.getElementById('function-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const prevBtn = document.getElementById('prev-btn');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const soundBtn = document.getElementById('sound-btn');
+    const modeBtn = document.getElementById('mode-btn');
+    const fsBtn = document.getElementById('fs-btn');
+
+    /* Audio Synthesis */
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSwitchBeep() {
+      if (!audioEnabled || !audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      } catch (e) {}
+    }
+
+    function playRelayClick() {
+      if (!audioEnabled || !audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.04);
+      } catch (e) {}
+    }
+
+    /* Screen Transition */
+    function showFunction(index, playSound = true) {
+      currentIndex = (index + SYSTEM_FUNCTIONS.length) % SYSTEM_FUNCTIONS.length;
+      timeElapsedInCycle = 0;
+      const fn = SYSTEM_FUNCTIONS[currentIndex];
+
+      codeEl.innerText = fn.code;
+      subtitleEl.innerText = fn.subtitle;
+      titleEl.innerText = fn.name;
+      indexBadgeEl.innerText = `${String(currentIndex + 1).padStart(2, '0')} / 12`;
+
+      if (playSound) {
+        playSwitchBeep();
+      }
+
+      setupMedia(fn);
+    }
+
+    function setupMedia(fn) {
+      if (mode === "CANVAS") {
+        videoEl.style.display = 'none';
+        canvas.style.display = 'block';
+        videoEl.pause();
+        return;
+      }
+
+      // Try video first if in AUTO or VIDEO mode
+      let triedPaths = [fn.video, fn.anim];
+      let pathIdx = 0;
+
+      function tryNextPath() {
+        if (pathIdx < triedPaths.length) {
+          videoEl.src = triedPaths[pathIdx++];
+          videoEl.load();
+          videoEl.play().then(() => {
+            videoEl.style.display = 'block';
+            canvas.style.display = 'none';
+          }).catch(() => {
+            tryNextPath();
+          });
+        } else {
+          // Video failed or not found (e.g. running standalone without video repo clone)
+          videoEl.style.display = 'none';
+          canvas.style.display = 'block';
+        }
+      }
+
+      videoEl.onerror = tryNextPath;
+      tryNextPath();
+    }
+
+    /* Procedural Retro Sci-Fi Canvas Animations */
+    let animFrame = 0;
+    function renderCanvasAnimation() {
+      const fn = SYSTEM_FUNCTIONS[currentIndex];
+      const w = canvas.width;
+      const h = canvas.height;
+      animFrame++;
+
+      // Background
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, w, h);
+
+      // CRT Scanline subtle effect
+      ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+      for (let y = 0; y < h; y += 4) {
+        ctx.fillRect(0, y, w, 2);
+      }
+
+      ctx.save();
+
+      switch (fn.code) {
+        case "ATM": // Atmosphere Monitoring
+          drawAtmosphereScene(w, h);
+          break;
+        case "CNT": // Control Dynamics
+          drawControlScene(w, h);
+          break;
+        case "COM": // Communications
+          drawCommsScene(w, h);
+          break;
+        case "DMG": // System Damage
+          drawDamageScene(w, h);
+          break;
+        case "FLX": // Flight Dynamics
+          drawFlightScene(w, h);
+          break;
+        case "GDE": // Guidance Data Extension
+          drawGuidanceScene(w, h);
+          break;
+        case "HIB": // Hibernation
+          drawHibernationScene(w, h);
+          break;
+        case "LIF": // Life Support
+          drawLifeScene(w, h);
+          break;
+        case "MEM": // Memory Core
+          drawMemoryScene(w, h);
+          break;
+        case "NAV": // Navigation Course
+          drawNavScene(w, h);
+          break;
+        case "NUC": // Nuclear Reactor
+          drawNuclearScene(w, h);
+          break;
+        case "VEH": // Vehicle Status
+          drawVehicleScene(w, h);
+          break;
+        default:
+          drawGenericScene(w, h, fn.code);
+      }
+
+      ctx.restore();
+      requestAnimationFrame(renderCanvasAnimation);
+    }
+
+    /* 1. ATMOSPHERE MONITORING */
+    function drawAtmosphereScene(w, h) {
+      ctx.strokeStyle = "#4da6ff";
+      ctx.lineWidth = 1.5;
+
+      // Circular atmosphere gauge
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2 - 20, 140, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Atmospheric rings
+      for (let r = 40; r < 140; r += 30) {
+        ctx.strokeStyle = "rgba(77, 166, 255, 0.3)";
+        ctx.beginPath();
+        ctx.arc(w / 2, h / 2 - 20, r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Rotating sensor ray
+      const angle = (animFrame * 0.03) % (Math.PI * 2);
+      ctx.strokeStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.moveTo(w / 2, h / 2 - 20);
+      ctx.lineTo(w / 2 + Math.cos(angle) * 140, h / 2 - 20 + Math.sin(angle) * 140);
+      ctx.stroke();
+
+      // Barometric bars at bottom
+      const gases = [
+        { label: "O2", val: 21.0 + Math.sin(animFrame * 0.05) * 0.4 },
+        { label: "N2", val: 78.1 + Math.cos(animFrame * 0.05) * 0.3 },
+        { label: "CO2", val: 0.04 + Math.sin(animFrame * 0.08) * 0.01 },
+        { label: "BAR", val: 101.3 + Math.sin(animFrame * 0.02) * 0.5 }
+      ];
+
+      gases.forEach((g, i) => {
+        const x = 70 + i * 90;
+        const barH = 50 + (g.val % 50);
+        ctx.fillStyle = "rgba(77, 166, 255, 0.25)";
+        ctx.fillRect(x, h - 100, 50, -barH);
+        ctx.strokeStyle = "#4da6ff";
+        ctx.strokeRect(x, h - 100, 50, -barH);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "12px 'Share Tech Mono'";
+        ctx.fillText(`${g.label}`, x + 15, h - 80);
+        ctx.fillText(`${g.val.toFixed(1)}`, x + 8, h - 60);
+      });
+    }
+
+    /* 2. CONTROL DYNAMICS */
+    function drawControlScene(w, h) {
+      ctx.strokeStyle = "#00ffcc";
+      ctx.lineWidth = 1.5;
+
+      // 3-Axis Gyroscope gimbal
+      const cx = w / 2, cy = h / 2;
+      const t = animFrame * 0.02;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+
+      // Pitch ring
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 130, 130 * Math.abs(Math.cos(t)), t, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Roll ring
+      ctx.strokeStyle = "rgba(0, 255, 204, 0.6)";
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 100 * Math.abs(Math.sin(t * 0.8)), 100, t * 0.5, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Center crosshair
+      ctx.strokeStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.moveTo(-160, 0); ctx.lineTo(160, 0);
+      ctx.moveTo(0, -160); ctx.lineTo(0, 160);
+      ctx.stroke();
+
+      ctx.restore();
+
+      ctx.fillStyle = "#00ffcc";
+      ctx.font = "13px 'Share Tech Mono'";
+      ctx.fillText("ATTITUDE: NORMAL", 60, 60);
+      ctx.fillText(`RCS YAW: ${(Math.sin(t) * 2.4).toFixed(2)}°`, 60, 85);
+      ctx.fillText(`RCS PITCH: ${(Math.cos(t) * 1.8).toFixed(2)}°`, 60, 110);
+    }
+
+    /* 3. COMMUNICATIONS TELEMETRY */
+    function drawCommsScene(w, h) {
+      ctx.strokeStyle = "#ffaa00";
+      ctx.lineWidth = 2;
+
+      // Sine carrier wave
+      ctx.beginPath();
+      for (let x = 40; x < w - 40; x += 3) {
+        const y = h / 2 + Math.sin(x * 0.05 + animFrame * 0.1) * 45 * Math.sin(animFrame * 0.02);
+        if (x === 40) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Second harmonic wave
+      ctx.strokeStyle = "rgba(255, 170, 0, 0.4)";
+      ctx.beginPath();
+      for (let x = 40; x < w - 40; x += 3) {
+        const y = h / 2 + Math.sin(x * 0.02 - animFrame * 0.08) * 75;
+        if (x === 40) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Earth link indicator
+      ctx.fillStyle = "#ffaa00";
+      ctx.font = "13px 'Share Tech Mono'";
+      ctx.fillText("EARTH RELAY LINK: HIGH GAIN", 50, 60);
+      ctx.fillText("UPLINK: 2.295 GHz [LOCKED]", 50, 85);
+      ctx.fillText("AZ: 148.2°  EL: +22.4°", 50, 110);
+      ctx.fillText("SIGNAL S/N: 48.6 dB", 50, h - 50);
+    }
+
+    /* 4. SYSTEM DAMAGE */
+    function drawDamageScene(w, h) {
+      const cx = w / 2, cy = h / 2;
+      ctx.strokeStyle = "#ff3333";
+      ctx.lineWidth = 2;
+
+      // Hexagonal schematic grid
+      for (let r = 40; r <= 160; r += 40) {
+        ctx.beginPath();
+        for (let i = 0; i < 6; i++) {
+          const a = (i * Math.PI / 3);
+          const x = cx + Math.cos(a) * r;
+          const y = cy + Math.sin(a) * r;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      }
+
+      // Flashing alert sector
+      if (Math.floor(animFrame / 15) % 2 === 0) {
+        ctx.fillStyle = "rgba(255, 51, 51, 0.35)";
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, 160, 0, Math.PI / 3);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      ctx.fillStyle = "#ff3333";
+      ctx.font = "14px 'Share Tech Mono'";
+      ctx.fillText("DAMAGE SURVEILLANCE MATRIX", 50, 60);
+      ctx.fillText("SECTOR 04-B: INTEGRITY 100%", 50, 85);
+      ctx.fillText("HULL BREACH: NONE DETECTED", 50, h - 50);
+    }
+
+    /* 5. FLIGHT DYNAMICS */
+    function drawFlightScene(w, h) {
+      ctx.strokeStyle = "#33ccff";
+      ctx.lineWidth = 1.5;
+
+      // Orbital ellipse
+      ctx.beginPath();
+      ctx.ellipse(w / 2, h / 2, 170, 70, -0.2, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Orbiting ship point
+      const t = animFrame * 0.03;
+      const sx = w / 2 + Math.cos(t) * 170 * Math.cos(-0.2) - Math.sin(t) * 70 * Math.sin(-0.2);
+      const sy = h / 2 + Math.cos(t) * 170 * Math.sin(-0.2) + Math.sin(t) * 70 * Math.cos(-0.2);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(sx, sy, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Velocity vectors
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+      ctx.beginPath();
+      ctx.moveTo(sx, sy);
+      ctx.lineTo(sx - Math.sin(t) * 35, sy + Math.cos(t) * 35);
+      ctx.stroke();
+
+      ctx.fillStyle = "#33ccff";
+      ctx.font = "13px 'Share Tech Mono'";
+      ctx.fillText("TRANSFER TRAJECTORY: JUPITER", 50, 60);
+      ctx.fillText(`VELOCITY: 36,412 KM/H`, 50, 85);
+      ctx.fillText(`ECCENTRICITY: 0.0482`, 50, 110);
+    }
+
+    /* 6. GUIDANCE DATA EXTENSION */
+    function drawGuidanceScene(w, h) {
+      ctx.strokeStyle = "#55ff55";
+      ctx.lineWidth = 1;
+
+      // Radar rings & crosshairs
+      const cx = w / 2, cy = h / 2;
+      for (let r = 30; r <= 150; r += 40) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(cx - 160, cy); ctx.lineTo(cx + 160, cy);
+      ctx.moveTo(cx, cy - 160); ctx.lineTo(cx, cy + 160);
+      ctx.stroke();
+
+      // Sweeping guidance tracker
+      const sweep = (animFrame * 0.04) % (Math.PI * 2);
+      ctx.fillStyle = "rgba(85, 255, 85, 0.15)";
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, 150, sweep, sweep + 0.35);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = "#55ff55";
+      ctx.font = "13px 'Share Tech Mono'";
+      ctx.fillText("GUIDANCE BEACON: JUPITER/IO", 50, 60);
+      ctx.fillText("STAR TRACKER 1: CANOPUS [LOCK]", 50, 85);
+      ctx.fillText("DELTA-V MARGIN: +142.6 M/S", 50, h - 50);
+    }
+
+    /* 7. HIBERNATION LIFE TELEMETRY */
+    function drawHibernationScene(w, h) {
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "12px 'Share Tech Mono'";
+      ctx.fillText("CRYO-HIBERNATION UNIT TELEMETRY", 45, 55);
+
+      const subjects = [
+        { name: "POOLE, D.", pulse: 4.2, temp: "-196°C", status: "STABLE" },
+        { name: "WHITEHEAD, C.", pulse: 4.1, temp: "-196°C", status: "STABLE" },
+        { name: "KAMINSKI, P.", pulse: 4.3, temp: "-196°C", status: "STABLE" }
+      ];
+
+      subjects.forEach((sub, i) => {
+        const yBase = 90 + i * 110;
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+        ctx.strokeRect(45, yBase, w - 90, 95);
+
+        ctx.fillStyle = "#00ffff";
+        ctx.font = "12px 'Share Tech Mono'";
+        ctx.fillText(`SUBJECT: ${sub.name}  |  STATUS: ${sub.status}`, 55, yBase + 22);
+        ctx.fillText(`METABOLIC: ${sub.pulse} BPM  |  CORE: ${sub.temp}`, 55, yBase + 40);
+
+        // ECG Heartbeat trace
+        ctx.strokeStyle = "#00ffcc";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        for (let x = 0; x < w - 110; x += 3) {
+          let ecg = 0;
+          let phase = ((x + animFrame * 2) % 120);
+          if (phase > 45 && phase < 55) ecg = -22;
+          else if (phase >= 55 && phase < 65) ecg = 18;
+          ctx.lineTo(55 + x, yBase + 70 + ecg);
+        }
+        ctx.stroke();
+      });
+    }
+
+    /* 8. LIFE SUPPORT REGULATION */
+    function drawLifeScene(w, h) {
+      ctx.strokeStyle = "#33cc66";
+      ctx.lineWidth = 1.5;
+
+      // Flow loops
+      const cx = w / 2, cy = h / 2;
+      for (let i = 0; i < 4; i++) {
+        const offset = Math.sin(animFrame * 0.05 + i) * 15;
+        ctx.beginPath();
+        ctx.roundRect(60 + i * 90, 100, 70, 240, 15);
+        ctx.stroke();
+
+        ctx.fillStyle = "rgba(51, 204, 102, 0.2)";
+        ctx.fillRect(60 + i * 90, 340, 70, -120 + offset);
+      }
+
+      ctx.fillStyle = "#33cc66";
+      ctx.font = "13px 'Share Tech Mono'";
+      ctx.fillText("ENVIRONMENTAL LIFE SUPPORT", 50, 60);
+      ctx.fillText("CO2 SCRUBBER: ACTIVE (CYCLE A)", 50, 85);
+      ctx.fillText("CABIN THERMAL: 21.4°C / 48% RH", 50, h - 50);
+    }
+
+    /* 9. MEMORY CORE MATRIX */
+    function drawMemoryScene(w, h) {
+      ctx.fillStyle = "#ffcc00";
+      ctx.font = "13px 'Share Tech Mono'";
+      ctx.fillText("HAL 9000 LOGIC CORE BANKS", 50, 55);
+
+      const rows = 12;
+      const cols = 12;
+      const cellW = 24;
+      const cellH = 20;
+      const startX = (w - cols * cellW) / 2;
+      const startY = 85;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const active = ((r * cols + c + animFrame) % 7 === 0 || (r + c * 3 + animFrame) % 11 === 0);
+          ctx.fillStyle = active ? "#ff3300" : "rgba(255, 204, 0, 0.25)";
+          ctx.fillRect(startX + c * cellW, startY + r * cellH, cellW - 4, cellH - 4);
+        }
+      }
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "12px 'Share Tech Mono'";
+      ctx.fillText("INTEGRATED CIRCUITS: NOMINAL", 50, h - 70);
+      ctx.fillText("COGNITIVE ERROR RATE: 0.0000%", 50, h - 45);
+    }
+
+    /* 10. NAVIGATION COURSE */
+    function drawNavScene(w, h) {
+      ctx.strokeStyle = "#4da6ff";
+      ctx.lineWidth = 1.5;
+
+      // Coordinate Grid
+      for (let x = 50; x < w; x += 40) {
+        ctx.strokeStyle = "rgba(77, 166, 255, 0.15)";
+        ctx.beginPath(); ctx.moveTo(x, 40); ctx.lineTo(x, h - 40); ctx.stroke();
+      }
+      for (let y = 40; y < h; y += 40) {
+        ctx.strokeStyle = "rgba(77, 166, 255, 0.15)";
+        ctx.beginPath(); ctx.moveTo(40, y); ctx.lineTo(w - 40, y); ctx.stroke();
+      }
+
+      // Parabolic Course Line
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let x = 60; x < w - 60; x += 4) {
+        const nx = (x - w / 2) / 100;
+        const y = h / 2 + (nx * nx * 35) - 30;
+        if (x === 60) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Position Node
+      const px = w / 2 + Math.sin(animFrame * 0.03) * 80;
+      const pnx = (px - w / 2) / 100;
+      const py = h / 2 + (pnx * pnx * 35) - 30;
+
+      ctx.fillStyle = "#ff3300";
+      ctx.beginPath(); ctx.arc(px, py, 6, 0, Math.PI * 2); ctx.fill();
+
+      ctx.fillStyle = "#4da6ff";
+      ctx.font = "13px 'Share Tech Mono'";
+      ctx.fillText("COURSE VECTOR: EARTH → JUPITER", 50, 60);
+      ctx.fillText("RANGE: 412,094,180 KM", 50, 85);
+      ctx.fillText("ETA AT JUPITER: 184 DAYS", 50, h - 50);
+    }
+
+    /* 11. NUCLEAR REACTOR STATUS */
+    function drawNuclearScene(w, h) {
+      const cx = w / 2, cy = h / 2;
+      ctx.strokeStyle = "#ff6600";
+      ctx.lineWidth = 2;
+
+      // Pulsing radiation rings
+      for (let i = 0; i < 5; i++) {
+        const r = ((animFrame * 1.5 + i * 35) % 150) + 15;
+        const alpha = Math.max(0, 1 - r / 150);
+        ctx.strokeStyle = `rgba(255, 102, 0, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Core center
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#ff6600";
+      ctx.font = "13px 'Share Tech Mono'";
+      ctx.fillText("CAVITY REACTOR STATUS", 50, 60);
+      ctx.fillText("COOLANT FLOW: 100% NOMINAL", 50, 85);
+      ctx.fillText("CORE TEMP: 2,480 K", 50, 110);
+      ctx.fillText("OUTPUT: 840 MW [STEADY]", 50, h - 50);
+    }
+
+    /* 12. VEHICLE STATUS (Discovery One) */
+    function drawVehicleScene(w, h) {
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1.5;
+
+      // Wireframe silhouette of Discovery One
+      const cx = w / 2, cy = h / 2;
+
+      // Command Sphere
+      ctx.beginPath();
+      ctx.arc(cx - 110, cy, 38, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Spine & modular cargo bays
+      ctx.beginPath();
+      ctx.moveTo(cx - 72, cy);
+      ctx.lineTo(cx + 90, cy);
+      ctx.stroke();
+
+      for (let bx = cx - 50; bx <= cx + 70; bx += 25) {
+        ctx.strokeRect(bx, cy - 12, 18, 24);
+      }
+
+      // Propulsion Engine Block
+      ctx.strokeRect(cx + 90, cy - 25, 45, 50);
+
+      // Scanning indicator
+      const scanX = cx - 120 + ((animFrame * 2) % 270);
+      ctx.strokeStyle = "rgba(193, 3, 65, 0.8)";
+      ctx.beginPath();
+      ctx.moveTo(scanX, cy - 60);
+      ctx.lineTo(scanX, cy + 60);
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "13px 'Share Tech Mono'";
+      ctx.fillText("U.S.S. DISCOVERY ONE (XD-1)", 50, 60);
+      ctx.fillText("COMMAND SPHERE: PRESSURIZED", 50, 85);
+      ctx.fillText("POD BAY 1, 2, 3: SECURED", 50, 110);
+      ctx.fillText("COMMUNICATION ANTENNA: ALIGNED", 50, h - 50);
+    }
+
+    function drawGenericScene(w, h, code) {
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "20px 'Orbitron'";
+      ctx.textAlign = "center";
+      ctx.fillText(code, w / 2, h / 2);
+    }
+
+    /* Cycle Loop (30 seconds per system function) */
+    setInterval(() => {
+      if (!isPaused) {
+        timeElapsedInCycle += 0.1;
+        const progress = Math.min(100, (timeElapsedInCycle / CYCLE_INTERVAL_SEC) * 100);
+        progressBarEl.style.width = `${progress}%`;
+
+        const remainingSec = Math.max(0, Math.ceil(CYCLE_INTERVAL_SEC - timeElapsedInCycle));
+        timerDisplay.innerText = `${remainingSec}s`;
+
+        if (timeElapsedInCycle >= CYCLE_INTERVAL_SEC) {
+          showFunction(currentIndex + 1);
+        }
+      }
+    }, 100);
+
+    /* Event Listeners */
+    highScreen.addEventListener('click', () => {
+      showFunction(currentIndex + 1);
+      playRelayClick();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      showFunction(currentIndex - 1);
+      playRelayClick();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      showFunction(currentIndex + 1);
+      playRelayClick();
+    });
+
+    playPauseBtn.addEventListener('click', () => {
+      isPaused = !isPaused;
+      playPauseBtn.innerText = isPaused ? "▶ RESUME" : "⏸ PAUSE";
+      playRelayClick();
+    });
+
+    soundBtn.addEventListener('click', () => {
+      initAudio();
+      audioEnabled = !audioEnabled;
+      soundBtn.classList.toggle('active', audioEnabled);
+      soundBtn.innerText = audioEnabled ? "🔊 SOUND ON" : "🔇 MUTE";
+      if (audioEnabled) playSwitchBeep();
+    });
+
+    modeBtn.addEventListener('click', () => {
+      if (mode === "AUTO") mode = "CANVAS";
+      else if (mode === "CANVAS") mode = "VIDEO";
+      else mode = "AUTO";
+      modeBtn.innerText = `MODE: ${mode}`;
+      setupMedia(SYSTEM_FUNCTIONS[currentIndex]);
+      playRelayClick();
+    });
+
+    fsBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    // Keyboard Shortcuts matching the Raspberry Pi 3 terminal code:
+    // Right Arrow: Next, Left Arrow: Prev, Spacebar: Pause/Resume, M: Mute/Sound
+    window.addEventListener('keydown', (e) => {
+      initAudio();
+      if (e.key === 'ArrowRight') {
+        showFunction(currentIndex + 1);
+      } else if (e.key === 'ArrowLeft') {
+        showFunction(currentIndex - 1);
+      } else if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault();
+        isPaused = !isPaused;
+        playPauseBtn.innerText = isPaused ? "▶ RESUME" : "⏸ PAUSE";
+        playRelayClick();
+      } else if (e.key === 'm' || e.key === 'M') {
+        audioEnabled = !audioEnabled;
+        soundBtn.classList.toggle('active', audioEnabled);
+        soundBtn.innerText = audioEnabled ? "🔊 SOUND ON" : "🔇 MUTE";
+        if (audioEnabled) playSwitchBeep();
+      } else if (e.key === 'f' || e.key === 'F') {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+    });
+
+    /* Initialize */
+    showFunction(0, false);
+    renderCanvasAnimation();
+  </script>
+</body>
+</html>
+
