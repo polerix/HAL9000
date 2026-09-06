@@ -1,0 +1,2410 @@
+{
+  "projectRoot": "/Users/polerixsys/Documents/hal9000-keypad",
+  "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+  "boardPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_pcb",
+  "kicad": "9.0.9",
+  "steps": [
+    {
+      "name": "create_project",
+      "args": {
+        "path": "/Users/polerixsys/Documents/hal9000-keypad",
+        "name": "hal9000-keypad"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Created project: hal9000-keypad\",\n  \"project\": {\n    \"name\": \"hal9000-keypad\",\n    \"path\": \"/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_pro\",\n    \"boardPath\": \"/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_pcb\",\n    \"schematicPath\": \"/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch\"\n  },\n  \"_backend\": \"swig\",\n  \"_realtime\": false,\n  \"sessionBackend\": \"swig\"\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Switch:SW_Push",
+        "reference": "SW1",
+        "value": "SW_HIB",
+        "footprint": "Button_Switch_THT:SW_PUSH_6mm",
+        "position": {
+          "x": 20,
+          "y": 40
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added SW1 (Switch:SW_Push) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:LED",
+        "reference": "D1",
+        "value": "LED_HIB",
+        "footprint": "LED_THT:LED_D5.0mm",
+        "position": {
+          "x": 20,
+          "y": 30
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added D1 (Device:LED) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:R",
+        "reference": "R1",
+        "value": "270",
+        "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+        "position": {
+          "x": 20,
+          "y": 20
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added R1 (Device:R) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Switch:SW_Push",
+        "reference": "SW2",
+        "value": "SW_LIF",
+        "footprint": "Button_Switch_THT:SW_PUSH_6mm",
+        "position": {
+          "x": 40,
+          "y": 40
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added SW2 (Switch:SW_Push) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:LED",
+        "reference": "D2",
+        "value": "LED_LIF",
+        "footprint": "LED_THT:LED_D5.0mm",
+        "position": {
+          "x": 40,
+          "y": 30
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added D2 (Device:LED) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:R",
+        "reference": "R2",
+        "value": "330",
+        "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+        "position": {
+          "x": 40,
+          "y": 20
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added R2 (Device:R) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Switch:SW_Push",
+        "reference": "SW3",
+        "value": "SW_COM",
+        "footprint": "Button_Switch_THT:SW_PUSH_6mm",
+        "position": {
+          "x": 60,
+          "y": 40
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added SW3 (Switch:SW_Push) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:LED",
+        "reference": "D3",
+        "value": "LED_COM",
+        "footprint": "LED_THT:LED_D5.0mm",
+        "position": {
+          "x": 60,
+          "y": 30
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added D3 (Device:LED) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:R",
+        "reference": "R3",
+        "value": "180",
+        "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+        "position": {
+          "x": 60,
+          "y": 20
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added R3 (Device:R) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Switch:SW_Push",
+        "reference": "SW4",
+        "value": "SW_NAV",
+        "footprint": "Button_Switch_THT:SW_PUSH_6mm",
+        "position": {
+          "x": 80,
+          "y": 40
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added SW4 (Switch:SW_Push) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:LED",
+        "reference": "D4",
+        "value": "LED_NAV",
+        "footprint": "LED_THT:LED_D5.0mm",
+        "position": {
+          "x": 80,
+          "y": 30
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added D4 (Device:LED) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:R",
+        "reference": "R4",
+        "value": "180",
+        "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+        "position": {
+          "x": 80,
+          "y": 20
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added R4 (Device:R) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Switch:SW_Push",
+        "reference": "SW5",
+        "value": "SW_MEM",
+        "footprint": "Button_Switch_THT:SW_PUSH_6mm",
+        "position": {
+          "x": 100,
+          "y": 40
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added SW5 (Switch:SW_Push) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:LED",
+        "reference": "D5",
+        "value": "LED_MEM",
+        "footprint": "LED_THT:LED_D5.0mm",
+        "position": {
+          "x": 100,
+          "y": 30
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added D5 (Device:LED) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:R",
+        "reference": "R5",
+        "value": "180",
+        "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+        "position": {
+          "x": 100,
+          "y": 20
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added R5 (Device:R) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Switch:SW_Push",
+        "reference": "SW6",
+        "value": "SW_ATM",
+        "footprint": "Button_Switch_THT:SW_PUSH_6mm",
+        "position": {
+          "x": 20,
+          "y": 80
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added SW6 (Switch:SW_Push) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:LED",
+        "reference": "D6",
+        "value": "LED_ATM",
+        "footprint": "LED_THT:LED_D5.0mm",
+        "position": {
+          "x": 20,
+          "y": 70
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added D6 (Device:LED) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:R",
+        "reference": "R6",
+        "value": "330",
+        "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+        "position": {
+          "x": 20,
+          "y": 60
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added R6 (Device:R) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Switch:SW_Push",
+        "reference": "SW7",
+        "value": "SW_FLX",
+        "footprint": "Button_Switch_THT:SW_PUSH_6mm",
+        "position": {
+          "x": 40,
+          "y": 80
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added SW7 (Switch:SW_Push) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:LED",
+        "reference": "D7",
+        "value": "LED_FLX",
+        "footprint": "LED_THT:LED_D5.0mm",
+        "position": {
+          "x": 40,
+          "y": 70
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added D7 (Device:LED) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:R",
+        "reference": "R7",
+        "value": "180",
+        "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+        "position": {
+          "x": 40,
+          "y": 60
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added R7 (Device:R) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Switch:SW_Push",
+        "reference": "SW8",
+        "value": "SW_NUC",
+        "footprint": "Button_Switch_THT:SW_PUSH_6mm",
+        "position": {
+          "x": 60,
+          "y": 80
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added SW8 (Switch:SW_Push) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:LED",
+        "reference": "D8",
+        "value": "LED_NUC",
+        "footprint": "LED_THT:LED_D5.0mm",
+        "position": {
+          "x": 60,
+          "y": 70
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added D8 (Device:LED) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:R",
+        "reference": "R8",
+        "value": "180",
+        "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+        "position": {
+          "x": 60,
+          "y": 60
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added R8 (Device:R) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Switch:SW_Push",
+        "reference": "SW9",
+        "value": "SW_WEA",
+        "footprint": "Button_Switch_THT:SW_PUSH_6mm",
+        "position": {
+          "x": 80,
+          "y": 80
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added SW9 (Switch:SW_Push) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:LED",
+        "reference": "D9",
+        "value": "LED_WEA",
+        "footprint": "LED_THT:LED_D5.0mm",
+        "position": {
+          "x": 80,
+          "y": 70
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added D9 (Device:LED) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:R",
+        "reference": "R9",
+        "value": "300",
+        "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+        "position": {
+          "x": 80,
+          "y": 60
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added R9 (Device:R) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Switch:SW_Push",
+        "reference": "SW10",
+        "value": "SW_MED",
+        "footprint": "Button_Switch_THT:SW_PUSH_6mm",
+        "position": {
+          "x": 100,
+          "y": 80
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added SW10 (Switch:SW_Push) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:LED",
+        "reference": "D10",
+        "value": "LED_MED",
+        "footprint": "LED_THT:LED_D5.0mm",
+        "position": {
+          "x": 100,
+          "y": 70
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added D10 (Device:LED) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Device:R",
+        "reference": "R10",
+        "value": "300",
+        "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+        "position": {
+          "x": 100,
+          "y": 60
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added R10 (Device:R) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Connector_Generic:Conn_01x10",
+        "reference": "J1",
+        "value": "BTN_HDR_10P",
+        "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical",
+        "position": {
+          "x": 130,
+          "y": 60
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added J1 (Connector_Generic:Conn_01x10) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "Connector_Generic:Conn_01x02",
+        "reference": "J2",
+        "value": "PWR_HDR_5V_GND",
+        "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
+        "position": {
+          "x": 130,
+          "y": 90
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added J2 (Connector_Generic:Conn_01x02) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_schematic_component",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "symbol": "power:PWR_FLAG",
+        "reference": "#FLG01",
+        "value": "PWR_FLAG",
+        "footprint": "",
+        "position": {
+          "x": 140,
+          "y": 100
+        },
+        "angle": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added #FLG01 (power:PWR_FLAG) to schematic"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R1",
+        "pinName": "1",
+        "netName": "+5V"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R1/1 to net '+5V'\",\n  \"pin_location\": [\n    20.32,\n    16.51\n  ],\n  \"label_location\": [\n    20.32,\n    13.97\n  ],\n  \"wire_stub\": [\n    [\n      20.32,\n      16.51\n    ],\n    [\n      20.32,\n      13.97\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R2",
+        "pinName": "1",
+        "netName": "+5V"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R2/1 to net '+5V'\",\n  \"pin_location\": [\n    39.37,\n    16.51\n  ],\n  \"label_location\": [\n    39.37,\n    13.97\n  ],\n  \"wire_stub\": [\n    [\n      39.37,\n      16.51\n    ],\n    [\n      39.37,\n      13.97\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R3",
+        "pinName": "1",
+        "netName": "+5V"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R3/1 to net '+5V'\",\n  \"pin_location\": [\n    59.69,\n    16.51\n  ],\n  \"label_location\": [\n    59.69,\n    13.97\n  ],\n  \"wire_stub\": [\n    [\n      59.69,\n      16.51\n    ],\n    [\n      59.69,\n      13.97\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R4",
+        "pinName": "1",
+        "netName": "+5V"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R4/1 to net '+5V'\",\n  \"pin_location\": [\n    80.01,\n    16.51\n  ],\n  \"label_location\": [\n    80.01,\n    13.97\n  ],\n  \"wire_stub\": [\n    [\n      80.01,\n      16.51\n    ],\n    [\n      80.01,\n      13.97\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R5",
+        "pinName": "1",
+        "netName": "+5V"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R5/1 to net '+5V'\",\n  \"pin_location\": [\n    100.33,\n    16.51\n  ],\n  \"label_location\": [\n    100.33,\n    13.97\n  ],\n  \"wire_stub\": [\n    [\n      100.33,\n      16.51\n    ],\n    [\n      100.33,\n      13.97\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R6",
+        "pinName": "1",
+        "netName": "+5V"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R6/1 to net '+5V'\",\n  \"pin_location\": [\n    20.32,\n    55.879999999999995\n  ],\n  \"label_location\": [\n    20.32,\n    53.34\n  ],\n  \"wire_stub\": [\n    [\n      20.32,\n      55.879999999999995\n    ],\n    [\n      20.32,\n      53.34\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R7",
+        "pinName": "1",
+        "netName": "+5V"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R7/1 to net '+5V'\",\n  \"pin_location\": [\n    39.37,\n    55.879999999999995\n  ],\n  \"label_location\": [\n    39.37,\n    53.34\n  ],\n  \"wire_stub\": [\n    [\n      39.37,\n      55.879999999999995\n    ],\n    [\n      39.37,\n      53.34\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R8",
+        "pinName": "1",
+        "netName": "+5V"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R8/1 to net '+5V'\",\n  \"pin_location\": [\n    59.69,\n    55.879999999999995\n  ],\n  \"label_location\": [\n    59.69,\n    53.34\n  ],\n  \"wire_stub\": [\n    [\n      59.69,\n      55.879999999999995\n    ],\n    [\n      59.69,\n      53.34\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R9",
+        "pinName": "1",
+        "netName": "+5V"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R9/1 to net '+5V'\",\n  \"pin_location\": [\n    80.01,\n    55.879999999999995\n  ],\n  \"label_location\": [\n    80.01,\n    53.34\n  ],\n  \"wire_stub\": [\n    [\n      80.01,\n      55.879999999999995\n    ],\n    [\n      80.01,\n      53.34\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R10",
+        "pinName": "1",
+        "netName": "+5V"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R10/1 to net '+5V'\",\n  \"pin_location\": [\n    100.33,\n    55.879999999999995\n  ],\n  \"label_location\": [\n    100.33,\n    53.34\n  ],\n  \"wire_stub\": [\n    [\n      100.33,\n      55.879999999999995\n    ],\n    [\n      100.33,\n      53.34\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "J2",
+        "pinName": "1",
+        "netName": "+5V"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected J2/1 to net '+5V'\",\n  \"pin_location\": [\n    124.46,\n    90.17\n  ],\n  \"label_location\": [\n    121.92,\n    90.17\n  ],\n  \"wire_stub\": [\n    [\n      124.46,\n      90.17\n    ],\n    [\n      121.92,\n      90.17\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW1",
+        "pinName": "2",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW1/2 to net 'GND'\",\n  \"pin_location\": [\n    25.4,\n    39.37\n  ],\n  \"label_location\": [\n    27.94,\n    39.37\n  ],\n  \"wire_stub\": [\n    [\n      25.4,\n      39.37\n    ],\n    [\n      27.94,\n      39.37\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D1",
+        "pinName": "K",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D1/K to net 'GND'\",\n  \"pin_location\": [\n    16.51,\n    30.48\n  ],\n  \"label_location\": [\n    13.97,\n    30.48\n  ],\n  \"wire_stub\": [\n    [\n      16.51,\n      30.48\n    ],\n    [\n      13.97,\n      30.48\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW2",
+        "pinName": "2",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW2/2 to net 'GND'\",\n  \"pin_location\": [\n    44.449999999999996,\n    39.37\n  ],\n  \"label_location\": [\n    46.99,\n    39.37\n  ],\n  \"wire_stub\": [\n    [\n      44.449999999999996,\n      39.37\n    ],\n    [\n      46.99,\n      39.37\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D2",
+        "pinName": "K",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D2/K to net 'GND'\",\n  \"pin_location\": [\n    35.559999999999995,\n    30.48\n  ],\n  \"label_location\": [\n    33.02,\n    30.48\n  ],\n  \"wire_stub\": [\n    [\n      35.559999999999995,\n      30.48\n    ],\n    [\n      33.02,\n      30.48\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW3",
+        "pinName": "2",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW3/2 to net 'GND'\",\n  \"pin_location\": [\n    64.77,\n    39.37\n  ],\n  \"label_location\": [\n    67.31,\n    39.37\n  ],\n  \"wire_stub\": [\n    [\n      64.77,\n      39.37\n    ],\n    [\n      67.31,\n      39.37\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D3",
+        "pinName": "K",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D3/K to net 'GND'\",\n  \"pin_location\": [\n    55.879999999999995,\n    30.48\n  ],\n  \"label_location\": [\n    53.34,\n    30.48\n  ],\n  \"wire_stub\": [\n    [\n      55.879999999999995,\n      30.48\n    ],\n    [\n      53.34,\n      30.48\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW4",
+        "pinName": "2",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW4/2 to net 'GND'\",\n  \"pin_location\": [\n    85.09,\n    39.37\n  ],\n  \"label_location\": [\n    87.63,\n    39.37\n  ],\n  \"wire_stub\": [\n    [\n      85.09,\n      39.37\n    ],\n    [\n      87.63,\n      39.37\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D4",
+        "pinName": "K",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D4/K to net 'GND'\",\n  \"pin_location\": [\n    76.2,\n    30.48\n  ],\n  \"label_location\": [\n    73.66,\n    30.48\n  ],\n  \"wire_stub\": [\n    [\n      76.2,\n      30.48\n    ],\n    [\n      73.66,\n      30.48\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW5",
+        "pinName": "2",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW5/2 to net 'GND'\",\n  \"pin_location\": [\n    105.41,\n    39.37\n  ],\n  \"label_location\": [\n    107.95,\n    39.37\n  ],\n  \"wire_stub\": [\n    [\n      105.41,\n      39.37\n    ],\n    [\n      107.95,\n      39.37\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D5",
+        "pinName": "K",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D5/K to net 'GND'\",\n  \"pin_location\": [\n    96.52,\n    30.48\n  ],\n  \"label_location\": [\n    93.98,\n    30.48\n  ],\n  \"wire_stub\": [\n    [\n      96.52,\n      30.48\n    ],\n    [\n      93.98,\n      30.48\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW6",
+        "pinName": "2",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW6/2 to net 'GND'\",\n  \"pin_location\": [\n    25.4,\n    80.01\n  ],\n  \"label_location\": [\n    27.94,\n    80.01\n  ],\n  \"wire_stub\": [\n    [\n      25.4,\n      80.01\n    ],\n    [\n      27.94,\n      80.01\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D6",
+        "pinName": "K",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D6/K to net 'GND'\",\n  \"pin_location\": [\n    16.51,\n    69.85\n  ],\n  \"label_location\": [\n    13.97,\n    69.85\n  ],\n  \"wire_stub\": [\n    [\n      16.51,\n      69.85\n    ],\n    [\n      13.97,\n      69.85\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW7",
+        "pinName": "2",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW7/2 to net 'GND'\",\n  \"pin_location\": [\n    44.449999999999996,\n    80.01\n  ],\n  \"label_location\": [\n    46.99,\n    80.01\n  ],\n  \"wire_stub\": [\n    [\n      44.449999999999996,\n      80.01\n    ],\n    [\n      46.99,\n      80.01\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D7",
+        "pinName": "K",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D7/K to net 'GND'\",\n  \"pin_location\": [\n    35.559999999999995,\n    69.85\n  ],\n  \"label_location\": [\n    33.02,\n    69.85\n  ],\n  \"wire_stub\": [\n    [\n      35.559999999999995,\n      69.85\n    ],\n    [\n      33.02,\n      69.85\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW8",
+        "pinName": "2",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW8/2 to net 'GND'\",\n  \"pin_location\": [\n    64.77,\n    80.01\n  ],\n  \"label_location\": [\n    67.31,\n    80.01\n  ],\n  \"wire_stub\": [\n    [\n      64.77,\n      80.01\n    ],\n    [\n      67.31,\n      80.01\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D8",
+        "pinName": "K",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D8/K to net 'GND'\",\n  \"pin_location\": [\n    55.879999999999995,\n    69.85\n  ],\n  \"label_location\": [\n    53.34,\n    69.85\n  ],\n  \"wire_stub\": [\n    [\n      55.879999999999995,\n      69.85\n    ],\n    [\n      53.34,\n      69.85\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW9",
+        "pinName": "2",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW9/2 to net 'GND'\",\n  \"pin_location\": [\n    85.09,\n    80.01\n  ],\n  \"label_location\": [\n    87.63,\n    80.01\n  ],\n  \"wire_stub\": [\n    [\n      85.09,\n      80.01\n    ],\n    [\n      87.63,\n      80.01\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D9",
+        "pinName": "K",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D9/K to net 'GND'\",\n  \"pin_location\": [\n    76.2,\n    69.85\n  ],\n  \"label_location\": [\n    73.66,\n    69.85\n  ],\n  \"wire_stub\": [\n    [\n      76.2,\n      69.85\n    ],\n    [\n      73.66,\n      69.85\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW10",
+        "pinName": "2",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW10/2 to net 'GND'\",\n  \"pin_location\": [\n    105.41,\n    80.01\n  ],\n  \"label_location\": [\n    107.95,\n    80.01\n  ],\n  \"wire_stub\": [\n    [\n      105.41,\n      80.01\n    ],\n    [\n      107.95,\n      80.01\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D10",
+        "pinName": "K",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D10/K to net 'GND'\",\n  \"pin_location\": [\n    96.52,\n    69.85\n  ],\n  \"label_location\": [\n    93.98,\n    69.85\n  ],\n  \"wire_stub\": [\n    [\n      96.52,\n      69.85\n    ],\n    [\n      93.98,\n      69.85\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "J2",
+        "pinName": "2",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected J2/2 to net 'GND'\",\n  \"pin_location\": [\n    124.46,\n    92.71000000000001\n  ],\n  \"label_location\": [\n    121.92,\n    92.71\n  ],\n  \"wire_stub\": [\n    [\n      124.46,\n      92.71000000000001\n    ],\n    [\n      121.92,\n      92.71\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "#FLG01",
+        "pinName": "1",
+        "netName": "GND"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected #FLG01/1 to net 'GND'\",\n  \"pin_location\": [\n    139.7,\n    100.33\n  ],\n  \"label_location\": [\n    139.7,\n    102.87\n  ],\n  \"wire_stub\": [\n    [\n      139.7,\n      100.33\n    ],\n    [\n      139.7,\n      102.87\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW1",
+        "pinName": "1",
+        "netName": "BTN_HIB"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW1/1 to net 'BTN_HIB'\",\n  \"pin_location\": [\n    15.24,\n    39.37\n  ],\n  \"label_location\": [\n    12.7,\n    39.37\n  ],\n  \"wire_stub\": [\n    [\n      15.24,\n      39.37\n    ],\n    [\n      12.7,\n      39.37\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "J1",
+        "pinName": "1",
+        "netName": "BTN_HIB"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected J1/1 to net 'BTN_HIB'\",\n  \"pin_location\": [\n    124.46,\n    49.53\n  ],\n  \"label_location\": [\n    121.92,\n    49.53\n  ],\n  \"wire_stub\": [\n    [\n      124.46,\n      49.53\n    ],\n    [\n      121.92,\n      49.53\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R1",
+        "pinName": "2",
+        "netName": "LED_A_HIB"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R1/2 to net 'LED_A_HIB'\",\n  \"pin_location\": [\n    20.32,\n    24.13\n  ],\n  \"label_location\": [\n    20.32,\n    26.67\n  ],\n  \"wire_stub\": [\n    [\n      20.32,\n      24.13\n    ],\n    [\n      20.32,\n      26.67\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D1",
+        "pinName": "A",
+        "netName": "LED_A_HIB"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D1/A to net 'LED_A_HIB'\",\n  \"pin_location\": [\n    24.13,\n    30.48\n  ],\n  \"label_location\": [\n    26.67,\n    30.48\n  ],\n  \"wire_stub\": [\n    [\n      24.13,\n      30.48\n    ],\n    [\n      26.67,\n      30.48\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW2",
+        "pinName": "1",
+        "netName": "BTN_LIF"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW2/1 to net 'BTN_LIF'\",\n  \"pin_location\": [\n    34.29,\n    39.37\n  ],\n  \"label_location\": [\n    31.75,\n    39.37\n  ],\n  \"wire_stub\": [\n    [\n      34.29,\n      39.37\n    ],\n    [\n      31.75,\n      39.37\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "J1",
+        "pinName": "2",
+        "netName": "BTN_LIF"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected J1/2 to net 'BTN_LIF'\",\n  \"pin_location\": [\n    124.46,\n    52.07\n  ],\n  \"label_location\": [\n    121.92,\n    52.07\n  ],\n  \"wire_stub\": [\n    [\n      124.46,\n      52.07\n    ],\n    [\n      121.92,\n      52.07\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R2",
+        "pinName": "2",
+        "netName": "LED_A_LIF"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R2/2 to net 'LED_A_LIF'\",\n  \"pin_location\": [\n    39.37,\n    24.13\n  ],\n  \"label_location\": [\n    39.37,\n    26.67\n  ],\n  \"wire_stub\": [\n    [\n      39.37,\n      24.13\n    ],\n    [\n      39.37,\n      26.67\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D2",
+        "pinName": "A",
+        "netName": "LED_A_LIF"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D2/A to net 'LED_A_LIF'\",\n  \"pin_location\": [\n    43.18,\n    30.48\n  ],\n  \"label_location\": [\n    45.72,\n    30.48\n  ],\n  \"wire_stub\": [\n    [\n      43.18,\n      30.48\n    ],\n    [\n      45.72,\n      30.48\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW3",
+        "pinName": "1",
+        "netName": "BTN_COM"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW3/1 to net 'BTN_COM'\",\n  \"pin_location\": [\n    54.61,\n    39.37\n  ],\n  \"label_location\": [\n    52.07,\n    39.37\n  ],\n  \"wire_stub\": [\n    [\n      54.61,\n      39.37\n    ],\n    [\n      52.07,\n      39.37\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "J1",
+        "pinName": "3",
+        "netName": "BTN_COM"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected J1/3 to net 'BTN_COM'\",\n  \"pin_location\": [\n    124.46,\n    54.61\n  ],\n  \"label_location\": [\n    121.92,\n    54.61\n  ],\n  \"wire_stub\": [\n    [\n      124.46,\n      54.61\n    ],\n    [\n      121.92,\n      54.61\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R3",
+        "pinName": "2",
+        "netName": "LED_A_COM"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R3/2 to net 'LED_A_COM'\",\n  \"pin_location\": [\n    59.69,\n    24.13\n  ],\n  \"label_location\": [\n    59.69,\n    26.67\n  ],\n  \"wire_stub\": [\n    [\n      59.69,\n      24.13\n    ],\n    [\n      59.69,\n      26.67\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D3",
+        "pinName": "A",
+        "netName": "LED_A_COM"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D3/A to net 'LED_A_COM'\",\n  \"pin_location\": [\n    63.5,\n    30.48\n  ],\n  \"label_location\": [\n    66.04,\n    30.48\n  ],\n  \"wire_stub\": [\n    [\n      63.5,\n      30.48\n    ],\n    [\n      66.04,\n      30.48\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW4",
+        "pinName": "1",
+        "netName": "BTN_NAV"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW4/1 to net 'BTN_NAV'\",\n  \"pin_location\": [\n    74.93,\n    39.37\n  ],\n  \"label_location\": [\n    72.39,\n    39.37\n  ],\n  \"wire_stub\": [\n    [\n      74.93,\n      39.37\n    ],\n    [\n      72.39,\n      39.37\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "J1",
+        "pinName": "4",
+        "netName": "BTN_NAV"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected J1/4 to net 'BTN_NAV'\",\n  \"pin_location\": [\n    124.46,\n    57.15\n  ],\n  \"label_location\": [\n    121.92,\n    57.15\n  ],\n  \"wire_stub\": [\n    [\n      124.46,\n      57.15\n    ],\n    [\n      121.92,\n      57.15\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R4",
+        "pinName": "2",
+        "netName": "LED_A_NAV"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R4/2 to net 'LED_A_NAV'\",\n  \"pin_location\": [\n    80.01,\n    24.13\n  ],\n  \"label_location\": [\n    80.01,\n    26.67\n  ],\n  \"wire_stub\": [\n    [\n      80.01,\n      24.13\n    ],\n    [\n      80.01,\n      26.67\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D4",
+        "pinName": "A",
+        "netName": "LED_A_NAV"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D4/A to net 'LED_A_NAV'\",\n  \"pin_location\": [\n    83.82000000000001,\n    30.48\n  ],\n  \"label_location\": [\n    86.36,\n    30.48\n  ],\n  \"wire_stub\": [\n    [\n      83.82000000000001,\n      30.48\n    ],\n    [\n      86.36,\n      30.48\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW5",
+        "pinName": "1",
+        "netName": "BTN_MEM"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW5/1 to net 'BTN_MEM'\",\n  \"pin_location\": [\n    95.25,\n    39.37\n  ],\n  \"label_location\": [\n    92.71,\n    39.37\n  ],\n  \"wire_stub\": [\n    [\n      95.25,\n      39.37\n    ],\n    [\n      92.71,\n      39.37\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "J1",
+        "pinName": "5",
+        "netName": "BTN_MEM"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected J1/5 to net 'BTN_MEM'\",\n  \"pin_location\": [\n    124.46,\n    59.69\n  ],\n  \"label_location\": [\n    121.92,\n    59.69\n  ],\n  \"wire_stub\": [\n    [\n      124.46,\n      59.69\n    ],\n    [\n      121.92,\n      59.69\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R5",
+        "pinName": "2",
+        "netName": "LED_A_MEM"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R5/2 to net 'LED_A_MEM'\",\n  \"pin_location\": [\n    100.33,\n    24.13\n  ],\n  \"label_location\": [\n    100.33,\n    26.67\n  ],\n  \"wire_stub\": [\n    [\n      100.33,\n      24.13\n    ],\n    [\n      100.33,\n      26.67\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D5",
+        "pinName": "A",
+        "netName": "LED_A_MEM"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D5/A to net 'LED_A_MEM'\",\n  \"pin_location\": [\n    104.14,\n    30.48\n  ],\n  \"label_location\": [\n    106.68,\n    30.48\n  ],\n  \"wire_stub\": [\n    [\n      104.14,\n      30.48\n    ],\n    [\n      106.68,\n      30.48\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW6",
+        "pinName": "1",
+        "netName": "BTN_ATM"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW6/1 to net 'BTN_ATM'\",\n  \"pin_location\": [\n    15.24,\n    80.01\n  ],\n  \"label_location\": [\n    12.7,\n    80.01\n  ],\n  \"wire_stub\": [\n    [\n      15.24,\n      80.01\n    ],\n    [\n      12.7,\n      80.01\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "J1",
+        "pinName": "6",
+        "netName": "BTN_ATM"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected J1/6 to net 'BTN_ATM'\",\n  \"pin_location\": [\n    124.46,\n    62.23\n  ],\n  \"label_location\": [\n    121.92,\n    62.23\n  ],\n  \"wire_stub\": [\n    [\n      124.46,\n      62.23\n    ],\n    [\n      121.92,\n      62.23\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R6",
+        "pinName": "2",
+        "netName": "LED_A_ATM"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R6/2 to net 'LED_A_ATM'\",\n  \"pin_location\": [\n    20.32,\n    63.5\n  ],\n  \"label_location\": [\n    20.32,\n    66.04\n  ],\n  \"wire_stub\": [\n    [\n      20.32,\n      63.5\n    ],\n    [\n      20.32,\n      66.04\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D6",
+        "pinName": "A",
+        "netName": "LED_A_ATM"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D6/A to net 'LED_A_ATM'\",\n  \"pin_location\": [\n    24.13,\n    69.85\n  ],\n  \"label_location\": [\n    26.67,\n    69.85\n  ],\n  \"wire_stub\": [\n    [\n      24.13,\n      69.85\n    ],\n    [\n      26.67,\n      69.85\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW7",
+        "pinName": "1",
+        "netName": "BTN_FLX"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW7/1 to net 'BTN_FLX'\",\n  \"pin_location\": [\n    34.29,\n    80.01\n  ],\n  \"label_location\": [\n    31.75,\n    80.01\n  ],\n  \"wire_stub\": [\n    [\n      34.29,\n      80.01\n    ],\n    [\n      31.75,\n      80.01\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "J1",
+        "pinName": "7",
+        "netName": "BTN_FLX"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected J1/7 to net 'BTN_FLX'\",\n  \"pin_location\": [\n    124.46,\n    64.77\n  ],\n  \"label_location\": [\n    121.92,\n    64.77\n  ],\n  \"wire_stub\": [\n    [\n      124.46,\n      64.77\n    ],\n    [\n      121.92,\n      64.77\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R7",
+        "pinName": "2",
+        "netName": "LED_A_FLX"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R7/2 to net 'LED_A_FLX'\",\n  \"pin_location\": [\n    39.37,\n    63.5\n  ],\n  \"label_location\": [\n    39.37,\n    66.04\n  ],\n  \"wire_stub\": [\n    [\n      39.37,\n      63.5\n    ],\n    [\n      39.37,\n      66.04\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D7",
+        "pinName": "A",
+        "netName": "LED_A_FLX"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D7/A to net 'LED_A_FLX'\",\n  \"pin_location\": [\n    43.18,\n    69.85\n  ],\n  \"label_location\": [\n    45.72,\n    69.85\n  ],\n  \"wire_stub\": [\n    [\n      43.18,\n      69.85\n    ],\n    [\n      45.72,\n      69.85\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW8",
+        "pinName": "1",
+        "netName": "BTN_NUC"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW8/1 to net 'BTN_NUC'\",\n  \"pin_location\": [\n    54.61,\n    80.01\n  ],\n  \"label_location\": [\n    52.07,\n    80.01\n  ],\n  \"wire_stub\": [\n    [\n      54.61,\n      80.01\n    ],\n    [\n      52.07,\n      80.01\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "J1",
+        "pinName": "8",
+        "netName": "BTN_NUC"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected J1/8 to net 'BTN_NUC'\",\n  \"pin_location\": [\n    124.46,\n    67.31\n  ],\n  \"label_location\": [\n    121.92,\n    67.31\n  ],\n  \"wire_stub\": [\n    [\n      124.46,\n      67.31\n    ],\n    [\n      121.92,\n      67.31\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R8",
+        "pinName": "2",
+        "netName": "LED_A_NUC"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R8/2 to net 'LED_A_NUC'\",\n  \"pin_location\": [\n    59.69,\n    63.5\n  ],\n  \"label_location\": [\n    59.69,\n    66.04\n  ],\n  \"wire_stub\": [\n    [\n      59.69,\n      63.5\n    ],\n    [\n      59.69,\n      66.04\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D8",
+        "pinName": "A",
+        "netName": "LED_A_NUC"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D8/A to net 'LED_A_NUC'\",\n  \"pin_location\": [\n    63.5,\n    69.85\n  ],\n  \"label_location\": [\n    66.04,\n    69.85\n  ],\n  \"wire_stub\": [\n    [\n      63.5,\n      69.85\n    ],\n    [\n      66.04,\n      69.85\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW9",
+        "pinName": "1",
+        "netName": "BTN_WEA"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW9/1 to net 'BTN_WEA'\",\n  \"pin_location\": [\n    74.93,\n    80.01\n  ],\n  \"label_location\": [\n    72.39,\n    80.01\n  ],\n  \"wire_stub\": [\n    [\n      74.93,\n      80.01\n    ],\n    [\n      72.39,\n      80.01\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "J1",
+        "pinName": "9",
+        "netName": "BTN_WEA"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected J1/9 to net 'BTN_WEA'\",\n  \"pin_location\": [\n    124.46,\n    69.85\n  ],\n  \"label_location\": [\n    121.92,\n    69.85\n  ],\n  \"wire_stub\": [\n    [\n      124.46,\n      69.85\n    ],\n    [\n      121.92,\n      69.85\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R9",
+        "pinName": "2",
+        "netName": "LED_A_WEA"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R9/2 to net 'LED_A_WEA'\",\n  \"pin_location\": [\n    80.01,\n    63.5\n  ],\n  \"label_location\": [\n    80.01,\n    66.04\n  ],\n  \"wire_stub\": [\n    [\n      80.01,\n      63.5\n    ],\n    [\n      80.01,\n      66.04\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D9",
+        "pinName": "A",
+        "netName": "LED_A_WEA"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D9/A to net 'LED_A_WEA'\",\n  \"pin_location\": [\n    83.82000000000001,\n    69.85\n  ],\n  \"label_location\": [\n    86.36,\n    69.85\n  ],\n  \"wire_stub\": [\n    [\n      83.82000000000001,\n      69.85\n    ],\n    [\n      86.36,\n      69.85\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "SW10",
+        "pinName": "1",
+        "netName": "BTN_MED"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected SW10/1 to net 'BTN_MED'\",\n  \"pin_location\": [\n    95.25,\n    80.01\n  ],\n  \"label_location\": [\n    92.71,\n    80.01\n  ],\n  \"wire_stub\": [\n    [\n      95.25,\n      80.01\n    ],\n    [\n      92.71,\n      80.01\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "J1",
+        "pinName": "10",
+        "netName": "BTN_MED"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected J1/10 to net 'BTN_MED'\",\n  \"pin_location\": [\n    124.46,\n    72.39\n  ],\n  \"label_location\": [\n    121.92,\n    72.39\n  ],\n  \"wire_stub\": [\n    [\n      124.46,\n      72.39\n    ],\n    [\n      121.92,\n      72.39\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "R10",
+        "pinName": "2",
+        "netName": "LED_A_MED"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected R10/2 to net 'LED_A_MED'\",\n  \"pin_location\": [\n    100.33,\n    63.5\n  ],\n  \"label_location\": [\n    100.33,\n    66.04\n  ],\n  \"wire_stub\": [\n    [\n      100.33,\n      63.5\n    ],\n    [\n      100.33,\n      66.04\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "connect_to_net",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "componentRef": "D10",
+        "pinName": "A",
+        "netName": "LED_A_MED"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Connected D10/A to net 'LED_A_MED'\",\n  \"pin_location\": [\n    104.14,\n    69.85\n  ],\n  \"label_location\": [\n    106.68,\n    69.85\n  ],\n  \"wire_stub\": [\n    [\n      104.14,\n      69.85\n    ],\n    [\n      106.68,\n      69.85\n    ]\n  ],\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "annotate_schematic",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "All components are already annotated."
+          }
+        ]
+      }
+    },
+    {
+      "name": "run_erc",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "ERC result: 0 violation(s)\n  Errors: 0  Warnings: 0  Info: 0"
+          }
+        ]
+      }
+    },
+    {
+      "name": "create_board_from_schematic",
+      "args": {
+        "schematicPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch",
+        "boardPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_pcb",
+        "overwrite": true
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Created board from schematic\",\n  \"schematicPath\": \"/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_sch\",\n  \"boardPath\": \"/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_pcb\",\n  \"sync\": {\n    \"success\": true,\n    \"message\": \"PCB updated from schematic: 32 footprints added, 23 nets added, 92 pads assigned\",\n    \"nets_added\": [\n      \"BTN_WEA\",\n      \"LED_A_LIF\",\n      \"BTN_LIF\",\n      \"GND\",\n      \"BTN_NAV\",\n      \"LED_A_NAV\",\n      \"BTN_COM\",\n      \"LED_A_MEM\",\n      \"+5V\",\n      \"BTN_ATM\",\n      \"BTN_MEM\",\n      \"LED_A_HIB\",\n      \"LED_A_ATM\",\n      \"BTN_MED\",\n      \"BTN_FLX\",\n      \"LED_A_MED\",\n      \"LED_A_COM\",\n      \"LED_A_FLX\",\n      \"BTN_NUC\",\n      \"LED_A_WEA\",\n      \"BTN_HIB\",\n      \"LED_A_NUC\",\n      \"PWR_FLAG\"\n    ],\n    \"nets_total\": 23,\n    \"pads_assigned\": 92,\n    \"unmatched_pads_sample\": [],\n    \"footprints_added\": [\n      {\n        \"reference\": \"D1\",\n        \"footprint\": \"LED_THT:LED_D5.0mm\"\n      },\n      {\n        \"reference\": \"D2\",\n        \"footprint\": \"LED_THT:LED_D5.0mm\"\n      },\n      {\n        \"reference\": \"D3\",\n        \"footprint\": \"LED_THT:LED_D5.0mm\"\n      },\n      {\n        \"reference\": \"D4\",\n        \"footprint\": \"LED_THT:LED_D5.0mm\"\n      },\n      {\n        \"reference\": \"D5\",\n        \"footprint\": \"LED_THT:LED_D5.0mm\"\n      },\n      {\n        \"reference\": \"D6\",\n        \"footprint\": \"LED_THT:LED_D5.0mm\"\n      },\n      {\n        \"reference\": \"D7\",\n        \"footprint\": \"LED_THT:LED_D5.0mm\"\n      },\n      {\n        \"reference\": \"D8\",\n        \"footprint\": \"LED_THT:LED_D5.0mm\"\n      },\n      {\n        \"reference\": \"D9\",\n        \"footprint\": \"LED_THT:LED_D5.0mm\"\n      },\n      {\n        \"reference\": \"D10\",\n        \"footprint\": \"LED_THT:LED_D5.0mm\"\n      },\n      {\n        \"reference\": \"J1\",\n        \"footprint\": \"Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical\"\n      },\n      {\n        \"reference\": \"J2\",\n        \"footprint\": \"Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical\"\n      },\n      {\n        \"reference\": \"R1\",\n        \"footprint\": \"Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\"\n      },\n      {\n        \"reference\": \"R2\",\n        \"footprint\": \"Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\"\n      },\n      {\n        \"reference\": \"R3\",\n        \"footprint\": \"Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\"\n      },\n      {\n        \"reference\": \"R4\",\n        \"footprint\": \"Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\"\n      },\n      {\n        \"reference\": \"R5\",\n        \"footprint\": \"Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\"\n      },\n      {\n        \"reference\": \"R6\",\n        \"footprint\": \"Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\"\n      },\n      {\n        \"reference\": \"R7\",\n        \"footprint\": \"Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\"\n      },\n      {\n        \"reference\": \"R8\",\n        \"footprint\": \"Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\"\n      },\n      {\n        \"reference\": \"R9\",\n        \"footprint\": \"Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\"\n      },\n      {\n        \"reference\": \"R10\",\n        \"footprint\": \"Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\"\n      },\n      {\n        \"reference\": \"SW1\",\n        \"footprint\": \"Button_Switch_THT:SW_PUSH_6mm\"\n      },\n      {\n        \"reference\": \"SW2\",\n        \"footprint\": \"Button_Switch_THT:SW_PUSH_6mm\"\n      },\n      {\n        \"reference\": \"SW3\",\n        \"footprint\": \"Button_Switch_THT:SW_PUSH_6mm\"\n      },\n      {\n        \"reference\": \"SW4\",\n        \"footprint\": \"Button_Switch_THT:SW_PUSH_6mm\"\n      },\n      {\n        \"reference\": \"SW5\",\n        \"footprint\": \"Button_Switch_THT:SW_PUSH_6mm\"\n      },\n      {\n        \"reference\": \"SW6\",\n        \"footprint\": \"Button_Switch_THT:SW_PUSH_6mm\"\n      },\n      {\n        \"reference\": \"SW7\",\n        \"footprint\": \"Button_Switch_THT:SW_PUSH_6mm\"\n      },\n      {\n        \"reference\": \"SW8\",\n        \"footprint\": \"Button_Switch_THT:SW_PUSH_6mm\"\n      },\n      {\n        \"reference\": \"SW9\",\n        \"footprint\": \"Button_Switch_THT:SW_PUSH_6mm\"\n      },\n      {\n        \"reference\": \"SW10\",\n        \"footprint\": \"Button_Switch_THT:SW_PUSH_6mm\"\n      }\n    ],\n    \"footprints_skipped\": []\n  },\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "set_design_rules",
+      "args": {
+        "clearance": 0.25,
+        "trackWidth": 0.5,
+        "minTrackWidth": 0.25,
+        "viaDiameter": 0.6,
+        "viaDrill": 0.3,
+        "minViaDiameter": 0.6,
+        "minViaDrill": 0.3
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"success\":true,\"message\":\"Updated design rules\",\"rules\":{\"clearance\":0.25,\"trackWidth\":0.5,\"viaDiameter\":0.6,\"viaDrill\":0.3,\"microViaDiameter\":0.2,\"microViaDrill\":0.1,\"minTrackWidth\":0.25,\"minViaDiameter\":0.6,\"minThroughDrill\":0.3,\"minMicroViaDiameter\":0.2,\"minMicroViaDrill\":0.1,\"holeClearance\":0.25,\"holeToHoleMin\":0.25,\"viasMinAnnularWidth\":0.1},\"_backend\":\"swig\",\"_realtime\":false}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "replace_board_outline",
+      "args": {
+        "shape": "rectangle",
+        "params": {
+          "x": 0,
+          "y": 0,
+          "width": 75.1,
+          "height": 30.2,
+          "unit": "mm"
+        }
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"success\":true,\"message\":\"Replaced board outline; removed 0 old item(s)\",\"outline\":{\"shape\":\"rectangle\",\"width\":75.1,\"height\":30.2,\"center\":{\"x\":37.55,\"y\":15.1,\"unit\":\"mm\"},\"radius\":null,\"cornerRadius\":0,\"points\":[]},\"cleared\":0,\"_backend\":\"swig\",\"_realtime\":false}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "open_board",
+      "args": {
+        "boardPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_pcb"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Opened board: hal9000-keypad.kicad_pcb\",\n  \"boardPath\": \"/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_pcb\",\n  \"sessionBackend\": \"swig\",\n  \"_backend\": \"swig\",\n  \"_realtime\": false\n}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "batch_move_components",
+      "args": {
+        "moves": {
+          "SW1": {
+            "position": {
+              "x": 7.55,
+              "y": 7.6,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "D1": {
+            "position": {
+              "x": 7.55,
+              "y": 2.5999999999999996,
+              "unit": "mm"
+            },
+            "rotation": 90
+          },
+          "R1": {
+            "position": {
+              "x": 7.55,
+              "y": 15,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "SW2": {
+            "position": {
+              "x": 22.55,
+              "y": 7.6,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "D2": {
+            "position": {
+              "x": 22.55,
+              "y": 2.5999999999999996,
+              "unit": "mm"
+            },
+            "rotation": 90
+          },
+          "R2": {
+            "position": {
+              "x": 22.55,
+              "y": 15,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "SW3": {
+            "position": {
+              "x": 37.55,
+              "y": 7.6,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "D3": {
+            "position": {
+              "x": 37.55,
+              "y": 2.5999999999999996,
+              "unit": "mm"
+            },
+            "rotation": 90
+          },
+          "R3": {
+            "position": {
+              "x": 37.55,
+              "y": 15,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "SW4": {
+            "position": {
+              "x": 52.55,
+              "y": 7.6,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "D4": {
+            "position": {
+              "x": 52.55,
+              "y": 2.5999999999999996,
+              "unit": "mm"
+            },
+            "rotation": 90
+          },
+          "R4": {
+            "position": {
+              "x": 52.55,
+              "y": 15,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "SW5": {
+            "position": {
+              "x": 67.55,
+              "y": 7.6,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "D5": {
+            "position": {
+              "x": 67.55,
+              "y": 2.5999999999999996,
+              "unit": "mm"
+            },
+            "rotation": 90
+          },
+          "R5": {
+            "position": {
+              "x": 67.55,
+              "y": 15,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "SW6": {
+            "position": {
+              "x": 7.55,
+              "y": 22.6,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "D6": {
+            "position": {
+              "x": 7.55,
+              "y": 17.6,
+              "unit": "mm"
+            },
+            "rotation": 90
+          },
+          "R6": {
+            "position": {
+              "x": 7.55,
+              "y": 15,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "SW7": {
+            "position": {
+              "x": 22.55,
+              "y": 22.6,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "D7": {
+            "position": {
+              "x": 22.55,
+              "y": 17.6,
+              "unit": "mm"
+            },
+            "rotation": 90
+          },
+          "R7": {
+            "position": {
+              "x": 22.55,
+              "y": 15,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "SW8": {
+            "position": {
+              "x": 37.55,
+              "y": 22.6,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "D8": {
+            "position": {
+              "x": 37.55,
+              "y": 17.6,
+              "unit": "mm"
+            },
+            "rotation": 90
+          },
+          "R8": {
+            "position": {
+              "x": 37.55,
+              "y": 15,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "SW9": {
+            "position": {
+              "x": 52.55,
+              "y": 22.6,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "D9": {
+            "position": {
+              "x": 52.55,
+              "y": 17.6,
+              "unit": "mm"
+            },
+            "rotation": 90
+          },
+          "R9": {
+            "position": {
+              "x": 52.55,
+              "y": 15,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "SW10": {
+            "position": {
+              "x": 67.55,
+              "y": 22.6,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "D10": {
+            "position": {
+              "x": 67.55,
+              "y": 17.6,
+              "unit": "mm"
+            },
+            "rotation": 90
+          },
+          "R10": {
+            "position": {
+              "x": 67.55,
+              "y": 15,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "J1": {
+            "position": {
+              "x": 73.6,
+              "y": 14.3,
+              "unit": "mm"
+            },
+            "rotation": 0
+          },
+          "J2": {
+            "position": {
+              "x": 73.6,
+              "y": 27.7,
+              "unit": "mm"
+            },
+            "rotation": 0
+          }
+        },
+        "save": true
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"success\":true,\"message\":\"Moved 32 component(s)\",\"moved\":[{\"reference\":\"SW1\",\"position\":{\"x\":7.55,\"y\":7.6,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"D1\",\"position\":{\"x\":7.55,\"y\":2.599999,\"unit\":\"mm\"},\"rotation\":90,\"layer\":\"F.Cu\"},{\"reference\":\"R1\",\"position\":{\"x\":7.55,\"y\":15,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"SW2\",\"position\":{\"x\":22.55,\"y\":7.6,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"D2\",\"position\":{\"x\":22.55,\"y\":2.599999,\"unit\":\"mm\"},\"rotation\":90,\"layer\":\"F.Cu\"},{\"reference\":\"R2\",\"position\":{\"x\":22.55,\"y\":15,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"SW3\",\"position\":{\"x\":37.55,\"y\":7.6,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"D3\",\"position\":{\"x\":37.55,\"y\":2.599999,\"unit\":\"mm\"},\"rotation\":90,\"layer\":\"F.Cu\"},{\"reference\":\"R3\",\"position\":{\"x\":37.55,\"y\":15,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"SW4\",\"position\":{\"x\":52.55,\"y\":7.6,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"D4\",\"position\":{\"x\":52.55,\"y\":2.599999,\"unit\":\"mm\"},\"rotation\":90,\"layer\":\"F.Cu\"},{\"reference\":\"R4\",\"position\":{\"x\":52.55,\"y\":15,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"SW5\",\"position\":{\"x\":67.55,\"y\":7.6,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"D5\",\"position\":{\"x\":67.55,\"y\":2.599999,\"unit\":\"mm\"},\"rotation\":90,\"layer\":\"F.Cu\"},{\"reference\":\"R5\",\"position\":{\"x\":67.55,\"y\":15,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"SW6\",\"position\":{\"x\":7.55,\"y\":22.6,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"D6\",\"position\":{\"x\":7.55,\"y\":17.6,\"unit\":\"mm\"},\"rotation\":90,\"layer\":\"F.Cu\"},{\"reference\":\"R6\",\"position\":{\"x\":7.55,\"y\":15,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"SW7\",\"position\":{\"x\":22.55,\"y\":22.6,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"D7\",\"position\":{\"x\":22.55,\"y\":17.6,\"unit\":\"mm\"},\"rotation\":90,\"layer\":\"F.Cu\"},{\"reference\":\"R7\",\"position\":{\"x\":22.55,\"y\":15,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"SW8\",\"position\":{\"x\":37.55,\"y\":22.6,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"D8\",\"position\":{\"x\":37.55,\"y\":17.6,\"unit\":\"mm\"},\"rotation\":90,\"layer\":\"F.Cu\"},{\"reference\":\"R8\",\"position\":{\"x\":37.55,\"y\":15,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"SW9\",\"position\":{\"x\":52.55,\"y\":22.6,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"D9\",\"position\":{\"x\":52.55,\"y\":17.6,\"unit\":\"mm\"},\"rotation\":90,\"layer\":\"F.Cu\"},{\"reference\":\"R9\",\"position\":{\"x\":52.55,\"y\":15,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"SW10\",\"position\":{\"x\":67.55,\"y\":22.6,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"D10\",\"position\":{\"x\":67.55,\"y\":17.6,\"unit\":\"mm\"},\"rotation\":90,\"layer\":\"F.Cu\"},{\"reference\":\"R10\",\"position\":{\"x\":67.55,\"y\":15,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"J1\",\"position\":{\"x\":73.6,\"y\":14.3,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"},{\"reference\":\"J2\",\"position\":{\"x\":73.6,\"y\":27.7,\"unit\":\"mm\"},\"rotation\":0,\"layer\":\"F.Cu\"}],\"saved\":true,\"autoSave\":{\"saved\":true,\"boardPath\":\"/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_pcb\",\"backup\":\"/Users/polerixsys/Documents/hal9000-keypad/.mcp-backups/hal9000-keypad.kicad_pcb.20260906-202603-820\"},\"_backend\":\"swig\",\"_realtime\":false}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "save_board",
+      "args": {
+        "boardPath": "/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_pcb",
+        "force": true
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Saved project to: /Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_pcb\",\n  \"project\": {\n    \"name\": \"hal9000-keypad\",\n    \"path\": \"/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_pcb\"\n  },\n  \"_backend\": \"swig\",\n  \"_realtime\": false,\n  \"boardPath\": \"/Users/polerixsys/Documents/hal9000-keypad/hal9000-keypad.kicad_pcb\"\n}"
+          }
+        ]
+      }
+    }
+  ],
+  "success": true
+}
