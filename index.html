@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAL 9000 // LCARS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000000;
+      --orange: #ff9900;
+      --amber: #ffcc00;
+      --red: #cc3333;
+      --dim: rgba(18,22,32,0.85);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: var(--bg); color: #fff; font-family: 'Antonio', sans-serif; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse 700px 400px at 50% 30%, rgba(255,0,0,0.06) 0%, transparent 65%);
+    }
+    .frame {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      min-height: 100vh;
+      position: relative; z-index: 1;
+      padding: 20px;
+      gap: 16px;
+    }
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 8px; }
+    .elbow {
+      height: 80px; background: var(--orange); border-radius: 40px 0 0 0;
+      display: flex; align-items: flex-end; padding: 10px 14px;
+      font-family: 'Antonio', sans-serif; font-weight: 700; font-size: 11px;
+      color: #000; letter-spacing: 2px; text-transform: uppercase;
+    }
+    .bar { height: 40px; display: flex; align-items: center; padding: 0 12px;
+      font-family: 'Antonio', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 1px; color: #000; text-transform: uppercase; }
+    .bar.amber { background: var(--amber); }
+    .bar.red   { background: var(--red); color: #fff; }
+    .spacer { flex: 1; }
+    .pill {
+      height: 60px; background: var(--orange); border-radius: 30px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 700; letter-spacing: 1px; color: #000; text-transform: uppercase;
+    }
+    /* MAIN CONTENT */
+    .main { display: flex; flex-direction: column; gap: 20px; }
+    .top-bar {
+      height: 30px; background: var(--orange); border-radius: 0 15px 15px 0;
+      display: flex; align-items: center; padding: 0 20px;
+      font-size: 11px; font-weight: 700; letter-spacing: 3px; color: #000; text-transform: uppercase;
+    }
+    .content-area {
+      flex: 1;
+      border: 1px solid rgba(255,153,0,0.2);
+      border-radius: 4px;
+      padding: 36px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .hal-eye {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, #ff4422 0%, #cc0000 40%, #660000 70%, #1a0000 100%);
+      box-shadow: 0 0 40px rgba(255,50,0,0.5), 0 0 80px rgba(255,50,0,0.2);
+      margin-bottom: 8px;
+      flex-shrink: 0;
+    }
+    .hal-header { display: flex; align-items: center; gap: 28px; }
+    h1 {
+      font-family: 'Antonio', sans-serif;
+      font-size: 56px; font-weight: 700;
+      letter-spacing: 6px; text-transform: uppercase;
+      color: var(--orange); line-height: 1;
+    }
+    .subtitle {
+      font-size: 13px; letter-spacing: 3px; color: rgba(255,153,0,0.6);
+      text-transform: uppercase; margin-top: 6px;
+    }
+    .desc {
+      font-size: 16px; line-height: 1.7; color: rgba(255,255,255,0.75);
+      max-width: 680px; border-left: 3px solid var(--orange);
+      padding-left: 20px;
+    }
+    .enter-btn {
+      display: inline-flex; align-items: center;
+      background: var(--orange); color: #000;
+      font-family: 'Antonio', sans-serif; font-weight: 700;
+      font-size: 18px; letter-spacing: 4px; text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 40px; border-radius: 30px;
+      transition: background 0.2s, box-shadow 0.2s;
+      align-self: flex-start;
+    }
+    .enter-btn:hover { background: var(--amber); box-shadow: 0 0 24px rgba(255,153,0,0.4); }
+    .bottom-bar {
+      height: 20px; background: var(--orange); border-radius: 0 10px 10px 0;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="frame">
+  <div class="sidebar">
+    <div class="elbow">HAL-9K</div>
+    <div class="bar amber">ATM</div>
+    <div class="bar amber">NAV</div>
+    <div class="bar red">CNT</div>
+    <div class="bar amber">LIF</div>
+    <div class="spacer"></div>
+    <div class="pill">SYS<br>IDENT</div>
+  </div>
+  <div class="main">
+    <div class="top-bar">HAL 9000 VIEWSCREEN SYSTEM // POLERIX // LCARS INTERFACE</div>
+    <div class="content-area">
+      <div class="hal-header">
+        <div class="hal-eye"></div>
+        <div>
+          <h1>HAL 9000</h1>
+          <div class="subtitle">Heuristically Programmed Algorithmic Computer</div>
+        </div>
+      </div>
+      <p class="desc">
+        A life-size HAL 9000 replica display system driven by a Raspberry Pi 3. A Pygame kiosk app 
+        cycles through 12 spacecraft subsystems — Atmosphere, Navigation, Communications, Life Support, 
+        and more — displaying function label panels and looping 4K screensaver animations on a 7" 
+        1024×600 HDMI screen in portrait orientation. Designed as a prop-grade control terminal 
+        with 3D-printed hardware and a full systemd service for unattended operation.
+      </p>
+      <a class="enter-btn" href="hal_viewscreen.py">ENTER</a>
+    </div>
+    <div class="bottom-bar"></div>
+  </div>
+</div>
+</body>
+</html>
