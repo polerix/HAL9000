@@ -16,6 +16,7 @@ Usage:
 import os
 import sys
 import glob
+import json
 import random
 import signal
 import time
@@ -34,6 +35,7 @@ from config import (
     FONT_SIZE_CODE, FONT_SIZE_SUBTITLE,
     FUNCTIONS, FUNCTION_BY_CODE, VIDEO_DIR,
     CYCLE_INTERVAL_SEC, FPS,
+    CACHE_WEA_PATH, CACHE_MED_PATH,
 )
 
 
@@ -264,6 +266,150 @@ class VideoPlayer:
 
 
 # ---------------------------------------------------------------------------
+# Live Data Panel (WEA / MED)
+# ---------------------------------------------------------------------------
+
+# Codes that render live instead of playing a video
+LIVE_CODES = {"WEA", "MED"}
+
+
+class LiveDataPanel:
+    """Renders WEA or MED live data into the low screen rect."""
+
+    def __init__(self):
+        try:
+            self.font_lg = pygame.font.Font(FONT_BOLD_EXTENDED, 36)
+            self.font_md = pygame.font.Font(FONT_EXTENDED, 22)
+            self.font_sm = pygame.font.Font(FONT_REGULAR, 16)
+        except FileNotFoundError:
+            self.font_lg = pygame.font.SysFont("monospace", 36, bold=True)
+            self.font_md = pygame.font.SysFont("monospace", 22)
+            self.font_sm = pygame.font.SysFont("monospace", 16)
+        self._wea_cache = None
+        self._med_cache = None
+        self._last_load = 0
+
+    def _load_cache(self):
+        now = time.time()
+        if now - self._last_load < 30:
+            return
+        self._last_load = now
+        try:
+            with open(CACHE_WEA_PATH) as f:
+                self._wea_cache = json.load(f)
+        except Exception:
+            self._wea_cache = None
+        try:
+            with open(CACHE_MED_PATH) as f:
+                self._med_cache = json.load(f)
+        except Exception:
+            self._med_cache = None
+
+    def _text(self, surface, text, font, color, x, y, max_width=440):
+        """Render text with word-wrap. Returns next y position."""
+        words = text.split()
+        line = ""
+        cy = y
+        for word in words:
+            test = line + (" " if line else "") + word
+            if font.size(test)[0] > max_width and line:
+                surf = font.render(line, True, color)
+                surface.blit(surf, (x, cy))
+                cy += surf.get_height() + 2
+                line = word
+            else:
+                line = test
+        if line:
+            surf = font.render(line, True, color)
+            surface.blit(surf, (x, cy))
+            cy += surf.get_height() + 2
+        return cy
+
+    def render_wea(self, surface, rect):
+        self._load_cache()
+        rx, ry, rw, rh = rect
+        pad = 16
+        cx = rx + pad
+        cy = ry + pad
+        WHITE = (241, 241, 241)
+        AMBER = (212, 160, 23)
+        GREY  = (160, 160, 160)
+
+        pygame.draw.rect(surface, (10, 10, 10), rect)
+        if not self._wea_cache:
+            self._text(surface, "AWAITING TELEMETRY", self.font_md, AMBER, cx, ry + 200)
+            return
+
+        w = self._wea_cache
+        cy = self._text(surface, w.get("city", "").upper(), self.font_lg, WHITE, cx, cy)
+        cy += 8
+
+        temp_str = f"{w['temp']}°C"
+        surf = self.font_lg.render(temp_str, True, AMBER)
+        surface.blit(surf, (cx, cy))
+        cy += surf.get_height() + 4
+
+        cy = self._text(surface, w.get("condition", ""), self.font_md, WHITE, cx, cy)
+        cy += 6
+
+        rows = [
+            ("FEELS LIKE", f"{w.get('feels_like', '—')}°C"),
+            ("WIND",       f"{w.get('wind_kmh', '—')} km/h"),
+            ("RAIN",       f"{w.get('rain_mm', 0)} mm"),
+            ("SNOW",       f"{w.get('snow_cm', 0)} cm"),
+        ]
+        for label, val in rows:
+            lsurf = self.font_sm.render(label, True, GREY)
+            vsurf = self.font_md.render(val, True, WHITE)
+            surface.blit(lsurf, (cx, cy + 4))
+            surface.blit(vsurf, (cx + 160, cy))
+            cy += vsurf.get_height() + 8
+
+        ts = self.font_sm.render(f"UPD {w.get('fetched_at', '')}", True, GREY)
+        surface.blit(ts, (cx, ry + rh - 28))
+
+    def render_med(self, surface, rect):
+        self._load_cache()
+        rx, ry, rw, rh = rect
+        pad = 16
+        cx = rx + pad
+        cy = ry + pad
+        WHITE = (241, 241, 241)
+        AMBER = (212, 160, 23)
+        GREY  = (160, 160, 160)
+
+        pygame.draw.rect(surface, (10, 10, 10), rect)
+        if not self._med_cache:
+            self._text(surface, "AWAITING TELEMETRY", self.font_md, AMBER, cx, ry + 200)
+            return
+
+        m = self._med_cache
+        cy = self._text(surface, "TRENDING", self.font_md, AMBER, cx, cy)
+        cy += 4
+        for item in (m.get("youtube") or [])[:2]:
+            cy = self._text(surface, item.get("title", ""), self.font_sm, WHITE, cx, cy)
+            cy += 4
+        cy += 8
+
+        div = self.font_sm.render("─" * 38, True, (60, 60, 60))
+        surface.blit(div, (cx, cy)); cy += 18
+        cy = self._text(surface, "WORLD NEWS", self.font_md, AMBER, cx, cy)
+        cy += 4
+        for item in (m.get("news") or [])[:4]:
+            cy = self._text(surface, item.get("title", ""), self.font_sm, WHITE, cx, cy, max_width=440)
+            cy += 3
+
+        ts = self.font_sm.render(f"UPD {m.get('fetched_at', '')}", True, GREY)
+        surface.blit(ts, (cx, ry + rh - 28))
+
+    def render(self, surface, rect, code):
+        if code == "WEA":
+            self.render_wea(surface, rect)
+        elif code == "MED":
+            self.render_med(surface, rect)
+
+
+# ---------------------------------------------------------------------------
 # Function Controller
 # ---------------------------------------------------------------------------
 
@@ -358,6 +504,7 @@ class HALViewscreen:
         # Create components
         self._high_panel = HighScreenPanel()
         self._video_player = VideoPlayer()
+        self._live_panel = LiveDataPanel()
         self._controller = FunctionController(self._video_map)
 
         # Signal handlers for clean shutdown
@@ -369,19 +516,25 @@ class HALViewscreen:
         self._running = False
 
     def _apply_function(self):
-        """Apply the current function: update panel and start video."""
+        """Apply the current function: update panel and start video (or live panel)."""
         func = self._controller.current
-        print(f"[INFO] Function: {func['code']} – {func['name']}")
+        code = func["code"]
+        print(f"[INFO] Function: {code} – {func['name']}")
 
         # Update high screen panel
-        self._high_panel.set_function(func["code"], func["subtitle"])
+        self._high_panel.set_function(code, func["subtitle"])
 
-        # Start video playback
+        # WEA and MED render live — no video
+        if code in LIVE_CODES:
+            self._video_player.stop()
+            return
+
+        # Start video playback for all other functions
         video_path = self._controller.get_random_video()
         if video_path:
             self._video_player.play(video_path)
         else:
-            print(f"[WARN] No videos available for {func['code']}")
+            print(f"[WARN] No videos available for {code}")
             self._video_player.stop()
 
     def run(self):
@@ -421,8 +574,16 @@ class HALViewscreen:
             # Render frame
             self._screen.fill(COLOR_BLACK)
             self._high_panel.draw(self._screen)
-            self._video_player.update()
-            self._video_player.draw(self._screen)
+            code = self._controller.current["code"]
+            if code in LIVE_CODES:
+                self._live_panel.render(
+                    self._screen,
+                    (LOW_SCREEN_X, LOW_SCREEN_Y, PANEL_WIDTH, PANEL_HEIGHT),
+                    code,
+                )
+            else:
+                self._video_player.update()
+                self._video_player.draw(self._screen)
 
             pygame.display.flip()
             self._clock.tick(FPS)

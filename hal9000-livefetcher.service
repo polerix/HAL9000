@@ -1,0 +1,15 @@
+[Unit]
+Description=HAL 9000 Live Data Fetcher
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/HAL9000
+ExecStart=/usr/bin/python3 /home/pi/HAL9000/live_fetcher.py
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

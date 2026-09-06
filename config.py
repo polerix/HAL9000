@@ -132,3 +132,15 @@ FUNCTION_BY_CODE = {f["code"]: f for f in FUNCTIONS}
 # ---------------------------------------------------------------------------
 CYCLE_INTERVAL_SEC = 30       # Seconds between function changes
 FPS = 30                      # Pygame framerate cap
+
+# ---------------------------------------------------------------------------
+# Live Data Settings
+# ---------------------------------------------------------------------------
+WEATHER_LAT = 44.6488          # Halifax, NS (update for your location)
+WEATHER_LON = -63.5752
+WEATHER_CITY = "Halifax"
+WEATHER_COUNTRY = "CA"
+CACHE_DIR = os.path.join(BASE_DIR, "cache")
+CACHE_WEA_PATH = os.path.join(CACHE_DIR, "wea.json")
+CACHE_MED_PATH = os.path.join(CACHE_DIR, "med.json")
+FETCH_INTERVAL_SEC = 600       # Refresh live data every 10 minutes

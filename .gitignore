@@ -17,3 +17,6 @@ Thumbs.db
 venv/
 ENV/
 env/
+
+# Live data cache
+cache/*.json
