@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="15mm" height="15mm"
+     viewBox="0 0 15 15">
+  <title>FLX — Flight Dynamics</title>
+  <!-- HAL 9000 Terminal Button Label | 15×15mm | #C8302A -->
+  <rect width="15" height="15" fill="#000000"/>
+  <rect x="0.4" y="0.4" width="14.2" height="14.2"
+        fill="none" stroke="#C8302A" stroke-width="0.35"/>
+  <text x="7.5" y="9.6"
+        font-family="Eurostile, &apos;Arial Narrow&apos;, sans-serif"
+        font-size="5.8"
+        font-weight="bold"
+        letter-spacing="0.4"
+        text-anchor="middle"
+        fill="#C8302A">FLX</text>
+</svg>

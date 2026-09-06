@@ -6,28 +6,9 @@
     "color_name": "Crimson Red",
     "color_category": "Red",
     "hex": "#9D0032",
-    "rgb": [
-      157,
-      0,
-      50
-    ],
+    "rgb": [157, 0, 50],
     "text_color": "#F1F1F1",
     "description": "Monitors internal spacecraft atmosphere, oxygen/nitrogen ratios, and cabin pressurization."
-  },
-  {
-    "code": "CNT",
-    "name": "Control",
-    "subtitle": "VER: 80-KJ",
-    "color_name": "Sage Green",
-    "color_category": "Green",
-    "hex": "#426F49",
-    "rgb": [
-      66,
-      111,
-      73
-    ],
-    "text_color": "#F1F1F1",
-    "description": "Central system control, operational routing, and executive spacecraft subsystems."
   },
   {
     "code": "COM",
@@ -36,28 +17,9 @@
     "color_name": "Plum Magenta",
     "color_category": "Purple",
     "hex": "#733863",
-    "rgb": [
-      115,
-      56,
-      99
-    ],
+    "rgb": [115, 56, 99],
     "text_color": "#F1F1F1",
     "description": "Radio and deep-space telemetry links with Mission Control Earth and antenna pointing."
-  },
-  {
-    "code": "DMG",
-    "name": "System Damage",
-    "subtitle": "GPM: 72-KC",
-    "color_name": "Bright Crimson",
-    "color_category": "Red",
-    "hex": "#C10341",
-    "rgb": [
-      193,
-      3,
-      65
-    ],
-    "text_color": "#F1F1F1",
-    "description": "Hull breach detection, structural stress diagnostics, and unit failure warnings (e.g. AE-35 unit fault)."
   },
   {
     "code": "FLX",
@@ -66,28 +28,9 @@
     "color_name": "Royal Blue",
     "color_category": "Blue",
     "hex": "#294194",
-    "rgb": [
-      41,
-      65,
-      148
-    ],
+    "rgb": [41, 65, 148],
     "text_color": "#F1F1F1",
     "description": "Orbital mechanics, spacecraft attitude, attitude thrusters, and momentum vectors."
-  },
-  {
-    "code": "GDE",
-    "name": "Guidance Data Extension",
-    "subtitle": "LIF: 13-AG",
-    "color_name": "Cerulean Blue",
-    "color_category": "Blue",
-    "hex": "#2C4DA1",
-    "rgb": [
-      44,
-      77,
-      161
-    ],
-    "text_color": "#F1F1F1",
-    "description": "Long-range trajectory calculations, interplanetary transfer orbits, and course corrections."
   },
   {
     "code": "HIB",
@@ -96,11 +39,7 @@
     "color_name": "Dark Teal",
     "color_category": "Teal / Green",
     "hex": "#074941",
-    "rgb": [
-      7,
-      73,
-      65
-    ],
+    "rgb": [7, 73, 65],
     "text_color": "#F1F1F1",
     "description": "Cryogenic pod biometrics, metabolic monitoring, and life status of hibernating crew members."
   },
@@ -111,11 +50,7 @@
     "color_name": "Rose Magenta",
     "color_category": "Red / Magenta",
     "hex": "#9E214B",
-    "rgb": [
-      158,
-      33,
-      75
-    ],
+    "rgb": [158, 33, 75],
     "text_color": "#F1F1F1",
     "description": "Active environmental control, centrifuge gravity simulation, water recycling, and thermal regulation."
   },
@@ -126,11 +61,7 @@
     "color_name": "Slate Steel Blue",
     "color_category": "Blue",
     "hex": "#17395A",
-    "rgb": [
-      23,
-      57,
-      90
-    ],
+    "rgb": [23, 57, 90],
     "text_color": "#F1F1F1",
     "description": "HAL 9000 optical logic banks, cognitive associative memory status, and core storage integrity."
   },
@@ -141,11 +72,7 @@
     "color_name": "Deep Violet",
     "color_category": "Purple",
     "hex": "#52316B",
-    "rgb": [
-      82,
-      49,
-      107
-    ],
+    "rgb": [82, 49, 107],
     "text_color": "#F1F1F1",
     "description": "Stellar triangulation, celestial coordinate tracking, star charts, and Jupiter approach tracking."
   },
@@ -156,27 +83,30 @@
     "color_name": "Midnight Navy",
     "color_category": "Blue",
     "hex": "#0F1738",
-    "rgb": [
-      15,
-      23,
-      56
-    ],
+    "rgb": [15, 23, 56],
     "text_color": "#F1F1F1",
     "description": "Nuclear propulsion core diagnostics, thermal radiator performance, and primary power generation."
   },
   {
-    "code": "VEH",
-    "name": "Vehicle Status",
-    "subtitle": "LIN: 86-QW",
-    "color_name": "Cobalt Blue",
-    "color_category": "Blue",
-    "hex": "#2C4DA1",
-    "rgb": [
-      44,
-      77,
-      161
-    ],
-    "text_color": "#F1F1F1",
-    "description": "Overall spacecraft superstructure integrity, Pod Bay airlock cycles, and Discovery One hull telemetry."
+    "code": "WEA",
+    "name": "Weather",
+    "subtitle": "ENV: 01-WX",
+    "color_name": "Amber",
+    "color_category": "Amber",
+    "hex": "#D4A017",
+    "rgb": [212, 160, 23],
+    "text_color": "#000000",
+    "description": "Live meteorological data — current conditions, forecast, and atmospheric readings."
+  },
+  {
+    "code": "MED",
+    "name": "Media",
+    "subtitle": "AUD: 02-MD",
+    "color_name": "Amber",
+    "color_category": "Amber",
+    "hex": "#D4A017",
+    "rgb": [212, 160, 23],
+    "text_color": "#000000",
+    "description": "Audio and video playback control — music, podcast, and visual media management."
   }
 ]
