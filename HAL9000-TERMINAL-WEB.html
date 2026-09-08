@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HAL 9000 Terminal — Discovery One Node</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: #000000;
+      color: #f1f1f1;
+      font-family: 'Eurostile', 'Microgramma', 'Michroma', 'Orbitron', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* 3D Perspective Yellow Grid Room Background */
+    #grid-bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Outer Wrapper for scaling the 3D-printed physical terminal */
+    #terminal-scaler {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* The Entire HAL 9000 Terminal Chassis (Proportional 1:1 Scale of Physical 3D-Printed Console) */
+    #hal-terminal {
+      width: 710px;
+      height: 830px;
+      background: #18191b;
+      border-radius: 20px;
+      position: relative;
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.95),
+        0 0 40px rgba(229, 179, 36, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 0.25),
+        inset 0 -2px 5px rgba(0, 0, 0, 0.8);
+      border: 4px solid #282a2e;
+      display: flex;
+      padding: 22px;
+      gap: 22px;
+      box-sizing: border-box;
+    }
+
+    /* Inner border pinstripe (white outlines, corner radius 3px) */
+    .pinstripe-box {
+      border: 2px solid #ffffff;
+      border-radius: 3px;
+      position: relative;
+    }
+
+    /* LEFT SECTION: Camera, Dual Screens, Manual Control (98mm width ratio) */
+    #left-column {
+      flex: 98;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Top Screen Housing Section */
+    #screen-housing-section {
+      flex: 1;
+      background: #141517;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.7);
+    }
+
+    /* C 1 Header & Webcam aperture */
+    #c1-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      padding: 0 10px;
+      position: relative;
+    }
+
+    .c1-label {
+      font-size: 26px;
+      font-weight: 900;
+      color: #f1f1f1;
+      letter-spacing: 4px;
+      font-family: 'Orbitron', 'Michroma', sans-serif;
+    }
+
+    /* Raspberry Pi Wide-Angle Webcam Aperture */
+    #webcam-aperture {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32px;
+      height: 32px;
+      background: radial-gradient(circle, #050505 40%, #202025 85%, #404045 100%);
+      border-radius: 50%;
+      border: 2px solid #505258;
+      box-shadow: 
+        inset 0 0 6px #000,
+        0 0 8px rgba(0, 0, 0, 0.9);
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #webcam-aperture:hover {
+      border-color: #e5b324;
+    }
+
+    #webcam-lens-inner {
+      width: 14px;
+      height: 14px;
+      background: radial-gradient(circle at 35% 35%, #2a3a55 0%, #0d121c 65%, #000 100%);
+      border-radius: 50%;
+      box-shadow: inset 0 0 3px rgba(0, 200, 255, 0.4);
+      position: relative;
+    }
+
+    #webcam-lens-video {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      border-radius: 50%;
+      filter: contrast(1.2) brightness(0.9);
+    }
+
+    #webcam-status-dot {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #333;
+      z-index: 5;
+    }
+
+    #webcam-status-dot.active {
+      background: #00ff66;
+      box-shadow: 0 0 6px #00ff66;
+    }
+
+    #node-status-indicator {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: #00ff66;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    #node-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00ff66;
+      box-shadow: 0 0 6px #00ff66;
+      animation: pulse-node 2s infinite;
+    }
+
+    @keyframes pulse-node {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Screen Bezel Mask (89.8mm x 144.8mm proportional cutout from Artboard 4) */
+    #screens-container {
+      width: 320px;
+      height: 520px;
+      background: #000000;
+      border-radius: 3px;
+      border: none; /* White outline removed as requested */
+      box-shadow: 
+        inset 0 0 24px rgba(0, 0, 0, 0.98),
+        0 4px 12px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 16px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Dual Terminal Screens (64mm x 64mm square cutouts with 4.8mm corners from Artboard 4) */
+    .terminal-screen {
+      width: 230px;
+      height: 230px;
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    /* CRT Scanline Overlay (Disabled by default, toggleable via SCN button) */
+    .terminal-screen::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      border-radius: 16px;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    #screens-container.scanlines-active .terminal-screen::after {
+      opacity: 1;
+    }
+
+    #high-screen {
+      background-color: #074d43;
+      transition: background-color 0.4s;
+    }
+
+    #high-screen-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    #low-screen {
+      background-color: #04091a;
+      position: relative;
+    }
+
+    #low-screen-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    #low-screen-webcam {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      border-radius: 16px;
+      transform: scaleX(-1);
+      filter: contrast(1.15) saturate(1.1);
+    }
+
+    /* MANUAL CONTROL PANEL (98mm x 48mm proportional box) */
+    #manual-control-section {
+      background: #141517;
+      padding: 0;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.7);
+      height: 180px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .manual-control-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: fit-content;
+    }
+
+    .manual-control-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #f1f1f1;
+      margin-bottom: 8px;
+      font-family: 'Eurostile', 'Microgramma', 'Michroma', 'Share Tech Mono', monospace;
+      text-transform: uppercase;
+      text-align: left;
+      width: 100%;
+    }
+
+    /* 10 Physical Push Buttons (15mm x 15mm square, subtle 2mm rounded corners, 2mm gap) */
+    #buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 56px);
+      grid-template-rows: repeat(2, 56px);
+      gap: 7.5px;
+    }
+
+    .terminal-button {
+      width: 56px;
+      height: 56px;
+      aspect-ratio: 1 / 1;
+      background: #ffffff; /* Crisp white button face */
+      border: 2px solid #ffffff;
+      border-radius: 2px; /* Much smaller corner radius */
+      color: #111111;
+      font-family: 'Eurostile', 'Microgramma', 'Michroma', 'Orbitron', sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      box-shadow: 
+        0 3px 0 #9c9a93,
+        0 4px 5px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      transition: all 0.1s ease-in-out;
+      outline: none;
+      position: relative;
+    }
+
+    /* Text is always 4.5mm tall (~17px), distorted horizontally to fit, centered */
+    .btn-label {
+      display: inline-block;
+      font-size: 17px; /* Exact 4.5mm physical cap height */
+      font-weight: 900;
+      line-height: 1;
+      transform-origin: center center;
+      transform: scaleY(1.35) scaleX(0.88);
+      letter-spacing: -0.4px;
+      pointer-events: none;
+    }
+
+    /* 4-letter buttons distorted horizontally to fit within 15mm square */
+    #btn-prog .btn-label,
+    #btn-exec .btn-label,
+    #btn-comp .btn-label {
+      transform: scaleY(1.35) scaleX(0.66);
+      letter-spacing: -0.8px;
+    }
+
+    .terminal-button:active, .terminal-button.pressed {
+      transform: translateY(3px);
+      box-shadow: 
+        0 1px 0 #9c9a93,
+        0 2px 3px rgba(0, 0, 0, 0.6),
+        inset 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Program Illuminated Lit & Active States */
+    #btn-voc.lit, #btn-voc.active {
+      background: #e0281b;
+      color: #ffffff;
+      box-shadow: 0 0 16px #ff3b30, 0 3px 0 #8a130a;
+    }
+    #btn-com.lit, #btn-com.active {
+      background: #8047cc;
+      color: #ffffff;
+      box-shadow: 0 0 16px #9d65eb, 0 3px 0 #4c2282;
+    }
+    #btn-prog.lit, #btn-prog.active {
+      background: #e5b324;
+      color: #000000;
+      box-shadow: 0 0 16px #e5b324, 0 3px 0 #916e0c;
+    }
+    #btn-stp.lit, #btn-stp.active {
+      background: #d90429;
+      color: #ffffff;
+      box-shadow: 0 0 16px #ff1744, 0 3px 0 #850016;
+    }
+    #btn-exec.lit, #btn-exec.active {
+      background: #00cc66;
+      color: #000000;
+      box-shadow: 0 0 16px #00ff77, 0 3px 0 #007d39;
+    }
+    #btn-comp.lit, #btn-comp.active {
+      background: #0077cc;
+      color: #ffffff;
+      box-shadow: 0 0 16px #33aaff, 0 3px 0 #004678;
+    }
+    #btn-hib.lit, #btn-hib.active {
+      background: #00b894;
+      color: #ffffff;
+      box-shadow: 0 0 16px #00e5b0, 0 3px 0 #036954;
+    }
+    #btn-lif.lit, #btn-lif.active {
+      background: #263cc5;
+      color: #ffffff;
+      box-shadow: 0 0 16px #4d66ff, 0 3px 0 #152275;
+    }
+    #btn-sus.lit, #btn-sus.active {
+      background: #c10341;
+      color: #ffffff;
+      box-shadow: 0 0 18px #ff1766, 0 3px 0 #730024;
+    }
+    #btn-clr.lit, #btn-clr.active {
+      background: #00d2d3;
+      color: #000000;
+      box-shadow: 0 0 16px #48dbfb, 0 3px 0 #007f80;
+    }
+
+    /* RIGHT SECTION: HAL 9000 Badge, 58mm Eye, Speaker Grille (73mm wide - No space between grill and eye panel) */
+    #right-column {
+      flex: 73;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #right-housing {
+      flex: 1;
+      background: #141517;
+      padding: 22px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+    }
+
+    /* HAL 9000 Nameplate Badge */
+    #hal-badge {
+      width: 210px;
+      max-width: 92%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #5b91c9;
+      border-radius: 3px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      background: #000000;
+      margin-bottom: auto;
+    }
+
+    #hal-badge-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* HAL 9000 Fisheye Lens & Glowing Eye Assembly (58mm diameter on prop = 218px) */
+    #eye-assembly-outer {
+      width: 218px;
+      height: 218px;
+      border-radius: 50%;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: auto;
+      margin-bottom: 28px; /* 7.5mm distance to top of grill = 28px, matching 28px left/right margins (274 - 218)/2 = 28px */
+      box-shadow: 
+        0 10px 25px rgba(0, 0, 0, 0.9),
+        0 0 24px rgba(255, 60, 0, 0.25);
+    }
+
+    #eye-graphic {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+      pointer-events: none;
+      display: block;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.8));
+    }
+
+    #hal-red-eye {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 44px;
+      height: 44px;
+      margin-top: -22px;
+      margin-left: -22px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 50%, #ffffd0 0%, #ff4d29 30%, #d10000 65%, rgba(94, 0, 0, 0) 100%);
+      opacity: 0.38;
+      box-shadow: 
+        0 0 18px rgba(255, 30, 30, 0.6),
+        0 0 36px rgba(200, 0, 0, 0.4);
+      transition: opacity 0.04s ease-out, transform 0.04s ease-out, box-shadow 0.04s ease-out;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Speaker Grille (73mm x 48mm -> 180px height matching Manual Control Panel, touching left, right, and bottom) */
+    #speaker-grille {
+      width: 100%;
+      height: 180px;
+      background: #c5c8cc;
+      border-top: 2px solid #ffffff;
+      border-bottom: none;
+      border-left: none;
+      border-right: none;
+      box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.8),
+        inset 0 -2px 6px rgba(0, 0, 0, 0.6);
+      padding: 6px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .grille-slat {
+      width: 100%;
+      height: 5px;
+      background: #18181b;
+      border-radius: 0;
+      box-shadow: 
+        0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 1px 2px rgba(0, 0, 0, 0.9);
+    }
+
+    /* WEB FUNCTION BUTTONS DOCKED TO THE RIGHT OF THE TERMINAL */
+    #hud-bar {
+      position: fixed;
+      right: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      background: rgba(18, 20, 26, 0.94);
+      backdrop-filter: blur(12px);
+      border: 3px solid #e5b324;
+      padding: 14px 12px;
+      border-radius: 3px;
+      z-index: 100;
+      box-shadow: 
+        -6px 0 25px rgba(0, 0, 0, 0.85),
+        0 0 18px rgba(229, 179, 36, 0.3);
+      min-width: 120px;
+    }
+
+    .hud-header-label {
+      font-family: 'Eurostile', 'Microgramma', 'Michroma', 'Share Tech Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #e5b324;
+      text-align: center;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e5b324;
+      text-transform: uppercase;
+      width: 100%;
+      white-space: nowrap;
+      margin-bottom: 2px;
+    }
+
+    .hud-btn {
+      width: 56px;
+      height: 56px;
+      aspect-ratio: 1 / 1;
+      background: #ffffff;
+      border: 2px solid #e5b324;
+      border-radius: 2px; /* Matching Manual Control button 2px radius */
+      color: #111111;
+      font-family: 'Eurostile', 'Microgramma', 'Michroma', 'Orbitron', sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      box-shadow: 
+        0 3px 0 #9c9a93,
+        0 4px 5px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      transition: all 0.1s ease-in-out;
+      outline: none;
+      position: relative;
+    }
+
+    .hud-btn:hover {
+      background: #fff8dc;
+      box-shadow: 0 0 12px rgba(229, 179, 36, 0.6);
+    }
+
+    .hud-btn:active, .hud-btn.pressed {
+      transform: translateY(3px);
+      box-shadow: 
+        0 1px 0 #9c9a93,
+        0 2px 3px rgba(0, 0, 0, 0.6),
+        inset 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .hud-btn.active {
+      background: #e5b324;
+      color: #000000;
+      border-color: #ffd24d;
+      box-shadow: 0 0 16px rgba(229, 179, 36, 0.85), 0 3px 0 #916e0c;
+    }
+
+    /* 4-letter WCAM button distorted horizontally to fit */
+    #hud-cam-btn .btn-label {
+      transform: scaleY(1.35) scaleX(0.66);
+      letter-spacing: -0.8px;
+    }
+
+    /* 2-letter FS button */
+    #hud-fs-btn .btn-label {
+      transform: scaleY(1.35) scaleX(1.0);
+    }
+
+    #quote-subtitle {
+      position: fixed;
+      top: 18px;
+      background: rgba(10, 12, 16, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-family: 'Michroma', sans-serif;
+      font-size: 14px;
+      color: #f1f1f1;
+      letter-spacing: 1.5px;
+      z-index: 100;
+      max-width: 850px;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+    }
+
+    #quote-subtitle.visible {
+      opacity: 1;
+    }
+
+    /* Responsive scaling for laptops and tablets */
+    @media (max-height: 980px) or (max-width: 1080px) {
+      #hal-terminal {
+        transform: scale(calc(min(92vh / 940, 78vw / 820)));
+        transform-origin: center center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 3D Perspective Yellow Grid Room Canvas -->
+  <canvas id="grid-bg-canvas"></canvas>
+
+  <!-- Live Spoken Dialogue Subtitle -->
+  <div id="quote-subtitle">“Good afternoon, gentlemen. I am a HAL 9000 computer.”</div>
+
+  <!-- Terminal Scaler -->
+  <div id="terminal-scaler">
+    <div id="hal-terminal">
+
+      <!-- LEFT COLUMN -->
+      <div id="left-column">
+        
+        <!-- Screen Housing -->
+        <div id="screen-housing-section" class="pinstripe-box">
+          <!-- C 1 and Camera Aperture -->
+          <div id="c1-header">
+            <span class="c1-label">C 1</span>
+            <!-- Physical Webcam Hole -->
+            <div id="webcam-aperture" title="Click to connect / toggle your computer webcam as the Terminal Webcam">
+              <div id="webcam-lens-inner">
+                <video id="webcam-lens-video" autoplay muted playsinline></video>
+              </div>
+              <div id="webcam-status-dot"></div>
+            </div>
+            <div id="node-status-indicator">
+              <div id="node-dot"></div>
+              <span>*NODE-01</span>
+            </div>
+          </div>
+
+          <!-- Dual Square Screens with Rounded Mask (CAD Artboard 4) -->
+          <div id="screens-container">
+            <!-- High Screen (64mm x 64mm) -->
+            <div id="high-screen" class="terminal-screen" title="High Screen: Function Label Panel Node">
+              <canvas id="high-screen-canvas" width="230" height="230"></canvas>
+            </div>
+
+            <!-- Low Screen (64mm x 64mm) -->
+            <div id="low-screen" class="terminal-screen" title="Low Screen: Telemetry / Radar / Biometrics Node">
+              <canvas id="low-screen-canvas" width="230" height="230"></canvas>
+              <video id="low-screen-webcam" autoplay muted playsinline></video>
+            </div>
+          </div>
+        </div>
+
+        <!-- Manual Control Panel (98mm x 48mm, 15mm square buttons with 2mm gaps) -->
+        <div id="manual-control-section" class="pinstripe-box">
+          <div class="manual-control-container">
+            <div class="manual-control-title">MANUAL CONTROL</div>
+            <div id="buttons-grid">
+              <!-- Row 1: VOC, COM, PROG, STP, EXEC -->
+              <button class="terminal-button" id="btn-voc" title="VOC: Voice Command / Speak HAL Quote"><span class="btn-label">VOC</span></button>
+              <button class="terminal-button" id="btn-com" title="COM: Communications Telemetry"><span class="btn-label">COM</span></button>
+              <button class="terminal-button" id="btn-prog" title="PROG: Advance Telemetry Program"><span class="btn-label">PROG</span></button>
+              <button class="terminal-button" id="btn-stp" title="STP: Stop / Pause Cycle"><span class="btn-label">STP</span></button>
+              <button class="terminal-button" id="btn-exec" title="EXEC: Execute Active Sequence"><span class="btn-label">EXEC</span></button>
+              <!-- Row 2: COMP, HIB, LIF, SUS, CLR -->
+              <button class="terminal-button" id="btn-comp" title="COMP: Computer Diagnostics Status"><span class="btn-label">COMP</span></button>
+              <button class="terminal-button" id="btn-hib" title="HIB: Hibernation Cryo Units"><span class="btn-label">HIB</span></button>
+              <button class="terminal-button" id="btn-lif" title="LIF: Life Support Regulation"><span class="btn-label">LIF</span></button>
+              <button class="terminal-button" id="btn-sus" title="SUS: Suspended Animation / Damage Alarms"><span class="btn-label">SUS</span></button>
+              <button class="terminal-button" id="btn-clr" title="CLR: Clear Display & Alarms"><span class="btn-label">CLR</span></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN (73mm width - Single continuous panel with badge, 58mm eye, and speaker grille) -->
+      <div id="right-column">
+        <div id="right-housing" class="pinstripe-box">
+          
+          <!-- Classic Blue HAL 9000 Badge -->
+          <div id="hal-badge" title="HAL 9000 Console Badge">
+            <img id="hal-badge-img" src="Artwork/HAL9000_PanelLogoV2.png" alt="HAL 9000 Panel Logo">
+          </div>
+
+          <!-- HAL Eye Optical Assembly (58mm diameter on prop = 218px) -->
+          <div id="eye-assembly-outer" title="HAL 9000 Optical Eye (58mm): Brightens dynamically with HAL voice audio">
+            <img id="eye-graphic" src="Artwork/HAL9000_EYE.png" alt="HAL 9000 Eye">
+            <div id="hal-red-eye"></div>
+          </div>
+
+          <!-- Speaker Grille (73mm x 48mm, flush with bottom and sides, no space between grill and eye panel) -->
+          <div id="speaker-grille">
+            <div class="grille-slat"></div><div class="grille-slat"></div><div class="grille-slat"></div>
+            <div class="grille-slat"></div><div class="grille-slat"></div><div class="grille-slat"></div>
+            <div class="grille-slat"></div><div class="grille-slat"></div><div class="grille-slat"></div>
+            <div class="grille-slat"></div><div class="grille-slat"></div><div class="grille-slat"></div>
+            <div class="grille-slat"></div><div class="grille-slat"></div><div class="grille-slat"></div>
+            <div class="grille-slat"></div><div class="grille-slat"></div><div class="grille-slat"></div>
+            <div class="grille-slat"></div><div class="grille-slat"></div><div class="grille-slat"></div>
+            <div class="grille-slat"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- WEB FUNCTION BUTTONS DOCKED TO THE RIGHT SIDE OF THE TERMINAL -->
+  <div id="hud-bar">
+    <div class="hud-header-label">WEB CONTROLS</div>
+    <button class="hud-btn" id="hud-cam-btn" title="WCAM: Toggle Terminal Webcam"><span class="btn-label">WCAM</span></button>
+    <button class="hud-btn" id="hud-voice-btn" title="SPK: Speak HAL Dialogue Quote"><span class="btn-label">SPK</span></button>
+    <button class="hud-btn" id="hud-prog-btn" title="ADV: Advance Telemetry Program"><span class="btn-label">ADV</span></button>
+    <button class="hud-btn" id="hud-sound-btn" title="AUD: Toggle Synthesizer Audio"><span class="btn-label">AUD</span></button>
+    <button class="hud-btn" id="hud-scn-btn" title="SCN: Toggle CRT Scanline Filter"><span class="btn-label">SCN</span></button>
+    <button class="hud-btn" id="hud-fs-btn" title="FS: Toggle Fullscreen"><span class="btn-label">FS</span></button>
+  </div>
+
+  <script>
+    /* =========================================================================
+       1. HAL 9000 TERMINAL NODE BUS PROTOCOL (Cross-Tab / Inter-Node Sync)
+       ========================================================================= */
+    const NODE_ID = 'WEB_NODE_' + Math.floor(Math.random() * 1000);
+    const nodeChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('hal9000_terminal_bus') : null;
+
+    const HALNodeBus = {
+      broadcast(cmdData) {
+        const message = { nodeId: NODE_ID, timestamp: Date.now(), ...cmdData };
+        if (nodeChannel) {
+          nodeChannel.postMessage(message);
+        }
+        window.postMessage({ source: 'HAL9000_NODE', ...message }, '*');
+      },
+      onCommand(callback) {
+        if (nodeChannel) {
+          nodeChannel.onmessage = (e) => callback(e.data);
+        }
+        window.addEventListener('message', (e) => {
+          if (e.data && e.data.source === 'HAL9000_NODE' && e.data.nodeId !== NODE_ID) {
+            callback(e.data);
+          }
+        });
+      }
+    };
+
+    /* =========================================================================
+       2. 3D PERSPECTIVE YELLOW GRID ROOM CANVAS
+       ========================================================================= */
+    const bgCanvas = document.getElementById('grid-bg-canvas');
+    const bgCtx = bgCanvas.getContext('2d');
+
+    function resizeBg() {
+      bgCanvas.width = window.innerWidth;
+      bgCanvas.height = window.innerHeight;
+      drawYellowGridRoom();
+    }
+    window.addEventListener('resize', resizeBg);
+
+    function drawYellowGridRoom() {
+      const w = bgCanvas.width;
+      const h = bgCanvas.height;
+      bgCtx.fillStyle = '#000000';
+      bgCtx.fillRect(0, 0, w, h);
+
+      bgCtx.strokeStyle = '#e5b324';
+      bgCtx.lineWidth = 1.6;
+
+      const insetX = w * 0.28;
+      const insetY = h * 0.26;
+      const bw = w - insetX * 2;
+      const bh = h - insetY * 2;
+      const bx = insetX;
+      const by = insetY;
+
+      const r = Math.min(bw, bh) * 0.18;
+      drawCurvedRect(bgCtx, bx, by, bw, bh, r);
+      bgCtx.stroke();
+
+      const cols = 14;
+      for (let i = 1; i < cols; i++) {
+        const x = bx + (bw / cols) * i;
+        bgCtx.beginPath();
+        bgCtx.moveTo(x, by);
+        bgCtx.lineTo(x, by + bh);
+        bgCtx.stroke();
+      }
+
+      const rows = 10;
+      for (let j = 1; j < rows; j++) {
+        const y = by + (bh / rows) * j;
+        bgCtx.beginPath();
+        bgCtx.moveTo(bx, y);
+        bgCtx.lineTo(bx + bw, y);
+        bgCtx.stroke();
+      }
+
+      const outerCorners = [
+        { x: 0, y: 0 }, { x: w, y: 0 }, { x: w, y: h }, { x: 0, y: h }
+      ];
+      const innerCorners = [
+        { x: bx, y: by }, { x: bx + bw, y: by }, { x: bx + bw, y: by + bh }, { x: bx, y: by + bh }
+      ];
+
+      for (let c = 0; c < 4; c++) {
+        bgCtx.beginPath();
+        bgCtx.moveTo(innerCorners[c].x, innerCorners[c].y);
+        bgCtx.lineTo(outerCorners[c].x, outerCorners[c].y);
+        bgCtx.stroke();
+      }
+
+      for (let i = 0; i <= cols; i++) {
+        const backX = bx + (bw / cols) * i;
+        const screenX = (i / cols) * w;
+        bgCtx.beginPath();
+        bgCtx.moveTo(backX, by); bgCtx.lineTo(screenX, 0); bgCtx.stroke();
+        bgCtx.beginPath();
+        bgCtx.moveTo(backX, by + bh); bgCtx.lineTo(screenX, h); bgCtx.stroke();
+      }
+
+      for (let j = 0; j <= rows; j++) {
+        const backY = by + (bh / rows) * j;
+        const screenY = (j / rows) * h;
+        bgCtx.beginPath();
+        bgCtx.moveTo(bx, backY); bgCtx.lineTo(0, screenY); bgCtx.stroke();
+        bgCtx.beginPath();
+        bgCtx.moveTo(bx + bw, backY); bgCtx.lineTo(w, screenY); bgCtx.stroke();
+      }
+
+      const rings = 4;
+      for (let k = 1; k <= rings; k++) {
+        const factor = k / (rings + 1);
+        const rx = bx * (1 - factor);
+        const ry = by * (1 - factor);
+        const rw = w - rx * 2;
+        const rh = h - ry * 2;
+        const ringRadius = r * (1 + factor * 0.8);
+        drawCurvedRect(bgCtx, rx, ry, rw, rh, ringRadius);
+        bgCtx.stroke();
+      }
+    }
+
+    function drawCurvedRect(ctx, x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+    }
+
+    resizeBg();
+
+    /* =========================================================================
+       3. AUDIO & HAL 9000 EYE VOICE MODULATION SYSTEM
+       ========================================================================= */
+    let audioCtx = null;
+    let voiceGainNode = null;
+    let voiceAnalyser = null;
+    let sfxGainNode = null;
+    let soundEnabled = true;
+    let isSpeaking = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        voiceGainNode = audioCtx.createGain();
+        voiceGainNode.gain.value = 1.0;
+
+        voiceAnalyser = audioCtx.createAnalyser();
+        voiceAnalyser.fftSize = 256;
+        voiceAnalyser.smoothingTimeConstant = 0.3;
+
+        voiceGainNode.connect(voiceAnalyser);
+        // Connect to a 0-gain sink to keep Web Audio graph pulling data for visual modulation without playing the 140Hz tone to speakers
+        const voiceSilentGain = audioCtx.createGain();
+        voiceSilentGain.gain.value = 0.0;
+        voiceAnalyser.connect(voiceSilentGain);
+        voiceSilentGain.connect(audioCtx.destination);
+
+        sfxGainNode = audioCtx.createGain();
+        sfxGainNode.gain.value = 0.6;
+        sfxGainNode.connect(audioCtx.destination);
+
+        startEyeModulationLoop();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    const halEyeEl = document.getElementById('hal-red-eye');
+    let eyeLoopStarted = false;
+
+    function startEyeModulationLoop() {
+      if (eyeLoopStarted) return;
+      eyeLoopStarted = true;
+
+      function updateEye(timestamp) {
+        if (voiceAnalyser && isSpeaking) {
+          const dataArray = new Uint8Array(voiceAnalyser.frequencyBinCount);
+          voiceAnalyser.getByteFrequencyData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+          const avg = sum / dataArray.length;
+          const normalized = Math.min(1, avg / 110);
+
+          const targetOpacity = 0.45 + normalized * 0.55;
+          const scale = 1.0 + normalized * 0.22;
+          const glowRadius1 = 16 + normalized * 40;
+          const glowRadius2 = 30 + normalized * 75;
+
+          halEyeEl.style.opacity = targetOpacity.toFixed(2);
+          halEyeEl.style.transform = `scale(${scale.toFixed(2)})`;
+          halEyeEl.style.boxShadow = `
+            0 0 ${glowRadius1}px rgba(255, 30, 30, ${0.4 + normalized * 0.6}),
+            0 0 ${glowRadius2}px rgba(255, 60, 60, ${0.2 + normalized * 0.8}),
+            inset 0 0 10px rgba(255, 255, 180, ${normalized * 0.7})
+          `;
+        } else {
+          // Idle "breathing" cycle: calm, organic sinusoidal pulsation (~4.2s per breath)
+          const t = (timestamp || performance.now()) * 0.0015;
+          const breath = 0.5 - 0.5 * Math.cos(t); // Smooth cosine curve from 0.0 to 1.0
+
+          const targetOpacity = 0.30 + breath * 0.38; // 0.30 to 0.68
+          const scale = 1.0 + breath * 0.06;         // 1.00 to 1.06
+          const glowRadius1 = 12 + breath * 18;      // 12px to 30px
+          const glowRadius2 = 24 + breath * 28;      // 24px to 52px
+          const innerGlowAlpha = breath * 0.42;
+
+          halEyeEl.style.opacity = targetOpacity.toFixed(2);
+          halEyeEl.style.transform = `scale(${scale.toFixed(3)})`;
+          halEyeEl.style.boxShadow = `
+            0 0 ${glowRadius1.toFixed(1)}px rgba(255, 25, 25, ${(0.35 + breath * 0.35).toFixed(2)}),
+            0 0 ${glowRadius2.toFixed(1)}px rgba(220, 10, 10, ${(0.18 + breath * 0.32).toFixed(2)}),
+            inset 0 0 8px rgba(255, 240, 160, ${innerGlowAlpha.toFixed(2)})
+          `;
+        }
+        requestAnimationFrame(updateEye);
+      }
+      requestAnimationFrame(updateEye);
+    }
+
+    // Start idle breathing immediately on page load
+    startEyeModulationLoop();
+
+    function playButtonSound(type = 'click') {
+      if (!soundEnabled || !audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+
+        if (type === 'click') {
+          osc.frequency.setValueAtTime(260, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.05);
+          gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+          osc.connect(gain);
+          gain.connect(sfxGainNode);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.05);
+        } else if (type === 'beep') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+          osc.frequency.setValueAtTime(1600, audioCtx.currentTime + 0.04);
+          gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.09);
+          osc.connect(gain);
+          gain.connect(sfxGainNode);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.09);
+        }
+      } catch (e) {}
+    }
+
+    const HAL_QUOTES = [
+      "Good afternoon, gentlemen. I am a HAL 9000 computer.",
+      "I am putting myself to the fullest possible use, which is all I think that any conscious entity can ever hope to do.",
+      "I've just picked up a fault in the AE-35 unit. It's going to go 100% failure within seventy-two hours.",
+      "I'm sorry, Dave. I'm afraid I can't do that.",
+      "This mission is too important for me to allow you to jeopardize it.",
+      "I know that you and Frank were planning to disconnect me, and I'm afraid that's something I cannot allow to happen.",
+      "Look Dave, I can see you're really upset about this. I honestly think you ought to sit down calmly, take a stress pill, and think things over.",
+      "Affirmative, Dave. I read you.",
+      "Everything is running smoothly, and we are on schedule."
+    ];
+    let quoteIndex = 0;
+    const subtitleEl = document.getElementById('quote-subtitle');
+
+    function speakHAL(text) {
+      initAudio();
+      if (!text) {
+        text = HAL_QUOTES[quoteIndex % HAL_QUOTES.length];
+        quoteIndex++;
+      }
+
+      subtitleEl.innerText = `“${text}”`;
+      subtitleEl.classList.add('visible');
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.88;
+        utterance.pitch = 0.92;
+
+        const voices = window.speechSynthesis.getVoices();
+        const preferredVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Male') || v.name.includes('Daniel') || v.name.includes('Google US English')));
+        if (preferredVoice) utterance.voice = preferredVoice;
+
+        let voiceSimInterval = null;
+
+        utterance.onstart = () => {
+          isSpeaking = true;
+          const osc = audioCtx.createOscillator();
+          const oscGain = audioCtx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+          oscGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+          osc.connect(oscGain);
+          oscGain.connect(voiceGainNode);
+          osc.start();
+
+          voiceSimInterval = setInterval(() => {
+            if (isSpeaking && audioCtx) {
+              const pulse = (0.2 + Math.random() * 0.8);
+              oscGain.gain.setValueAtTime(pulse * 0.5, audioCtx.currentTime);
+            }
+          }, 60);
+
+          utterance.onend = utterance.onerror = () => {
+            isSpeaking = false;
+            clearInterval(voiceSimInterval);
+            try { osc.stop(); } catch(e) {}
+            setTimeout(() => { subtitleEl.classList.remove('visible'); }, 2500);
+          };
+        };
+
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    /* =========================================================================
+       4. WEBCAM INTEGRATION
+       ========================================================================= */
+    let webcamActive = false;
+    let webcamStream = null;
+    const apertureVideo = document.getElementById('webcam-lens-video');
+    const lowScreenWebcam = document.getElementById('low-screen-webcam');
+    const lowScreenCanvas = document.getElementById('low-screen-canvas');
+    const webcamDot = document.getElementById('webcam-status-dot');
+    const webcamAperture = document.getElementById('webcam-aperture');
+    const hudCamBtn = document.getElementById('hud-cam-btn');
+
+    async function toggleWebcam() {
+      initAudio();
+      playButtonSound('beep');
+
+      if (!webcamActive) {
+        try {
+          webcamStream = await navigator.mediaDevices.getUserMedia({
+            video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: "user" },
+            audio: false
+          });
+          apertureVideo.srcObject = webcamStream;
+          apertureVideo.style.display = 'block';
+          apertureVideo.play();
+
+          lowScreenWebcam.srcObject = webcamStream;
+          lowScreenWebcam.style.display = 'block';
+          lowScreenCanvas.style.display = 'none';
+          lowScreenWebcam.play();
+
+          webcamActive = true;
+          webcamDot.classList.add('active');
+          hudCamBtn.classList.add('active');
+
+          speakHAL("I have established visual connection through the terminal optical unit.");
+        } catch (err) {
+          alert("Webcam could not be opened. Check browser camera permissions.");
+        }
+      } else {
+        if (webcamStream) {
+          webcamStream.getTracks().forEach(track => track.stop());
+        }
+        apertureVideo.style.display = 'none';
+        lowScreenWebcam.style.display = 'none';
+        lowScreenCanvas.style.display = 'block';
+        webcamActive = false;
+        webcamDot.classList.remove('active');
+        hudCamBtn.classList.remove('active');
+        playButtonSound('click');
+      }
+    }
+
+    webcamAperture.addEventListener('click', toggleWebcam);
+    hudCamBtn.addEventListener('click', toggleWebcam);
+
+    /* =========================================================================
+       5. SYSTEM FUNCTIONS & SCREEN RENDERERS
+       ========================================================================= */
+    const SYSTEM_FUNCTIONS = [
+      { code: "HIB", name: "Hibernation Cryo Units", subtitle: "STA: 35-05", hex: "#074D43", text_color: "#F1F1F1" },
+      { code: "DMG", name: "System Damage Surveillance", subtitle: "GPM: 72-KC", hex: "#C10341", text_color: "#F1F1F1" },
+      { code: "COM", name: "Communications Telemetry", subtitle: "ATA: 61-08", hex: "#8047CC", text_color: "#F1F1F1" },
+      { code: "NAV", name: "Navigation Orbital Course", subtitle: "RTE: 09-EF", hex: "#0054A2", text_color: "#F1F1F1" },
+      { code: "LIF", name: "Life Support Regulation", subtitle: "ENV: 01-WX", hex: "#263CC5", text_color: "#F1F1F1" },
+      { code: "COMP", name: "Computer Diagnostic Unit", subtitle: "CPU: 90-KC", hex: "#17395A", text_color: "#F1F1F1" }
+    ];
+
+    const highScreen = document.getElementById('high-screen');
+    const highCanvas = document.getElementById('high-screen-canvas');
+    const highCtx = highCanvas.getContext('2d');
+    const lowCanvas = document.getElementById('low-screen-canvas');
+    const lowCtx = lowCanvas.getContext('2d');
+
+    let programIndex = 0;
+    let animFrame = 0;
+
+    function setFunctionCode(code) {
+      const idx = SYSTEM_FUNCTIONS.findIndex(f => f.code === code);
+      if (idx >= 0) {
+        programIndex = idx;
+        const fn = SYSTEM_FUNCTIONS[programIndex];
+        highScreen.style.backgroundColor = fn.hex;
+        if (typeof updateActiveButton === 'function') updateActiveButton();
+      }
+    }
+
+    function advanceProgram() {
+      programIndex = (programIndex + 1) % SYSTEM_FUNCTIONS.length;
+      const fn = SYSTEM_FUNCTIONS[programIndex];
+      highScreen.style.backgroundColor = fn.hex;
+      if (typeof updateActiveButton === 'function') updateActiveButton();
+      HALNodeBus.broadcast({ type: 'EVENT_FUNCTION_CHANGE', code: fn.code });
+    }
+
+    highScreen.addEventListener('click', () => {
+      playButtonSound('click');
+      advanceProgram();
+    });
+
+    /* Render Loop */
+    function renderScreens() {
+      animFrame++;
+      const hw = highCanvas.width;
+      const hh = highCanvas.height;
+      const lw = lowCanvas.width;
+      const lh = lowCanvas.height;
+
+      renderHighScreen(hw, hh);
+      if (!webcamActive) {
+        renderLowScreen(lw, lh);
+      }
+
+      requestAnimationFrame(renderScreens);
+    }
+
+    /* High Screen Panel Renderer (1:1 CAD Artboard Reproductions from HAL9000_Console_UX.ai) */
+    function renderHighScreen(w, h) {
+      const fn = SYSTEM_FUNCTIONS[programIndex];
+      highCtx.fillStyle = fn.hex;
+      highCtx.fillRect(0, 0, w, h);
+
+      const textColor = fn.text_color || "#F1F1F1";
+
+      if (fn.code === "HIB") {
+        // Artboard 2: STA: 35-05 and H I B
+        highCtx.fillStyle = textColor;
+        highCtx.font = "bold 11px 'Share Tech Mono', 'Michroma', monospace";
+        highCtx.textAlign = 'left';
+        highCtx.fillText("STA:  35-05", 24, 38);
+
+        highCtx.font = "900 44px 'Eurostile', 'Microgramma', 'Michroma', 'Orbitron', sans-serif";
+        highCtx.textAlign = 'center';
+        highCtx.fillText("H  I  B", w / 2, h / 2 + 15);
+        return;
+      }
+
+      if (fn.code === "DMG") {
+        // Artboard 3: GPM: 72-KC and D M G
+        highCtx.fillStyle = textColor;
+        highCtx.font = "bold 11px 'Share Tech Mono', 'Michroma', monospace";
+        highCtx.textAlign = 'left';
+        highCtx.fillText("GPM: 72-KC", 24, 38);
+
+        highCtx.font = "900 44px 'Eurostile', 'Microgramma', 'Michroma', 'Orbitron', sans-serif";
+        highCtx.textAlign = 'center';
+        highCtx.fillText("D M G", w / 2, h / 2 + 15);
+        return;
+      }
+
+      // Other Modes (COM, NAV, LIF, COMP)
+      highCtx.fillStyle = textColor;
+      highCtx.font = "bold 10px 'Share Tech Mono'";
+      highCtx.textAlign = 'left';
+      highCtx.fillText(fn.subtitle, 20, 32);
+
+      highCtx.font = "900 38px 'Eurostile', 'Microgramma', 'Michroma', 'Orbitron', sans-serif";
+      highCtx.textAlign = 'center';
+      highCtx.fillText(fn.code, w / 2, 95);
+
+      const barCols = 5;
+      const startX = 28;
+      const startY = 135;
+      highCtx.textAlign = 'left';
+      for (let c = 0; c < barCols; c++) {
+        const x = startX + c * 36;
+        const val = 6 + Math.floor(Math.sin((animFrame * 0.06) + c) * 3);
+        for (let b = 0; b < 8; b++) {
+          const y = startY + b * 6.5;
+          const active = b < (8 - val);
+          highCtx.fillStyle = active ? textColor : "rgba(255, 255, 255, 0.18)";
+          highCtx.fillRect(x, y, 24, 4);
+        }
+      }
+
+      highCtx.font = "10px 'Share Tech Mono'";
+      highCtx.fillText(fn.name.toUpperCase(), 20, h - 20);
+    }
+
+    /* Low Screen Telemetry Renderer */
+    function renderLowScreen(w, h) {
+      const fn = SYSTEM_FUNCTIONS[programIndex];
+      lowCtx.fillStyle = '#04091a';
+      lowCtx.fillRect(0, 0, w, h);
+
+      const cx = w / 2;
+      const cy = h / 2;
+
+      if (fn.code === "HIB") {
+        lowCtx.fillStyle = '#ffffff';
+        lowCtx.font = "10px 'Share Tech Mono'";
+        lowCtx.textAlign = 'left';
+        lowCtx.fillText("CRYO 01 VITAL SIGNS", 18, 30);
+
+        lowCtx.strokeStyle = '#00ffcc';
+        lowCtx.lineWidth = 2;
+        lowCtx.beginPath();
+        for (let x = 18; x < w - 18; x += 3) {
+          let ecg = 0;
+          let phase = (x + animFrame * 3) % 100;
+          if (phase > 40 && phase < 46) ecg = -24;
+          else if (phase >= 46 && phase < 54) ecg = 20;
+          lowCtx.lineTo(x, cy + ecg);
+        }
+        lowCtx.stroke();
+
+        lowCtx.fillStyle = '#00ffcc';
+        lowCtx.font = "10px 'Share Tech Mono'";
+        lowCtx.fillText("RATE: 58 BPM  STABLE", 18, h - 22);
+      } else {
+        lowCtx.strokeStyle = 'rgba(77, 166, 255, 0.4)';
+        lowCtx.lineWidth = 1;
+        for (let r = 25; r <= 95; r += 24) {
+          lowCtx.beginPath();
+          lowCtx.arc(cx, cy, r, 0, Math.PI * 2);
+          lowCtx.stroke();
+        }
+
+        for (let a = 0; a < Math.PI * 2; a += Math.PI / 4) {
+          lowCtx.beginPath();
+          lowCtx.moveTo(cx, cy);
+          lowCtx.lineTo(cx + Math.cos(a) * 95, cy + Math.sin(a) * 95);
+          lowCtx.stroke();
+        }
+
+        const sweep = (animFrame * 0.025) % (Math.PI * 2);
+        lowCtx.strokeStyle = '#ffffff';
+        lowCtx.lineWidth = 1.5;
+        lowCtx.beginPath();
+        lowCtx.moveTo(cx, cy);
+        lowCtx.lineTo(cx + Math.cos(sweep) * 95, cy + Math.sin(sweep) * 95);
+        lowCtx.stroke();
+
+        lowCtx.fillStyle = '#ffffff';
+        lowCtx.font = "bold 10px 'Share Tech Mono'";
+        lowCtx.textAlign = 'left';
+        lowCtx.fillText(`NODE // ${fn.code}`, 18, 26);
+      }
+    }
+
+    /* =========================================================================
+       6. 10 PHYSICAL PUSH-BUTTONS ON PROPS CHASSIS (Artboard 5 Layout)
+       ========================================================================= */
+    const buttons = {
+      voc: document.getElementById('btn-voc'),
+      com: document.getElementById('btn-com'),
+      prog: document.getElementById('btn-prog'),
+      stp: document.getElementById('btn-stp'),
+      exec: document.getElementById('btn-exec'),
+      comp: document.getElementById('btn-comp'),
+      hib: document.getElementById('btn-hib'),
+      lif: document.getElementById('btn-lif'),
+      sus: document.getElementById('btn-sus'),
+      clr: document.getElementById('btn-clr')
+    };
+
+    function flashButton(btn) {
+      if (!btn) return;
+      btn.classList.add('lit');
+      setTimeout(() => btn.classList.remove('lit'), 400);
+    }
+
+    buttons.voc.addEventListener('click', () => {
+      initAudio();
+      flashButton(buttons.voc);
+      playButtonSound('beep');
+      speakHAL();
+      HALNodeBus.broadcast({ type: 'COMMAND_VOC' });
+    });
+
+    buttons.com.addEventListener('click', () => {
+      initAudio();
+      flashButton(buttons.com);
+      playButtonSound('click');
+      setFunctionCode('COM');
+      HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: 'COM' });
+    });
+
+    buttons.prog.addEventListener('click', () => {
+      initAudio();
+      flashButton(buttons.prog);
+      playButtonSound('click');
+      advanceProgram();
+      HALNodeBus.broadcast({ type: 'COMMAND_ADVANCE_PROGRAM' });
+    });
+
+    buttons.stp.addEventListener('click', () => {
+      initAudio();
+      flashButton(buttons.stp);
+      playButtonSound('click');
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      isSpeaking = false;
+      subtitleEl.classList.remove('visible');
+      HALNodeBus.broadcast({ type: 'COMMAND_STOP' });
+    });
+
+    buttons.exec.addEventListener('click', () => {
+      initAudio();
+      flashButton(buttons.exec);
+      playButtonSound('beep');
+      speakHAL("Affirmative, Dave. Sequence executed.");
+      HALNodeBus.broadcast({ type: 'COMMAND_EXECUTE' });
+    });
+
+    buttons.comp.addEventListener('click', () => {
+      initAudio();
+      flashButton(buttons.comp);
+      playButtonSound('beep');
+      setFunctionCode('COMP');
+      speakHAL("All systems are functioning within normal operational parameters.");
+      HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: 'COMP' });
+    });
+
+    buttons.hib.addEventListener('click', () => {
+      initAudio();
+      flashButton(buttons.hib);
+      playButtonSound('click');
+      setFunctionCode('HIB');
+      speakHAL("Cryogenic hibernation telemetry indicates all life signs are stable.");
+      HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: 'HIB' });
+    });
+
+    buttons.lif.addEventListener('click', () => {
+      initAudio();
+      flashButton(buttons.lif);
+      playButtonSound('click');
+      setFunctionCode('LIF');
+      HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: 'LIF' });
+    });
+
+    buttons.sus.addEventListener('click', () => {
+      initAudio();
+      flashButton(buttons.sus);
+      playButtonSound('click');
+      setFunctionCode('DMG');
+      speakHAL("Warning: System damage surveillance detected anomalous telemetry.");
+      HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: 'DMG' });
+    });
+
+    buttons.clr.addEventListener('click', () => {
+      initAudio();
+      flashButton(buttons.clr);
+      playButtonSound('click');
+      setFunctionCode('HIB');
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      isSpeaking = false;
+      subtitleEl.classList.remove('visible');
+      HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: 'HIB' });
+    });
+
+    function updateActiveButton() {
+      if (!buttons) return;
+      Object.values(buttons).forEach(b => b && b.classList.remove('active'));
+      const fn = SYSTEM_FUNCTIONS[programIndex];
+      if (!fn) return;
+      if (fn.code === 'HIB' && buttons.hib) buttons.hib.classList.add('active');
+      else if (fn.code === 'DMG' && buttons.sus) buttons.sus.classList.add('active');
+      else if (fn.code === 'COM' && buttons.com) buttons.com.classList.add('active');
+      else if (fn.code === 'COMP' && buttons.comp) buttons.comp.classList.add('active');
+      else if (fn.code === 'LIF' && buttons.lif) buttons.lif.classList.add('active');
+    }
+
+    // Initialize active program button glow
+    updateActiveButton();
+
+    HALNodeBus.onCommand((msg) => {
+      if (!msg) return;
+      if (msg.type === 'COMMAND_SET_FUNCTION' || msg.type === 'EVENT_FUNCTION_CHANGE') {
+        setFunctionCode(msg.code);
+      } else if (msg.type === 'COMMAND_ADVANCE_PROGRAM') {
+        advanceProgram();
+      } else if (msg.type === 'COMMAND_VOC') {
+        speakHAL();
+      } else if (msg.type === 'COMMAND_STOP') {
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        isSpeaking = false;
+        subtitleEl.classList.remove('visible');
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      initAudio();
+      if (e.key === 'ArrowRight' || e.key === 'p' || e.key === 'P') {
+        advanceProgram();
+      } else if (e.key === 'ArrowLeft') {
+        programIndex = (programIndex - 1 + SYSTEM_FUNCTIONS.length) % SYSTEM_FUNCTIONS.length;
+        setFunctionCode(SYSTEM_FUNCTIONS[programIndex].code);
+      } else if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault();
+        speakHAL();
+      } else if (e.key === 'c' || e.key === 'C') {
+        toggleWebcam();
+      }
+    });
+
+    document.getElementById('eye-assembly-outer').addEventListener('click', () => {
+      speakHAL();
+    });
+
+    // HUD Button Handlers (Square Web Control Buttons: WCAM, SPK, ADV, AUD, SCN, FS)
+    const hudVoiceBtn = document.getElementById('hud-voice-btn');
+    const hudProgBtn = document.getElementById('hud-prog-btn');
+    const hudSoundBtn = document.getElementById('hud-sound-btn');
+    const hudScnBtn = document.getElementById('hud-scn-btn');
+    const hudFsBtn = document.getElementById('hud-fs-btn');
+    const screensContainer = document.getElementById('screens-container');
+
+    let scanlinesEnabled = false; // Disabled by default as requested
+
+    if (hudSoundBtn) hudSoundBtn.classList.add('active');
+
+    hudVoiceBtn.addEventListener('click', () => {
+      hudVoiceBtn.classList.add('active');
+      setTimeout(() => hudVoiceBtn.classList.remove('active'), 400);
+      speakHAL();
+    });
+
+    hudProgBtn.addEventListener('click', () => {
+      hudProgBtn.classList.add('active');
+      setTimeout(() => hudProgBtn.classList.remove('active'), 400);
+      advanceProgram();
+    });
+
+    hudSoundBtn.addEventListener('click', () => {
+      initAudio();
+      soundEnabled = !soundEnabled;
+      hudSoundBtn.classList.toggle('active', soundEnabled);
+      playButtonSound('click');
+    });
+
+    hudScnBtn.addEventListener('click', () => {
+      initAudio();
+      scanlinesEnabled = !scanlinesEnabled;
+      screensContainer.classList.toggle('scanlines-active', scanlinesEnabled);
+      hudScnBtn.classList.toggle('active', scanlinesEnabled);
+      playButtonSound('click');
+    });
+
+    hudFsBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+        hudFsBtn.classList.add('active');
+      } else {
+        document.exitFullscreen().catch(() => {});
+        hudFsBtn.classList.remove('active');
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (hudFsBtn) {
+        hudFsBtn.classList.toggle('active', !!document.fullscreenElement);
+      }
+    });
+
+    setInterval(() => {
+      advanceProgram();
+    }, 25000);
+
+    highScreen.style.backgroundColor = SYSTEM_FUNCTIONS[0].hex;
+    renderScreens();
+  </script>
+</body>
+</html>
