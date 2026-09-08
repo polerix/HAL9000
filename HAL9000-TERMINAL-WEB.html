@@ -1646,6 +1646,97 @@
       } catch (e) { console.error('Claude fetch error', e); return null; }
     }
 
+    // ── VOX Low-Screen VU Monitor ───────────────────────────────────────────
+    let _voxMicStream = null, _voxMicAnalyser = null, _voxScreenRaf = null;
+    let _voxMode = 'idle'; // 'listening' | 'thinking' | 'idle'
+
+    function _startVoxScreen() {
+      const canvas = document.getElementById('low-screen-canvas');
+      if (!canvas) return;
+      canvas._voxActive = true;
+      _voxMode = 'listening';
+      const ctx = canvas.getContext('2d');
+
+      navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        .then(stream => {
+          _voxMicStream = stream;
+          const mCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const src = mCtx.createMediaStreamSource(stream);
+          _voxMicAnalyser = mCtx.createAnalyser();
+          _voxMicAnalyser.fftSize = 64;
+          _voxMicAnalyser.smoothingTimeConstant = 0.75;
+          src.connect(_voxMicAnalyser);
+          _drawVoxScreen(canvas, ctx);
+        })
+        .catch(() => { _drawVoxScreen(canvas, ctx); });
+    }
+
+    function _drawVoxScreen(canvas, ctx) {
+      if (!canvas._voxActive) return;
+      const W = canvas.width, H = canvas.height;
+      ctx.fillStyle = '#000d1a';
+      ctx.fillRect(0, 0, W, H);
+
+      // Amber top rule
+      ctx.fillStyle = 'rgba(229,179,36,0.7)';
+      ctx.fillRect(10, 10, W - 20, 1);
+
+      // Header
+      ctx.fillStyle = '#e5b324';
+      ctx.font = 'bold 10px "Share Tech Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('VOICE INPUT', W / 2, 26);
+
+      // Status
+      const isThinking = _voxMode === 'thinking';
+      ctx.fillStyle = isThinking ? '#ff8800' : '#00ff88';
+      ctx.font = '8px "Share Tech Mono", monospace';
+      ctx.fillText(isThinking ? '— PROCESSING —' : '— LISTENING —', W / 2, 40);
+
+      // VU bars
+      const barCount = 16;
+      const totalW = W - 24;
+      const barW = Math.floor(totalW / barCount) - 2;
+      const maxBarH = H - 68;
+
+      const data = new Uint8Array(_voxMicAnalyser ? _voxMicAnalyser.frequencyBinCount : barCount);
+      if (_voxMicAnalyser) _voxMicAnalyser.getByteFrequencyData(data);
+
+      for (let i = 0; i < barCount; i++) {
+        const level = _voxMicAnalyser
+          ? (data[Math.floor(i * data.length / barCount)] || 0) / 255
+          : (0.05 + Math.random() * 0.1);
+        const bH = Math.max(3, level * maxBarH);
+        const x = 12 + i * (barW + 2);
+        const y = H - 22 - bH;
+        // Green → yellow → red
+        const hue = level < 0.55 ? 120 : level < 0.8 ? Math.round(120 - (level - 0.55) / 0.25 * 60) : 0;
+        ctx.fillStyle = `hsl(${hue},100%,45%)`;
+        ctx.fillRect(x, y, barW, bH);
+        // Peak highlight
+        ctx.fillStyle = 'rgba(255,255,255,0.55)';
+        ctx.fillRect(x, y, barW, 2);
+      }
+
+      // Bottom rule + label
+      ctx.fillStyle = 'rgba(229,179,36,0.45)';
+      ctx.fillRect(10, H - 14, W - 20, 1);
+      ctx.fillStyle = 'rgba(229,179,36,0.35)';
+      ctx.font = '7px "Share Tech Mono", monospace';
+      ctx.fillText('MIC LEVEL MONITOR', W / 2, H - 4);
+
+      _voxScreenRaf = requestAnimationFrame(() => _drawVoxScreen(canvas, ctx));
+    }
+
+    function _stopVoxScreen() {
+      if (_voxScreenRaf) { cancelAnimationFrame(_voxScreenRaf); _voxScreenRaf = null; }
+      if (_voxMicStream) { _voxMicStream.getTracks().forEach(t => t.stop()); _voxMicStream = null; }
+      _voxMicAnalyser = null;
+      _voxMode = 'idle';
+      const canvas = document.getElementById('low-screen-canvas');
+      if (canvas) canvas._voxActive = false;
+    }
+
     function startVoiceAI() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
@@ -1654,6 +1745,7 @@
       }
       if (voxActive) { stopAllActivity(); return; }
       voxActive = true;
+      _startVoxScreen();
       buttons.vox && buttons.vox.classList.add('active');
       speakHAL("I'm listening, Dave.");
       subtitleEl.innerText = '[ LISTENING... ]';
@@ -1665,22 +1757,25 @@
       rec.maxAlternatives = 1;
 
       rec.onresult = async (e) => {
+        _voxMode = 'thinking';
         const transcript = e.results[0][0].transcript;
         subtitleEl.innerText = `[ PROCESSING: "${transcript}" ]`;
         const reply = await callClaude(transcript);
         voxActive = false;
         buttons.vox && buttons.vox.classList.remove('active');
+        _stopVoxScreen();
         speakHAL(reply || "I'm sorry, Dave. I was unable to process that request.");
       };
 
       rec.onerror = () => {
         voxActive = false;
         buttons.vox && buttons.vox.classList.remove('active');
+        _stopVoxScreen();
         subtitleEl.classList.remove('visible');
         speakHAL("I did not receive a clear signal, Dave.");
       };
 
-      rec.onend = () => { if (voxActive) { voxActive = false; buttons.vox && buttons.vox.classList.remove('active'); } };
+      rec.onend = () => { if (voxActive) { voxActive = false; buttons.vox && buttons.vox.classList.remove('active'); _stopVoxScreen(); } };
       rec.start();
       HALNodeBus.broadcast({ type: 'COMMAND_VOX' });
     }
