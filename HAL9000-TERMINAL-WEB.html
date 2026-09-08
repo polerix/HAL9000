@@ -665,6 +665,12 @@
       text-transform: uppercase; transition: color 0.2s; user-select: none;
     }
     #setup-skip:hover { color: rgba(241,241,241,0.55); }
+    #setup-purge {
+      display: none; text-align: center; margin-top: 6px; font-size: 9px;
+      letter-spacing: 2px; color: rgba(255,80,80,0.35); cursor: pointer;
+      text-transform: uppercase; transition: color 0.2s; user-select: none;
+    }
+    #setup-purge:hover { color: rgba(255,80,80,0.75); }
     .setup-field select {
       width: 100%; background: #0e1118; border: 1px solid rgba(229,179,36,0.35);
       border-radius: 2px; color: #f1f1f1;
@@ -705,11 +711,15 @@
       <div id="setup-header">HAL 9000 — System Initialization</div>
       <div id="setup-subheader">Discovery One · Node Configuration</div>
       <div class="setup-divider"></div>
-      <div class="setup-field">
+      <div class="setup-field" id="setup-apikey-wrap">
         <label>Anthropic API Key</label>
         <input type="password" id="setup-api-key" placeholder="sk-ant-api03-…" autocomplete="off" spellcheck="false" />
       </div>
-      <div class="setup-row">
+      <div class="setup-field" id="setup-passphrase-wrap">
+        <label>Authorization Code</label>
+        <input type="password" id="setup-passphrase" placeholder="Create a passphrase to save settings" />
+      </div>
+      <div class="setup-row" id="setup-weather-row">
         <div class="setup-field">
           <label>Weather City</label>
           <input type="text" id="setup-city" placeholder="Moncton" value="Moncton" />
@@ -733,6 +743,7 @@
       <div id="setup-status"></div>
       <button id="setup-init-btn">Initialize</button>
       <span id="setup-skip">Skip — run without AI</span>
+      <span id="setup-purge">⚠ Purge Memory</span>
     </div>
   </div>
 
@@ -1983,12 +1994,113 @@
       window.speechSynthesis.speak(utter);
     });
 
+    // ── Encrypted Settings Persistence (AES-GCM / PBKDF2) ──────────────────
+    const _HAL_STORE = 'hal9000_cfg_v1';
+    let _unlockMode = false;
+
+    async function _deriveKey(pass, salt) {
+      const base = await crypto.subtle.importKey(
+        'raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']
+      );
+      return crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
+        base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
+      );
+    }
+
+    async function _saveSettings(pass, payload) {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv   = crypto.getRandomValues(new Uint8Array(12));
+      const k    = await _deriveKey(pass, salt);
+      const ct   = await crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv }, k,
+        new TextEncoder().encode(JSON.stringify(payload))
+      );
+      localStorage.setItem(_HAL_STORE, JSON.stringify(
+        { s: [...salt], i: [...iv], c: [...new Uint8Array(ct)] }
+      ));
+    }
+
+    async function _loadSettings(pass) {
+      const raw = localStorage.getItem(_HAL_STORE);
+      if (!raw) return null;
+      try {
+        const { s, i, c } = JSON.parse(raw);
+        const k  = await _deriveKey(pass, new Uint8Array(s));
+        const pt = await crypto.subtle.decrypt(
+          { name: 'AES-GCM', iv: new Uint8Array(i) }, k, new Uint8Array(c)
+        );
+        return JSON.parse(new TextDecoder().decode(pt));
+      } catch { return null; }
+    }
+
+    // Switch to unlock-mode if encrypted config exists
+    (function _checkStorage() {
+      if (!localStorage.getItem(_HAL_STORE)) return;
+      _unlockMode = true;
+      document.getElementById('setup-header').textContent    = 'HAL 9000 — Authorization Required';
+      document.getElementById('setup-subheader').textContent = 'Enter Code to Restore Session';
+      document.getElementById('setup-init-btn').textContent  = 'UNLOCK';
+      document.getElementById('setup-purge').style.display   = 'block';
+      const pp = document.getElementById('setup-passphrase');
+      if (pp) pp.placeholder = 'Enter authorization code';
+      // Hide full-setup fields not needed for unlock
+      ['setup-apikey-wrap', 'setup-weather-row'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+      // Hide crew & voice rows
+      const crewWrap = document.getElementById('setup-crew-name');
+      if (crewWrap && crewWrap.closest('.setup-field')) crewWrap.closest('.setup-field').style.display = 'none';
+      const voiceRow = document.querySelector('.setup-voice-row');
+      if (voiceRow) voiceRow.style.display = 'none';
+    })();
+
+    document.getElementById('setup-purge').addEventListener('click', () => {
+      if (!confirm('Purge all saved HAL settings? You will need to re-enter your API key.')) return;
+      localStorage.removeItem(_HAL_STORE);
+      location.reload();
+    });
+
     async function initializeSetup() {
+      const statusEl  = document.getElementById('setup-status');
+      const initBtn   = document.getElementById('setup-init-btn');
+      const passEl    = document.getElementById('setup-passphrase');
+      const passphrase = passEl ? passEl.value.trim() : '';
+
+      if (_unlockMode) {
+        if (!passphrase) { statusEl.textContent = 'AUTHORIZATION CODE REQUIRED'; return; }
+        statusEl.textContent = 'DECRYPTING…';
+        initBtn.disabled = true;
+        const cfg = await _loadSettings(passphrase);
+        if (!cfg) {
+          statusEl.textContent = 'AUTHORIZATION FAILED — INCORRECT CODE';
+          initBtn.disabled = false;
+          return;
+        }
+        anthropicKey = cfg.key || '';
+        crewName     = cfg.crewName || 'Dave';
+        weatherCity  = cfg.city    || 'Moncton';
+        const vName = cfg.voiceName;
+        if (vName) {
+          const vs = window.speechSynthesis.getVoices();
+          halVoice = vs.find(v => v.name === vName) || null;
+        }
+        statusEl.textContent = 'AUTHORIZATION CONFIRMED';
+        try {
+          const geo = await geocodeCity(cfg.city || 'Moncton', cfg.country || 'CA');
+          weatherLat = geo.lat; weatherLon = geo.lon; weatherCity = geo.name;
+          weatherData = await fetchWeather(weatherLat, weatherLon);
+          scheduleWeatherRefresh();
+        } catch { /* weather optional */ }
+        setTimeout(closeSetup, 800);
+        return;
+      }
+
+      // ── Full setup path ────────────────────────────────────────────────────
       const keyInput   = document.getElementById('setup-api-key');
       const cityInput  = document.getElementById('setup-city');
       const countryIn  = document.getElementById('setup-country');
-      const statusEl   = document.getElementById('setup-status');
-      const initBtn    = document.getElementById('setup-init-btn');
 
       const key     = keyInput.value.trim();
       const city    = cityInput.value.trim() || 'Moncton';
@@ -2013,7 +2125,18 @@
         statusEl.textContent = `STATION LOCKED — ${geo.name.toUpperCase()} (${geo.lat.toFixed(2)}, ${geo.lon.toFixed(2)})`;
         weatherData = await fetchWeather(weatherLat, weatherLon);
         scheduleWeatherRefresh();
-        statusEl.textContent = 'SYSTEMS ONLINE — INITIALIZATION COMPLETE';
+        if (passphrase) {
+          try {
+            await _saveSettings(passphrase, {
+              key, crewName: nameVal,
+              voiceName: halVoice ? halVoice.name : '',
+              city: geo.name, country, lat: geo.lat, lon: geo.lon
+            });
+            statusEl.textContent = 'SYSTEMS ONLINE — SETTINGS ENCRYPTED & SAVED';
+          } catch { statusEl.textContent = 'SYSTEMS ONLINE — INITIALIZATION COMPLETE'; }
+        } else {
+          statusEl.textContent = 'SYSTEMS ONLINE — INITIALIZATION COMPLETE';
+        }
         setTimeout(closeSetup, 1200);
       } catch(e) {
         statusEl.textContent = `GEO FAULT: ${(e.message || 'UNKNOWN').toUpperCase()}`;
