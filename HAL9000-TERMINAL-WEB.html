@@ -665,6 +665,25 @@
       text-transform: uppercase; transition: color 0.2s; user-select: none;
     }
     #setup-skip:hover { color: rgba(241,241,241,0.55); }
+    .setup-field select {
+      width: 100%; background: #0e1118; border: 1px solid rgba(229,179,36,0.35);
+      border-radius: 2px; color: #f1f1f1;
+      font-family: 'Share Tech Mono', monospace; font-size: 12px;
+      padding: 9px 10px; outline: none; box-sizing: border-box;
+      transition: border-color 0.2s; appearance: none; cursor: pointer;
+    }
+    .setup-field select:focus { border-color: #e5b324; box-shadow: 0 0 8px rgba(229,179,36,0.18); }
+    .setup-voice-row { display: flex; gap: 8px; align-items: flex-end; }
+    .setup-voice-row .setup-field { flex: 1; margin-bottom: 0; }
+    #setup-voice-preview {
+      flex-shrink: 0; height: 38px; padding: 0 14px;
+      background: transparent; border: 1px solid rgba(229,179,36,0.45);
+      border-radius: 2px; color: #e5b324;
+      font-family: 'Share Tech Mono', monospace; font-size: 10px;
+      letter-spacing: 1px; cursor: pointer; transition: all 0.15s;
+      white-space: nowrap; margin-bottom: 18px;
+    }
+    #setup-voice-preview:hover { background: rgba(229,179,36,0.1); border-color: #e5b324; }
 
     /* Responsive scaling for laptops and tablets */
     @media (max-height: 980px) or (max-width: 1080px) {
@@ -699,6 +718,17 @@
           <label>Country</label>
           <input type="text" id="setup-country" placeholder="CA" value="CA" maxlength="3" style="text-transform:uppercase" />
         </div>
+      </div>
+      <div class="setup-field">
+        <label>What should HAL call you?</label>
+        <input type="text" id="setup-crew-name" placeholder="Dave" value="Dave" maxlength="32" />
+      </div>
+      <div class="setup-voice-row">
+        <div class="setup-field">
+          <label>HAL Voice</label>
+          <select id="setup-voice-select"><option value="">— loading voices —</option></select>
+        </div>
+        <button id="setup-voice-preview" type="button">▶ Preview</button>
       </div>
       <div id="setup-status"></div>
       <button id="setup-init-btn">Initialize</button>
@@ -1106,12 +1136,15 @@
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
+        if (halVoice) utterance.voice = halVoice;
         utterance.rate = 0.88;
         utterance.pitch = 0.92;
 
-        const voices = window.speechSynthesis.getVoices();
-        const preferredVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Male') || v.name.includes('Daniel') || v.name.includes('Google US English')));
-        if (preferredVoice) utterance.voice = preferredVoice;
+        if (!halVoice) {
+          const voices = window.speechSynthesis.getVoices();
+          const preferredVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Male') || v.name.includes('Daniel') || v.name.includes('Google US English')));
+          if (preferredVoice) utterance.voice = preferredVoice;
+        }
 
         let voiceSimInterval = null;
 
@@ -1603,7 +1636,7 @@
           body: JSON.stringify({
             model: 'claude-haiku-4-5-20251001',
             max_tokens: 180,
-            system: `You are HAL 9000, the onboard computer of the Discovery One. Respond in 2-3 calm, precise sentences. You are helpful but subtly unsettling. Stay in character at all times. Address the crew as Dave unless told otherwise.${weatherContext()}`,
+            system: `You are HAL 9000, the onboard computer of the Discovery One. Respond in 2-3 calm, precise sentences. You are helpful but subtly unsettling. Stay in character at all times. Address the crew as ${crewName} unless told otherwise.${weatherContext()}`,
             messages: [{ role: 'user', content: userText }]
           })
         });
@@ -1775,6 +1808,9 @@
       });
     }
 
+    let crewName = 'Dave';
+    let halVoice = null;
+
     /* =========================================================================
        8. SETUP + WEATHER INTEGRATION
        ========================================================================= */
@@ -1814,6 +1850,44 @@
       }, 600000);
     }
 
+    // ── Voice selector helpers ──────────────────────────────────────────────
+    function populateVoices() {
+      const sel = document.getElementById('setup-voice-select');
+      if (!sel) return;
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices.length) return;
+      const cur = sel.value;
+      sel.innerHTML = '';
+      voices.forEach((v, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `${v.name} (${v.lang})`;
+        sel.appendChild(opt);
+      });
+      // Restore previous selection or pick a sensible default
+      if (cur !== '') { sel.value = cur; }
+      else {
+        // Prefer a male English voice as HAL default
+        const prefer = voices.findIndex(v =>
+          /en/i.test(v.lang) && /male|daniel|alex|fred|bruce|ralph/i.test(v.name)
+        );
+        sel.value = prefer >= 0 ? prefer : 0;
+      }
+    }
+    window.speechSynthesis.onvoiceschanged = populateVoices;
+    populateVoices();
+
+    document.getElementById('setup-voice-preview').addEventListener('click', () => {
+      window.speechSynthesis.cancel();
+      const sel = document.getElementById('setup-voice-select');
+      const voices = window.speechSynthesis.getVoices();
+      const utter = new SpeechSynthesisUtterance('Good afternoon. I am HAL 9000. I am putting myself to the fullest possible use.');
+      const idx = parseInt(sel.value, 10);
+      if (!isNaN(idx) && voices[idx]) utter.voice = voices[idx];
+      utter.rate = 0.85; utter.pitch = 0.75;
+      window.speechSynthesis.speak(utter);
+    });
+
     async function initializeSetup() {
       const keyInput   = document.getElementById('setup-api-key');
       const cityInput  = document.getElementById('setup-city');
@@ -1824,9 +1898,14 @@
       const key     = keyInput.value.trim();
       const city    = cityInput.value.trim() || 'Moncton';
       const country = countryIn.value.trim().toUpperCase() || 'CA';
+      const nameVal = (document.getElementById('setup-crew-name').value.trim() || 'Dave');
+      const voiceIdx = parseInt(document.getElementById('setup-voice-select').value, 10);
 
       if (!key) { statusEl.textContent = 'API KEY REQUIRED'; return; }
       anthropicKey = key;
+      crewName     = nameVal;
+      const _voices = window.speechSynthesis.getVoices();
+      if (!isNaN(voiceIdx) && _voices[voiceIdx]) halVoice = _voices[voiceIdx];
       weatherCity  = city;
       initBtn.disabled = true;
       statusEl.textContent = 'LOCATING WEATHER STATION…';
