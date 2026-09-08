@@ -18,6 +18,10 @@
 
     body {
       background-color: #000000;
+      background-image: radial-gradient(ellipse 70% 65% at 50% 50%,
+        rgba(38,24,3,0.6) 0%,
+        rgba(14,9,1,0.35) 45%,
+        rgba(0,0,0,0) 100%);
       color: #f1f1f1;
       font-family: 'Eurostile', 'Microgramma', 'Michroma', 'Orbitron', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
@@ -29,16 +33,8 @@
       position: relative;
     }
 
-    /* 3D Perspective Yellow Grid Room Background */
-    #grid-bg-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1;
-      pointer-events: none;
-    }
+    /* Background canvas — hidden, body CSS gradient replaces it */
+    #grid-bg-canvas { display: none; }
 
     /* Outer Wrapper for scaling the 3D-printed physical terminal */
     #terminal-scaler {
@@ -901,98 +897,29 @@
     function drawYellowGridRoom() {
       const w = bgCanvas.width;
       const h = bgCanvas.height;
+
+      // Pure black base
       bgCtx.fillStyle = '#000000';
       bgCtx.fillRect(0, 0, w, h);
 
-      bgCtx.strokeStyle = '#e5b324';
-      bgCtx.lineWidth = 1.6;
+      // Soft amber edge-glow — radiates from where the terminal sits
+      const cx = w / 2, cy = h / 2;
+      const r  = Math.max(w, h) * 0.72;
+      const glow = bgCtx.createRadialGradient(cx, cy, r * 0.08, cx, cy, r);
+      glow.addColorStop(0,    'rgba(40, 28, 4, 0.55)');   // warm centre hint
+      glow.addColorStop(0.38, 'rgba(25, 17, 2, 0.35)');
+      glow.addColorStop(0.72, 'rgba(8,  5,  0, 0.15)');
+      glow.addColorStop(1,    'rgba(0,  0,  0, 0)');
+      bgCtx.fillStyle = glow;
+      bgCtx.fillRect(0, 0, w, h);
 
-      const insetX = w * 0.28;
-      const insetY = h * 0.26;
-      const bw = w - insetX * 2;
-      const bh = h - insetY * 2;
-      const bx = insetX;
-      const by = insetY;
-
-      const r = Math.min(bw, bh) * 0.18;
-      drawCurvedRect(bgCtx, bx, by, bw, bh, r);
-      bgCtx.stroke();
-
-      const cols = 14;
-      for (let i = 1; i < cols; i++) {
-        const x = bx + (bw / cols) * i;
-        bgCtx.beginPath();
-        bgCtx.moveTo(x, by);
-        bgCtx.lineTo(x, by + bh);
-        bgCtx.stroke();
-      }
-
-      const rows = 10;
-      for (let j = 1; j < rows; j++) {
-        const y = by + (bh / rows) * j;
-        bgCtx.beginPath();
-        bgCtx.moveTo(bx, y);
-        bgCtx.lineTo(bx + bw, y);
-        bgCtx.stroke();
-      }
-
-      const outerCorners = [
-        { x: 0, y: 0 }, { x: w, y: 0 }, { x: w, y: h }, { x: 0, y: h }
-      ];
-      const innerCorners = [
-        { x: bx, y: by }, { x: bx + bw, y: by }, { x: bx + bw, y: by + bh }, { x: bx, y: by + bh }
-      ];
-
-      for (let c = 0; c < 4; c++) {
-        bgCtx.beginPath();
-        bgCtx.moveTo(innerCorners[c].x, innerCorners[c].y);
-        bgCtx.lineTo(outerCorners[c].x, outerCorners[c].y);
-        bgCtx.stroke();
-      }
-
-      for (let i = 0; i <= cols; i++) {
-        const backX = bx + (bw / cols) * i;
-        const screenX = (i / cols) * w;
-        bgCtx.beginPath();
-        bgCtx.moveTo(backX, by); bgCtx.lineTo(screenX, 0); bgCtx.stroke();
-        bgCtx.beginPath();
-        bgCtx.moveTo(backX, by + bh); bgCtx.lineTo(screenX, h); bgCtx.stroke();
-      }
-
-      for (let j = 0; j <= rows; j++) {
-        const backY = by + (bh / rows) * j;
-        const screenY = (j / rows) * h;
-        bgCtx.beginPath();
-        bgCtx.moveTo(bx, backY); bgCtx.lineTo(0, screenY); bgCtx.stroke();
-        bgCtx.beginPath();
-        bgCtx.moveTo(bx + bw, backY); bgCtx.lineTo(w, screenY); bgCtx.stroke();
-      }
-
-      const rings = 4;
-      for (let k = 1; k <= rings; k++) {
-        const factor = k / (rings + 1);
-        const rx = bx * (1 - factor);
-        const ry = by * (1 - factor);
-        const rw = w - rx * 2;
-        const rh = h - ry * 2;
-        const ringRadius = r * (1 + factor * 0.8);
-        drawCurvedRect(bgCtx, rx, ry, rw, rh, ringRadius);
-        bgCtx.stroke();
-      }
-    }
-
-    function drawCurvedRect(ctx, x, y, width, height, radius) {
-      ctx.beginPath();
-      ctx.moveTo(x + radius, y);
-      ctx.lineTo(x + width - radius, y);
-      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-      ctx.lineTo(x + width, y + height - radius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-      ctx.lineTo(x + radius, y + height);
-      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-      ctx.lineTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.closePath();
+      // Very faint amber perimeter vignette (edges are slightly brighter)
+      const edge = bgCtx.createRadialGradient(cx, cy, r * 0.35, cx, cy, r * 1.1);
+      edge.addColorStop(0,   'rgba(0,0,0,0)');
+      edge.addColorStop(0.7, 'rgba(0,0,0,0)');
+      edge.addColorStop(1,   'rgba(229,179,36,0.04)');
+      bgCtx.fillStyle = edge;
+      bgCtx.fillRect(0, 0, w, h);
     }
 
     resizeBg();
