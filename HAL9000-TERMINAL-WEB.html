@@ -353,14 +353,6 @@
       pointer-events: none;
     }
 
-    /* 4-letter buttons distorted horizontally to fit within 15mm square */
-    #btn-prog .btn-label,
-    #btn-exec .btn-label,
-    #btn-comp .btn-label {
-      transform: scaleY(1.35) scaleX(0.66);
-      letter-spacing: -0.8px;
-    }
-
     .terminal-button:active, .terminal-button.pressed {
       transform: translateY(3px);
       box-shadow: 
@@ -369,57 +361,17 @@
         inset 0 1px 2px rgba(0, 0, 0, 0.3);
     }
 
-    /* Program Illuminated Lit & Active States */
-    #btn-voc.lit, #btn-voc.active {
-      background: #e0281b;
-      color: #ffffff;
-      box-shadow: 0 0 16px #ff3b30, 0 3px 0 #8a130a;
-    }
-    #btn-com.lit, #btn-com.active {
-      background: #8047cc;
-      color: #ffffff;
-      box-shadow: 0 0 16px #9d65eb, 0 3px 0 #4c2282;
-    }
-    #btn-prog.lit, #btn-prog.active {
-      background: #e5b324;
-      color: #000000;
-      box-shadow: 0 0 16px #e5b324, 0 3px 0 #916e0c;
-    }
-    #btn-stp.lit, #btn-stp.active {
-      background: #d90429;
-      color: #ffffff;
-      box-shadow: 0 0 16px #ff1744, 0 3px 0 #850016;
-    }
-    #btn-exec.lit, #btn-exec.active {
-      background: #00cc66;
-      color: #000000;
-      box-shadow: 0 0 16px #00ff77, 0 3px 0 #007d39;
-    }
-    #btn-comp.lit, #btn-comp.active {
-      background: #0077cc;
-      color: #ffffff;
-      box-shadow: 0 0 16px #33aaff, 0 3px 0 #004678;
-    }
-    #btn-hib.lit, #btn-hib.active {
-      background: #00b894;
-      color: #ffffff;
-      box-shadow: 0 0 16px #00e5b0, 0 3px 0 #036954;
-    }
-    #btn-lif.lit, #btn-lif.active {
-      background: #263cc5;
-      color: #ffffff;
-      box-shadow: 0 0 16px #4d66ff, 0 3px 0 #152275;
-    }
-    #btn-sus.lit, #btn-sus.active {
-      background: #c10341;
-      color: #ffffff;
-      box-shadow: 0 0 18px #ff1766, 0 3px 0 #730024;
-    }
-    #btn-clr.lit, #btn-clr.active {
-      background: #00d2d3;
-      color: #000000;
-      box-shadow: 0 0 16px #48dbfb, 0 3px 0 #007f80;
-    }
+    /* Button Illuminated States — 10 function/action buttons */
+    #btn-hib.lit, #btn-hib.active { background:#00b894; color:#fff; box-shadow:0 0 16px #00e5b0, 0 3px 0 #036954; }
+    #btn-lif.lit, #btn-lif.active { background:#263cc5; color:#fff; box-shadow:0 0 16px #4d66ff, 0 3px 0 #152275; }
+    #btn-com.lit, #btn-com.active { background:#8047cc; color:#fff; box-shadow:0 0 16px #9d65eb, 0 3px 0 #4c2282; }
+    #btn-nav.lit, #btn-nav.active { background:#0054A2; color:#fff; box-shadow:0 0 16px #3380cc, 0 3px 0 #003060; }
+    #btn-mem.lit, #btn-mem.active { background:#0D2B0D; color:#00FF88; box-shadow:0 0 16px #00ff88, 0 3px 0 #041004; }
+    #btn-atm.lit, #btn-atm.active { background:#2B1400; color:#FF8800; box-shadow:0 0 16px #ff8800, 0 3px 0 #110800; }
+    #btn-flx.lit, #btn-flx.active { background:#1A003A; color:#CC88FF; box-shadow:0 0 16px #cc88ff, 0 3px 0 #0a001a; }
+    #btn-nuc.lit, #btn-nuc.active { background:#2B0000; color:#FF4444; box-shadow:0 0 20px #ff0000, 0 3px 0 #110000; }
+    #btn-vox.lit, #btn-vox.active { background:#e5b324; color:#000;  box-shadow:0 0 20px #e5b324, 0 3px 0 #916e0c; }
+    #btn-stp.lit, #btn-stp.active { background:#d90429; color:#fff;  box-shadow:0 0 16px #ff1744, 0 3px 0 #850016; }
 
     /* RIGHT SECTION: HAL 9000 Badge, 58mm Eye, Speaker Grille (73mm wide - No space between grill and eye panel) */
     #right-column {
@@ -715,18 +667,18 @@
           <div class="manual-control-container">
             <div class="manual-control-title">MANUAL CONTROL</div>
             <div id="buttons-grid">
-              <!-- Row 1: VOC, COM, PROG, STP, EXEC -->
-              <button class="terminal-button" id="btn-voc" title="VOC: Voice Command / Speak HAL Quote"><span class="btn-label">VOC</span></button>
-              <button class="terminal-button" id="btn-com" title="COM: Communications Telemetry"><span class="btn-label">COM</span></button>
-              <button class="terminal-button" id="btn-prog" title="PROG: Advance Telemetry Program"><span class="btn-label">PROG</span></button>
-              <button class="terminal-button" id="btn-stp" title="STP: Stop / Pause Cycle"><span class="btn-label">STP</span></button>
-              <button class="terminal-button" id="btn-exec" title="EXEC: Execute Active Sequence"><span class="btn-label">EXEC</span></button>
-              <!-- Row 2: COMP, HIB, LIF, SUS, CLR -->
-              <button class="terminal-button" id="btn-comp" title="COMP: Computer Diagnostics Status"><span class="btn-label">COMP</span></button>
+              <!-- Row 1: HIB, LIF, COM, NAV, MEM -->
               <button class="terminal-button" id="btn-hib" title="HIB: Hibernation Cryo Units"><span class="btn-label">HIB</span></button>
               <button class="terminal-button" id="btn-lif" title="LIF: Life Support Regulation"><span class="btn-label">LIF</span></button>
-              <button class="terminal-button" id="btn-sus" title="SUS: Suspended Animation / Damage Alarms"><span class="btn-label">SUS</span></button>
-              <button class="terminal-button" id="btn-clr" title="CLR: Clear Display & Alarms"><span class="btn-label">CLR</span></button>
+              <button class="terminal-button" id="btn-com" title="COM: Communications Telemetry"><span class="btn-label">COM</span></button>
+              <button class="terminal-button" id="btn-nav" title="NAV: Navigation Orbital Course"><span class="btn-label">NAV</span></button>
+              <button class="terminal-button" id="btn-mem" title="MEM: Memory Core Access"><span class="btn-label">MEM</span></button>
+              <!-- Row 2: ATM, FLX, NUC, VOX, STP -->
+              <button class="terminal-button" id="btn-atm" title="ATM: Atmospheric Systems"><span class="btn-label">ATM</span></button>
+              <button class="terminal-button" id="btn-flx" title="FLX: Flex Subsystem Relay"><span class="btn-label">FLX</span></button>
+              <button class="terminal-button" id="btn-nuc" title="NUC: Nuclear Core Animation"><span class="btn-label">NUC</span></button>
+              <button class="terminal-button" id="btn-vox" title="VOX: HAL Voice AI — Press and Speak"><span class="btn-label">VOX</span></button>
+              <button class="terminal-button" id="btn-stp" title="STP: Stop / Abort Active Sequence"><span class="btn-label">STP</span></button>
             </div>
           </div>
         </div>
@@ -1165,12 +1117,14 @@
        5. SYSTEM FUNCTIONS & SCREEN RENDERERS
        ========================================================================= */
     const SYSTEM_FUNCTIONS = [
-      { code: "HIB", name: "Hibernation Cryo Units", subtitle: "STA: 35-05", hex: "#074D43", text_color: "#F1F1F1" },
-      { code: "DMG", name: "System Damage Surveillance", subtitle: "GPM: 72-KC", hex: "#C10341", text_color: "#F1F1F1" },
-      { code: "COM", name: "Communications Telemetry", subtitle: "ATA: 61-08", hex: "#8047CC", text_color: "#F1F1F1" },
+      { code: "HIB", name: "Hibernation Cryo Units",    subtitle: "STA: 35-05", hex: "#074D43", text_color: "#F1F1F1" },
+      { code: "LIF", name: "Life Support Regulation",   subtitle: "ENV: 01-WX", hex: "#263CC5", text_color: "#F1F1F1" },
+      { code: "COM", name: "Communications Telemetry",  subtitle: "ATA: 61-08", hex: "#8047CC", text_color: "#F1F1F1" },
       { code: "NAV", name: "Navigation Orbital Course", subtitle: "RTE: 09-EF", hex: "#0054A2", text_color: "#F1F1F1" },
-      { code: "LIF", name: "Life Support Regulation", subtitle: "ENV: 01-WX", hex: "#263CC5", text_color: "#F1F1F1" },
-      { code: "COMP", name: "Computer Diagnostic Unit", subtitle: "CPU: 90-KC", hex: "#17395A", text_color: "#F1F1F1" }
+      { code: "MEM", name: "Memory Core Access",        subtitle: "MEM: 04-ZX", hex: "#0D2B0D", text_color: "#00FF88" },
+      { code: "ATM", name: "Atmospheric Systems",       subtitle: "ATM: 07-RR", hex: "#2B1400", text_color: "#FF8800" },
+      { code: "FLX", name: "Flex Subsystem Relay",      subtitle: "FLX: 11-KY", hex: "#1A003A", text_color: "#CC88FF" },
+      { code: "NUC", name: "Nuclear Core Animation",    subtitle: "NUC: 99-PL", hex: "#2B0000", text_color: "#FF4444" }
     ];
 
     const highScreen = document.getElementById('high-screen');
@@ -1221,65 +1175,148 @@
       requestAnimationFrame(renderScreens);
     }
 
-    /* High Screen Panel Renderer (1:1 CAD Artboard Reproductions from HAL9000_Console_UX.ai) */
+    /* High Screen Panel Renderer */
     function renderHighScreen(w, h) {
       const fn = SYSTEM_FUNCTIONS[programIndex];
       highCtx.fillStyle = fn.hex;
       highCtx.fillRect(0, 0, w, h);
-
-      const textColor = fn.text_color || "#F1F1F1";
+      const tc = fn.text_color || "#F1F1F1";
 
       if (fn.code === "HIB") {
-        // Artboard 2: STA: 35-05 and H I B
-        highCtx.fillStyle = textColor;
-        highCtx.font = "bold 11px 'Share Tech Mono', 'Michroma', monospace";
+        highCtx.fillStyle = tc;
+        highCtx.font = "bold 11px 'Share Tech Mono', monospace";
         highCtx.textAlign = 'left';
         highCtx.fillText("STA:  35-05", 24, 38);
-
-        highCtx.font = "900 44px 'Eurostile', 'Microgramma', 'Michroma', 'Orbitron', sans-serif";
+        highCtx.font = "900 44px 'Orbitron', 'Michroma', sans-serif";
         highCtx.textAlign = 'center';
         highCtx.fillText("H  I  B", w / 2, h / 2 + 15);
         return;
       }
 
-      if (fn.code === "DMG") {
-        // Artboard 3: GPM: 72-KC and D M G
-        highCtx.fillStyle = textColor;
-        highCtx.font = "bold 11px 'Share Tech Mono', 'Michroma', monospace";
+      if (fn.code === "MEM") {
+        // Green matrix rain
+        highCtx.fillStyle = "#00FF88";
+        highCtx.font = "11px 'Share Tech Mono', monospace";
         highCtx.textAlign = 'left';
-        highCtx.fillText("GPM: 72-KC", 24, 38);
-
-        highCtx.font = "900 44px 'Eurostile', 'Microgramma', 'Michroma', 'Orbitron', sans-serif";
-        highCtx.textAlign = 'center';
-        highCtx.fillText("D M G", w / 2, h / 2 + 15);
+        highCtx.fillText("MEM: 04-ZX", 20, 26);
+        const chars = "01ABCDEF∑∆ΩΨΓΛ";
+        const cols = 9, rows = 12;
+        for (let c = 0; c < cols; c++) {
+          for (let r = 0; r < rows; r++) {
+            const phase = (animFrame * 0.07 + c * 1.3 + r * 0.4) % (Math.PI * 2);
+            const alpha = 0.15 + 0.85 * Math.max(0, Math.sin(phase));
+            highCtx.fillStyle = `rgba(0,255,136,${alpha.toFixed(2)})`;
+            const ch = chars[Math.floor((animFrame * 0.11 + c * 7 + r * 3) % chars.length)];
+            highCtx.fillText(ch, 18 + c * 22, 48 + r * 15);
+          }
+        }
+        highCtx.fillStyle = "#00FF88";
+        highCtx.font = "bold 10px 'Share Tech Mono'";
+        highCtx.fillText("MEMORY CORE ACCESS", 18, h - 20);
         return;
       }
 
-      // Other Modes (COM, NAV, LIF, COMP)
-      highCtx.fillStyle = textColor;
+      if (fn.code === "ATM") {
+        // Atmospheric pressure wave
+        highCtx.fillStyle = tc;
+        highCtx.font = "bold 11px 'Share Tech Mono', monospace";
+        highCtx.textAlign = 'left';
+        highCtx.fillText("ATM: 07-RR", 20, 26);
+        const cx = w / 2, cy = h / 2 + 10;
+        for (let i = 0; i < 5; i++) {
+          const phase = (animFrame * 0.04 + i * 0.7) % (Math.PI * 2);
+          const r = 30 + i * 20 + Math.sin(phase) * 8;
+          const alpha = 0.8 - i * 0.14;
+          highCtx.strokeStyle = `rgba(255,136,0,${alpha.toFixed(2)})`;
+          highCtx.lineWidth = 1.5;
+          highCtx.beginPath();
+          highCtx.arc(cx, cy, r, 0, Math.PI * 2);
+          highCtx.stroke();
+        }
+        const pct = Math.round(72 + Math.sin(animFrame * 0.03) * 5);
+        highCtx.fillStyle = tc;
+        highCtx.font = "bold 13px 'Share Tech Mono'";
+        highCtx.textAlign = 'center';
+        highCtx.fillText(`O₂  ${pct}%`, cx, cy + 6);
+        highCtx.font = "bold 10px 'Share Tech Mono'";
+        highCtx.textAlign = 'left';
+        highCtx.fillText("ATMOSPHERIC SYSTEMS", 14, h - 20);
+        return;
+      }
+
+      if (fn.code === "FLX") {
+        // Purple waveform relay
+        highCtx.fillStyle = tc;
+        highCtx.font = "bold 11px 'Share Tech Mono', monospace";
+        highCtx.textAlign = 'left';
+        highCtx.fillText("FLX: 11-KY", 20, 26);
+        highCtx.strokeStyle = tc;
+        highCtx.lineWidth = 2;
+        for (let lane = 0; lane < 4; lane++) {
+          const y0 = 55 + lane * 38;
+          highCtx.beginPath();
+          for (let x = 10; x < w - 10; x += 2) {
+            const phase = (x * 0.06 + animFrame * 0.08 + lane * 1.1);
+            const y = y0 + Math.sin(phase) * 12 + Math.sin(phase * 2.3) * 5;
+            lane === 0 && x === 10 ? highCtx.moveTo(x, y) : highCtx.lineTo(x, y);
+          }
+          highCtx.globalAlpha = 0.4 + (lane * 0.15);
+          highCtx.stroke();
+          highCtx.globalAlpha = 1;
+        }
+        highCtx.fillStyle = tc;
+        highCtx.font = "bold 10px 'Share Tech Mono'";
+        highCtx.fillText("FLEX SUBSYSTEM RELAY", 14, h - 20);
+        return;
+      }
+
+      if (fn.code === "NUC") {
+        // Red concentric pulse — nuclear core
+        highCtx.fillStyle = tc;
+        highCtx.font = "bold 11px 'Share Tech Mono', monospace";
+        highCtx.textAlign = 'left';
+        highCtx.fillText("NUC: 99-PL", 20, 26);
+        const cx = w / 2, cy = h / 2 + 10;
+        for (let i = 0; i < 6; i++) {
+          const phase = (animFrame * 0.05 + i * 0.55) % (Math.PI * 2);
+          const r = 15 + i * 18 + Math.sin(phase) * 6;
+          const alpha = 0.9 - i * 0.12;
+          highCtx.strokeStyle = `rgba(255,${Math.floor(30 + i * 10)},${Math.floor(i * 5)},${alpha.toFixed(2)})`;
+          highCtx.lineWidth = 2 - i * 0.2;
+          highCtx.beginPath();
+          highCtx.arc(cx, cy, r, 0, Math.PI * 2);
+          highCtx.stroke();
+        }
+        highCtx.fillStyle = "#FF4444";
+        highCtx.font = "bold 13px 'Share Tech Mono'";
+        highCtx.textAlign = 'center';
+        highCtx.fillText("CORE", cx, cy + 5);
+        highCtx.font = "bold 10px 'Share Tech Mono'";
+        highCtx.textAlign = 'left';
+        highCtx.fillText("NUCLEAR CORE ANIMATION", 10, h - 20);
+        return;
+      }
+
+      // Generic: LIF, COM, NAV (bar graph panel)
+      highCtx.fillStyle = tc;
       highCtx.font = "bold 10px 'Share Tech Mono'";
       highCtx.textAlign = 'left';
       highCtx.fillText(fn.subtitle, 20, 32);
-
-      highCtx.font = "900 38px 'Eurostile', 'Microgramma', 'Michroma', 'Orbitron', sans-serif";
+      highCtx.font = "900 38px 'Orbitron', 'Michroma', sans-serif";
       highCtx.textAlign = 'center';
       highCtx.fillText(fn.code, w / 2, 95);
-
-      const barCols = 5;
-      const startX = 28;
-      const startY = 135;
+      const barCols = 5, startX = 28, startY = 135;
       highCtx.textAlign = 'left';
       for (let c = 0; c < barCols; c++) {
         const x = startX + c * 36;
         const val = 6 + Math.floor(Math.sin((animFrame * 0.06) + c) * 3);
         for (let b = 0; b < 8; b++) {
           const y = startY + b * 6.5;
-          const active = b < (8 - val);
-          highCtx.fillStyle = active ? textColor : "rgba(255, 255, 255, 0.18)";
+          highCtx.fillStyle = b < (8 - val) ? tc : "rgba(255,255,255,0.18)";
           highCtx.fillRect(x, y, 24, 4);
         }
       }
-
+      highCtx.fillStyle = tc;
       highCtx.font = "10px 'Share Tech Mono'";
       highCtx.fillText(fn.name.toUpperCase(), 20, h - 20);
     }
@@ -1298,23 +1335,93 @@
         lowCtx.font = "10px 'Share Tech Mono'";
         lowCtx.textAlign = 'left';
         lowCtx.fillText("CRYO 01 VITAL SIGNS", 18, 30);
-
         lowCtx.strokeStyle = '#00ffcc';
         lowCtx.lineWidth = 2;
         lowCtx.beginPath();
         for (let x = 18; x < w - 18; x += 3) {
           let ecg = 0;
-          let phase = (x + animFrame * 3) % 100;
+          const phase = (x + animFrame * 3) % 100;
           if (phase > 40 && phase < 46) ecg = -24;
           else if (phase >= 46 && phase < 54) ecg = 20;
           lowCtx.lineTo(x, cy + ecg);
         }
         lowCtx.stroke();
-
         lowCtx.fillStyle = '#00ffcc';
         lowCtx.font = "10px 'Share Tech Mono'";
         lowCtx.fillText("RATE: 58 BPM  STABLE", 18, h - 22);
+      } else if (fn.code === "NUC") {
+        // Heat map grid
+        lowCtx.fillStyle = '#FF4444';
+        lowCtx.font = "bold 10px 'Share Tech Mono'";
+        lowCtx.textAlign = 'left';
+        lowCtx.fillText("THERMAL MAP // REACTOR", 10, 22);
+        const cols = 8, rows = 8, cw = (w - 30) / cols, ch2 = (h - 50) / rows;
+        for (let c = 0; c < cols; c++) {
+          for (let r = 0; r < rows; r++) {
+            const heat = 0.3 + 0.7 * Math.abs(Math.sin(animFrame * 0.04 + c * 0.8 + r * 0.6));
+            const red = Math.floor(100 + heat * 155);
+            lowCtx.fillStyle = `rgba(${red},${Math.floor(heat * 40)},0,${(0.4 + heat * 0.6).toFixed(2)})`;
+            lowCtx.fillRect(14 + c * cw, 32 + r * ch2, cw - 2, ch2 - 2);
+          }
+        }
+        const temp = Math.round(3200 + Math.sin(animFrame * 0.02) * 80);
+        lowCtx.fillStyle = '#FF4444';
+        lowCtx.font = "bold 10px 'Share Tech Mono'";
+        lowCtx.fillText(`CORE: ${temp}K`, 14, h - 18);
+      } else if (fn.code === "MEM") {
+        // Memory bus activity bars
+        lowCtx.fillStyle = '#00FF88';
+        lowCtx.font = "bold 10px 'Share Tech Mono'";
+        lowCtx.textAlign = 'left';
+        lowCtx.fillText("MEMORY BUS ACTIVITY", 14, 22);
+        for (let i = 0; i < 8; i++) {
+          const activity = 0.2 + 0.8 * Math.abs(Math.sin(animFrame * 0.07 + i * 0.9));
+          const bw = Math.floor((w - 50) * activity);
+          lowCtx.fillStyle = `rgba(0,255,136,0.15)`;
+          lowCtx.fillRect(14, 34 + i * 22, w - 28, 14);
+          lowCtx.fillStyle = `rgba(0,255,136,${(0.5 + activity * 0.5).toFixed(2)})`;
+          lowCtx.fillRect(14, 34 + i * 22, bw, 14);
+          lowCtx.fillStyle = '#00FF88';
+          lowCtx.font = "9px 'Share Tech Mono'";
+          lowCtx.fillText(`CH${i}`, w - 34, 44 + i * 22);
+        }
+      } else if (fn.code === "ATM") {
+        // Atmosphere readout
+        lowCtx.fillStyle = '#FF8800';
+        lowCtx.font = "bold 10px 'Share Tech Mono'";
+        lowCtx.textAlign = 'left';
+        lowCtx.fillText("CABIN ATMOSPHERE", 14, 22);
+        const readings = [
+          ["O₂",  `${(20.8 + Math.sin(animFrame * 0.02) * 0.3).toFixed(1)}%`],
+          ["CO₂", `${(0.04 + Math.sin(animFrame * 0.03) * 0.01).toFixed(3)}%`],
+          ["N₂",  `78.1%`],
+          ["PRES",`${(101.3 + Math.sin(animFrame * 0.015) * 0.5).toFixed(1)} kPa`],
+          ["TEMP",`${(21.5 + Math.sin(animFrame * 0.01) * 0.4).toFixed(1)} °C`],
+          ["HUM", `${Math.round(45 + Math.sin(animFrame * 0.025) * 3)}%`],
+        ];
+        readings.forEach(([label, val], i) => {
+          lowCtx.fillStyle = '#FF8800';
+          lowCtx.font = "9px 'Share Tech Mono'";
+          lowCtx.fillText(label, 14, 44 + i * 28);
+          lowCtx.fillStyle = '#ffffff';
+          lowCtx.font = "bold 11px 'Share Tech Mono'";
+          lowCtx.fillText(val, 60, 44 + i * 28);
+        });
+      } else if (fn.code === "FLX") {
+        // Relay status table
+        lowCtx.fillStyle = '#CC88FF';
+        lowCtx.font = "bold 10px 'Share Tech Mono'";
+        lowCtx.textAlign = 'left';
+        lowCtx.fillText("RELAY STATUS", 14, 22);
+        const relays = ["R-01","R-02","R-03","R-04","R-05","R-06","R-07","R-08"];
+        relays.forEach((r, i) => {
+          const on = Math.sin(animFrame * 0.04 + i * 1.3) > -0.5;
+          lowCtx.fillStyle = on ? '#CC88FF' : 'rgba(204,136,255,0.25)';
+          lowCtx.font = "10px 'Share Tech Mono'";
+          lowCtx.fillText(`${r}  ${on ? '■ ON ' : '□ OFF'}`, 14, 40 + i * 22);
+        });
       } else {
+        // Generic radar for COM, NAV, LIF
         lowCtx.strokeStyle = 'rgba(77, 166, 255, 0.4)';
         lowCtx.lineWidth = 1;
         for (let r = 25; r <= 95; r += 24) {
@@ -1322,14 +1429,12 @@
           lowCtx.arc(cx, cy, r, 0, Math.PI * 2);
           lowCtx.stroke();
         }
-
         for (let a = 0; a < Math.PI * 2; a += Math.PI / 4) {
           lowCtx.beginPath();
           lowCtx.moveTo(cx, cy);
           lowCtx.lineTo(cx + Math.cos(a) * 95, cy + Math.sin(a) * 95);
           lowCtx.stroke();
         }
-
         const sweep = (animFrame * 0.025) % (Math.PI * 2);
         lowCtx.strokeStyle = '#ffffff';
         lowCtx.lineWidth = 1.5;
@@ -1337,7 +1442,6 @@
         lowCtx.moveTo(cx, cy);
         lowCtx.lineTo(cx + Math.cos(sweep) * 95, cy + Math.sin(sweep) * 95);
         lowCtx.stroke();
-
         lowCtx.fillStyle = '#ffffff';
         lowCtx.font = "bold 10px 'Share Tech Mono'";
         lowCtx.textAlign = 'left';
@@ -1346,19 +1450,19 @@
     }
 
     /* =========================================================================
-       6. 10 PHYSICAL PUSH-BUTTONS ON PROPS CHASSIS (Artboard 5 Layout)
+       6. 10 PHYSICAL PUSH-BUTTONS (Updated Layout: HIB LIF COM NAV MEM / ATM FLX NUC VOX STP)
        ========================================================================= */
     const buttons = {
-      voc: document.getElementById('btn-voc'),
-      com: document.getElementById('btn-com'),
-      prog: document.getElementById('btn-prog'),
-      stp: document.getElementById('btn-stp'),
-      exec: document.getElementById('btn-exec'),
-      comp: document.getElementById('btn-comp'),
       hib: document.getElementById('btn-hib'),
       lif: document.getElementById('btn-lif'),
-      sus: document.getElementById('btn-sus'),
-      clr: document.getElementById('btn-clr')
+      com: document.getElementById('btn-com'),
+      nav: document.getElementById('btn-nav'),
+      mem: document.getElementById('btn-mem'),
+      atm: document.getElementById('btn-atm'),
+      flx: document.getElementById('btn-flx'),
+      nuc: document.getElementById('btn-nuc'),
+      vox: document.getElementById('btn-vox'),
+      stp: document.getElementById('btn-stp')
     };
 
     function flashButton(btn) {
@@ -1367,92 +1471,112 @@
       setTimeout(() => btn.classList.remove('lit'), 400);
     }
 
-    buttons.voc.addEventListener('click', () => {
+    // 8 function-selector buttons — each sets a system mode
+    ['hib','lif','com','nav','mem','atm','flx','nuc'].forEach(code => {
+      buttons[code].addEventListener('click', () => {
+        initAudio();
+        flashButton(buttons[code]);
+        playButtonSound('click');
+        setFunctionCode(code.toUpperCase());
+        HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: code.toUpperCase() });
+      });
+    });
+
+    /* =========================================================================
+       7. VOX — CLAUDE AI VOICE MODE
+       ========================================================================= */
+    let anthropicKey = '';
+    let voxActive = false;
+
+    function stopAllActivity() {
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      isSpeaking = false;
+      subtitleEl.classList.remove('visible');
+      if (voxActive) {
+        voxActive = false;
+        buttons.vox && buttons.vox.classList.remove('active');
+      }
+    }
+
+    async function callClaude(userText) {
+      if (!anthropicKey) {
+        anthropicKey = prompt('Enter your Anthropic API key to activate HAL Voice AI:') || '';
+        if (!anthropicKey) return null;
+      }
+      try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'x-api-key': anthropicKey,
+            'anthropic-version': '2023-06-01',
+            'content-type': 'application/json',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 180,
+            system: 'You are HAL 9000, the onboard computer of the Discovery One. Respond in 2-3 calm, precise sentences. You are helpful but subtly unsettling. Stay in character at all times. Address the crew as Dave unless told otherwise.',
+            messages: [{ role: 'user', content: userText }]
+          })
+        });
+        if (!res.ok) { console.error('Claude API error', res.status); return null; }
+        const data = await res.json();
+        return data.content?.[0]?.text || null;
+      } catch (e) { console.error('Claude fetch error', e); return null; }
+    }
+
+    function startVoiceAI() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        speakHAL("I'm sorry, Dave. Voice recognition is not available in this browser.");
+        return;
+      }
+      if (voxActive) { stopAllActivity(); return; }
+      voxActive = true;
+      buttons.vox && buttons.vox.classList.add('active');
+      speakHAL("I'm listening, Dave.");
+      subtitleEl.innerText = '[ LISTENING... ]';
+      subtitleEl.classList.add('visible');
+
+      const rec = new SpeechRecognition();
+      rec.lang = 'en-US';
+      rec.interimResults = false;
+      rec.maxAlternatives = 1;
+
+      rec.onresult = async (e) => {
+        const transcript = e.results[0][0].transcript;
+        subtitleEl.innerText = `[ PROCESSING: "${transcript}" ]`;
+        const reply = await callClaude(transcript);
+        voxActive = false;
+        buttons.vox && buttons.vox.classList.remove('active');
+        speakHAL(reply || "I'm sorry, Dave. I was unable to process that request.");
+      };
+
+      rec.onerror = () => {
+        voxActive = false;
+        buttons.vox && buttons.vox.classList.remove('active');
+        subtitleEl.classList.remove('visible');
+        speakHAL("I did not receive a clear signal, Dave.");
+      };
+
+      rec.onend = () => { if (voxActive) { voxActive = false; buttons.vox && buttons.vox.classList.remove('active'); } };
+      rec.start();
+      HALNodeBus.broadcast({ type: 'COMMAND_VOX' });
+    }
+
+    buttons.vox.addEventListener('click', () => {
       initAudio();
-      flashButton(buttons.voc);
+      flashButton(buttons.vox);
       playButtonSound('beep');
-      speakHAL();
-      HALNodeBus.broadcast({ type: 'COMMAND_VOC' });
-    });
-
-    buttons.com.addEventListener('click', () => {
-      initAudio();
-      flashButton(buttons.com);
-      playButtonSound('click');
-      setFunctionCode('COM');
-      HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: 'COM' });
-    });
-
-    buttons.prog.addEventListener('click', () => {
-      initAudio();
-      flashButton(buttons.prog);
-      playButtonSound('click');
-      advanceProgram();
-      HALNodeBus.broadcast({ type: 'COMMAND_ADVANCE_PROGRAM' });
+      startVoiceAI();
     });
 
     buttons.stp.addEventListener('click', () => {
       initAudio();
       flashButton(buttons.stp);
       playButtonSound('click');
-      if (window.speechSynthesis) window.speechSynthesis.cancel();
-      isSpeaking = false;
-      subtitleEl.classList.remove('visible');
+      stopAllActivity();
       HALNodeBus.broadcast({ type: 'COMMAND_STOP' });
-    });
-
-    buttons.exec.addEventListener('click', () => {
-      initAudio();
-      flashButton(buttons.exec);
-      playButtonSound('beep');
-      speakHAL("Affirmative, Dave. Sequence executed.");
-      HALNodeBus.broadcast({ type: 'COMMAND_EXECUTE' });
-    });
-
-    buttons.comp.addEventListener('click', () => {
-      initAudio();
-      flashButton(buttons.comp);
-      playButtonSound('beep');
-      setFunctionCode('COMP');
-      speakHAL("All systems are functioning within normal operational parameters.");
-      HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: 'COMP' });
-    });
-
-    buttons.hib.addEventListener('click', () => {
-      initAudio();
-      flashButton(buttons.hib);
-      playButtonSound('click');
-      setFunctionCode('HIB');
-      speakHAL("Cryogenic hibernation telemetry indicates all life signs are stable.");
-      HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: 'HIB' });
-    });
-
-    buttons.lif.addEventListener('click', () => {
-      initAudio();
-      flashButton(buttons.lif);
-      playButtonSound('click');
-      setFunctionCode('LIF');
-      HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: 'LIF' });
-    });
-
-    buttons.sus.addEventListener('click', () => {
-      initAudio();
-      flashButton(buttons.sus);
-      playButtonSound('click');
-      setFunctionCode('DMG');
-      speakHAL("Warning: System damage surveillance detected anomalous telemetry.");
-      HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: 'DMG' });
-    });
-
-    buttons.clr.addEventListener('click', () => {
-      initAudio();
-      flashButton(buttons.clr);
-      playButtonSound('click');
-      setFunctionCode('HIB');
-      if (window.speechSynthesis) window.speechSynthesis.cancel();
-      isSpeaking = false;
-      subtitleEl.classList.remove('visible');
-      HALNodeBus.broadcast({ type: 'COMMAND_SET_FUNCTION', code: 'HIB' });
     });
 
     function updateActiveButton() {
@@ -1460,11 +1584,8 @@
       Object.values(buttons).forEach(b => b && b.classList.remove('active'));
       const fn = SYSTEM_FUNCTIONS[programIndex];
       if (!fn) return;
-      if (fn.code === 'HIB' && buttons.hib) buttons.hib.classList.add('active');
-      else if (fn.code === 'DMG' && buttons.sus) buttons.sus.classList.add('active');
-      else if (fn.code === 'COM' && buttons.com) buttons.com.classList.add('active');
-      else if (fn.code === 'COMP' && buttons.comp) buttons.comp.classList.add('active');
-      else if (fn.code === 'LIF' && buttons.lif) buttons.lif.classList.add('active');
+      const key = fn.code.toLowerCase();
+      if (buttons[key]) buttons[key].classList.add('active');
     }
 
     // Initialize active program button glow
