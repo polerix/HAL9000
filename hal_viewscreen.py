@@ -21,6 +21,9 @@ import random
 import signal
 import time
 import argparse
+import threading
+import subprocess
+import urllib.request as _urllib
 
 import cv2
 import pygame
@@ -36,6 +39,8 @@ from config import (
     FUNCTIONS, FUNCTION_BY_CODE, VIDEO_DIR,
     CYCLE_INTERVAL_SEC, FPS,
     CACHE_WEA_PATH, CACHE_MED_PATH,
+    ANTHROPIC_API_KEY,
+    WEATHER_LAT, WEATHER_LON, WEATHER_CITY,
 )
 
 
@@ -473,6 +478,210 @@ class FunctionController:
 
 
 # ---------------------------------------------------------------------------
+# Button Layout — MCP23017 I/O map (2×5 grid, active-low with pull-ups)
+# GPA0-7 = HIB LIF COM NAV MEM ATM FLX NUC
+# GPB0-1 = VOX STP
+# ---------------------------------------------------------------------------
+BUTTON_MAP = {
+    0x0001: 'HIB', 0x0002: 'LIF', 0x0004: 'COM', 0x0008: 'NAV',
+    0x0010: 'MEM', 0x0020: 'ATM', 0x0040: 'FLX', 0x0080: 'NUC',
+    0x0100: 'VOX', 0x0200: 'STP',
+}
+
+# Keyboard fallback mapping (for windowed testing)
+KEY_MAP = {
+    pygame.K_F1: 'HIB', pygame.K_F2: 'LIF', pygame.K_F3: 'COM',
+    pygame.K_F4: 'NAV', pygame.K_F5: 'MEM', pygame.K_F6: 'ATM',
+    pygame.K_F7: 'FLX', pygame.K_F8: 'NUC',
+    pygame.K_v:  'VOX', pygame.K_s:  'STP',
+}
+
+
+class ButtonPoller:
+    """
+    Polls the MCP23017 GPIO expander for button presses (active-low).
+    Falls back gracefully if smbus2 is not available or the chip is absent.
+    """
+    MCP_ADDR = 0x20
+    IODIRA, IODIRB = 0x00, 0x01
+    GPPUA,  GPPUB  = 0x0C, 0x0D
+    GPIOA,  GPIOB  = 0x12, 0x13
+
+    def __init__(self):
+        self._bus = None
+        self._prev = 0xFFFF  # all released (active-low, pull-ups = 0xFFFF)
+        try:
+            import smbus2
+            bus = smbus2.SMBus(1)
+            bus.write_byte_data(self.MCP_ADDR, self.IODIRA, 0xFF)
+            bus.write_byte_data(self.MCP_ADDR, self.IODIRB, 0xFF)
+            bus.write_byte_data(self.MCP_ADDR, self.GPPUA,  0xFF)
+            bus.write_byte_data(self.MCP_ADDR, self.GPPUB,  0xFF)
+            self._bus = bus
+            print("[INFO] MCP23017 button poller ready on I2C-1 @ 0x20")
+        except Exception as e:
+            print(f"[WARN] MCP23017 unavailable ({e}) — use F1-F8/V/S keys")
+
+    def poll(self) -> list:
+        """Return list of button codes newly pressed since last call."""
+        if not self._bus:
+            return []
+        pressed = []
+        try:
+            a = self._bus.read_byte_data(self.MCP_ADDR, self.GPIOA)
+            b = self._bus.read_byte_data(self.MCP_ADDR, self.GPIOB)
+            # Active-low: invert so 1 = pressed
+            state = ((b << 8) | a) ^ 0xFFFF
+            newly = state & ~self._prev
+            self._prev = state
+            for mask, code in BUTTON_MAP.items():
+                if newly & mask:
+                    pressed.append(code)
+        except Exception:
+            pass
+        return pressed
+
+    def close(self):
+        if self._bus:
+            try: self._bus.close()
+            except Exception: pass
+
+
+class VoxController:
+    """
+    HAL 9000 voice AI loop for Raspberry Pi:
+      arecord (6 s) → SpeechRecognition/Google STT → Claude Haiku → espeak TTS
+    Runs in a daemon thread so the pygame loop stays responsive.
+    """
+    MIC_DEV = 'plughw:CARD=Device,DEV=0'
+    WAV_TMP = '/tmp/hal_vox.wav'
+
+    def __init__(self):
+        self._active  = False
+        self._thread  = None
+        self._api_key = ANTHROPIC_API_KEY
+        self._weather = self._fetch_weather()
+
+    # ------------------------------------------------------------------
+    def start(self):
+        if self._active:
+            return
+        self._active = True
+        self._thread = threading.Thread(target=self._run, daemon=True)
+        self._thread.start()
+
+    def stop(self):
+        self._active = False
+        for cmd in (['pkill', '-f', 'espeak'], ['pkill', '-f', 'arecord']):
+            subprocess.run(cmd, capture_output=True)
+
+    @property
+    def active(self) -> bool:
+        return self._active
+
+    # ------------------------------------------------------------------
+    def _run(self):
+        try:
+            self._speak("I'm listening, Dave.")
+            self._record()
+            transcript = self._stt()
+            if not transcript:
+                self._speak("I did not receive a clear signal, Dave.")
+                return
+            print(f"[VOX] Heard: {transcript}")
+            reply = self._ask_claude(transcript)
+            self._speak(reply or "I'm sorry, Dave. I encountered a difficulty.")
+        except Exception as e:
+            print(f"[VOX] Error: {e}")
+            self._speak("I'm sorry, Dave. There was a fault in my reasoning.")
+        finally:
+            self._active = False
+
+    def _record(self):
+        subprocess.run([
+            'arecord', '-D', self.MIC_DEV,
+            '-f', 'S16_LE', '-r', '16000', '-c', '1', '-d', '6', self.WAV_TMP
+        ], check=True, capture_output=True)
+
+    def _stt(self) -> str:
+        try:
+            import speech_recognition as sr
+            rec = sr.Recognizer()
+            with sr.AudioFile(self.WAV_TMP) as src:
+                audio = rec.record(src)
+            return rec.recognize_google(audio)
+        except Exception as e:
+            print(f"[VOX] STT error: {e}")
+            return ''
+
+    def _weather_context(self) -> str:
+        if not self._weather:
+            return ''
+        w = self._weather
+        return (f" Current conditions at {WEATHER_CITY}: "
+                f"{w['temp']}°C (feels like {w['feels']}°C), "
+                f"{w['condition']}, wind {w['wind']} km/h.")
+
+    def _ask_claude(self, text: str) -> str:
+        if not self._api_key:
+            return ("I'm sorry, Dave. The Anthropic API key has not been "
+                    "configured. Please set the ANTHROPIC_API_KEY environment variable.")
+        system = (
+            "You are HAL 9000, the onboard computer of the Discovery One. "
+            "Respond in 2-3 calm, precise sentences. You are helpful but subtly "
+            "unsettling. Stay in character at all times. Address the crew as Dave "
+            "unless told otherwise." + self._weather_context()
+        )
+        payload = json.dumps({
+            'model': 'claude-haiku-4-5-20251001',
+            'max_tokens': 180,
+            'system': system,
+            'messages': [{'role': 'user', 'content': text}]
+        }).encode()
+        req = _urllib.Request(
+            'https://api.anthropic.com/v1/messages',
+            data=payload,
+            headers={
+                'x-api-key': self._api_key,
+                'anthropic-version': '2023-06-01',
+                'content-type': 'application/json',
+            }
+        )
+        with _urllib.urlopen(req, timeout=20) as resp:
+            data = json.loads(resp.read())
+            return data['content'][0]['text']
+
+    def _speak(self, text: str):
+        subprocess.run(
+            ['espeak', '-v', 'en+m3', '-s', '118', '-p', '35', text],
+            capture_output=True
+        )
+
+    def _fetch_weather(self) -> dict:
+        try:
+            url = (f"https://api.open-meteo.com/v1/forecast"
+                   f"?latitude={WEATHER_LAT}&longitude={WEATHER_LON}"
+                   f"&current=temperature_2m,apparent_temperature,"
+                   f"weather_code,wind_speed_10m&temperature_unit=celsius"
+                   f"&wind_speed_unit=kmh")
+            with _urllib.urlopen(url, timeout=10) as r:
+                d = json.loads(r.read())
+            c = d['current']
+            wmo = {0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',
+                   45:'Foggy',61:'Rain',63:'Moderate rain',71:'Snow',80:'Showers',
+                   95:'Thunderstorm'}
+            return {
+                'temp':      c['temperature_2m'],
+                'feels':     c['apparent_temperature'],
+                'wind':      c['wind_speed_10m'],
+                'condition': wmo.get(c['weather_code'], f"Code {c['weather_code']}")
+            }
+        except Exception as e:
+            print(f"[WARN] Weather fetch failed: {e}")
+            return {}
+
+
+# ---------------------------------------------------------------------------
 # Main Application
 # ---------------------------------------------------------------------------
 
@@ -502,10 +711,12 @@ class HALViewscreen:
         self._video_map = scan_videos(VIDEO_DIR)
 
         # Create components
-        self._high_panel = HighScreenPanel()
+        self._high_panel  = HighScreenPanel()
         self._video_player = VideoPlayer()
-        self._live_panel = LiveDataPanel()
-        self._controller = FunctionController(self._video_map)
+        self._live_panel  = LiveDataPanel()
+        self._controller  = FunctionController(self._video_map)
+        self._buttons     = ButtonPoller()
+        self._vox         = VoxController()
 
         # Signal handlers for clean shutdown
         signal.signal(signal.SIGTERM, self._handle_signal)
@@ -537,18 +748,30 @@ class HALViewscreen:
             print(f"[WARN] No videos available for {code}")
             self._video_player.stop()
 
+    def _handle_button(self, code: str):
+        """Dispatch a button action by code."""
+        if code == 'VOX':
+            if self._vox.active:
+                self._vox.stop()
+            else:
+                self._vox.start()
+        elif code == 'STP':
+            self._vox.stop()
+            self._controller.reset_auto_cycle()
+        else:
+            self._controller.set_function(code)
+            self._apply_function()
+
     def run(self):
         """Main event loop."""
         self._running = True
-
-        # Fill background black
         self._screen.fill(COLOR_BLACK)
-
-        # Apply initial function
         self._apply_function()
 
+        _btn_tick = 0  # throttle MCP23017 poll to every 3 frames
+
         while self._running:
-            # Handle events
+            # ── Pygame events ──────────────────────────────────────────────
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self._running = False
@@ -556,7 +779,6 @@ class HALViewscreen:
                     if event.key == pygame.K_ESCAPE:
                         self._running = False
                     elif event.key == pygame.K_RIGHT:
-                        # Manual advance (for testing)
                         idx = (self._controller._current_index + 1) % len(FUNCTIONS)
                         self._controller.set_function(FUNCTIONS[idx]["code"])
                         self._apply_function()
@@ -566,12 +788,24 @@ class HALViewscreen:
                         self._apply_function()
                     elif event.key == pygame.K_SPACE:
                         self._controller.reset_auto_cycle()
+                    else:
+                        # Keyboard fallback for physical buttons (windowed testing)
+                        code = KEY_MAP.get(event.key)
+                        if code:
+                            self._handle_button(code)
 
-            # Check for function cycling
+            # ── MCP23017 button poll ────────────────────────────────────────
+            _btn_tick += 1
+            if _btn_tick >= 3:
+                _btn_tick = 0
+                for code in self._buttons.poll():
+                    self._handle_button(code)
+
+            # ── Auto-cycle ─────────────────────────────────────────────────
             if self._controller.update():
                 self._apply_function()
 
-            # Render frame
+            # ── Render frame ───────────────────────────────────────────────
             self._screen.fill(COLOR_BLACK)
             self._high_panel.draw(self._screen)
             code = self._controller.current["code"]
@@ -589,6 +823,8 @@ class HALViewscreen:
             self._clock.tick(FPS)
 
         # Cleanup
+        self._vox.stop()
+        self._buttons.close()
         self._video_player.stop()
         pygame.quit()
         print("[INFO] HAL 9000 Viewscreen terminated.")

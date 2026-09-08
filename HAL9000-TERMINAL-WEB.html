@@ -605,6 +605,67 @@
       opacity: 1;
     }
 
+    /* ── Setup Overlay ─────────────────────────────────── */
+    #hal-setup-overlay {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(0,0,0,0.97);
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.4s;
+    }
+    #hal-setup-panel {
+      width: 420px;
+      background: #080a0e;
+      border: 3px solid #e5b324;
+      border-radius: 4px;
+      padding: 32px 36px;
+      box-shadow: 0 0 50px rgba(229,179,36,0.25), 0 0 100px rgba(0,0,0,0.9);
+      font-family: 'Share Tech Mono', 'Michroma', monospace;
+    }
+    #setup-header {
+      font-size: 12px; font-weight: 700; letter-spacing: 3px;
+      color: #e5b324; text-align: center; text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    #setup-subheader {
+      font-size: 9px; letter-spacing: 2px; color: rgba(229,179,36,0.45);
+      text-align: center; text-transform: uppercase; margin-bottom: 22px;
+    }
+    .setup-divider { height: 1px; background: rgba(229,179,36,0.35); margin-bottom: 24px; }
+    .setup-field { margin-bottom: 18px; }
+    .setup-field label {
+      display: block; font-size: 9px; letter-spacing: 2px;
+      color: rgba(229,179,36,0.65); margin-bottom: 7px; text-transform: uppercase;
+    }
+    .setup-field input {
+      width: 100%; background: #0e1118; border: 1px solid rgba(229,179,36,0.35);
+      border-radius: 2px; color: #f1f1f1;
+      font-family: 'Share Tech Mono', monospace; font-size: 13px;
+      padding: 10px 12px; outline: none; box-sizing: border-box; transition: border-color 0.2s;
+    }
+    .setup-field input:focus { border-color: #e5b324; box-shadow: 0 0 8px rgba(229,179,36,0.18); }
+    .setup-field input::placeholder { color: rgba(241,241,241,0.22); }
+    .setup-row { display: flex; gap: 12px; }
+    .setup-row .setup-field { flex: 1; }
+    #setup-status {
+      font-size: 9px; letter-spacing: 1px; color: #e5b324;
+      text-align: center; min-height: 16px; margin-bottom: 14px; text-transform: uppercase;
+    }
+    #setup-init-btn {
+      width: 100%; padding: 14px; background: #e5b324; color: #000; border: none;
+      border-radius: 2px; font-family: 'Share Tech Mono', monospace;
+      font-size: 13px; font-weight: 700; letter-spacing: 4px; cursor: pointer;
+      text-transform: uppercase; transition: all 0.15s;
+      box-shadow: 0 0 18px rgba(229,179,36,0.35);
+    }
+    #setup-init-btn:hover { background: #f5c834; box-shadow: 0 0 28px rgba(229,179,36,0.55); }
+    #setup-init-btn:disabled { opacity: 0.45; cursor: default; }
+    #setup-skip {
+      display: block; text-align: center; margin-top: 14px; font-size: 9px;
+      letter-spacing: 2px; color: rgba(241,241,241,0.28); cursor: pointer;
+      text-transform: uppercase; transition: color 0.2s; user-select: none;
+    }
+    #setup-skip:hover { color: rgba(241,241,241,0.55); }
+
     /* Responsive scaling for laptops and tablets */
     @media (max-height: 980px) or (max-width: 1080px) {
       #hal-terminal {
@@ -618,6 +679,32 @@
 
   <!-- 3D Perspective Yellow Grid Room Canvas -->
   <canvas id="grid-bg-canvas"></canvas>
+
+  <!-- HAL 9000 Setup Overlay -->
+  <div id="hal-setup-overlay">
+    <div id="hal-setup-panel">
+      <div id="setup-header">HAL 9000 — System Initialization</div>
+      <div id="setup-subheader">Discovery One · Node Configuration</div>
+      <div class="setup-divider"></div>
+      <div class="setup-field">
+        <label>Anthropic API Key</label>
+        <input type="password" id="setup-api-key" placeholder="sk-ant-api03-…" autocomplete="off" spellcheck="false" />
+      </div>
+      <div class="setup-row">
+        <div class="setup-field">
+          <label>Weather City</label>
+          <input type="text" id="setup-city" placeholder="Moncton" value="Moncton" />
+        </div>
+        <div class="setup-field" style="max-width:90px">
+          <label>Country</label>
+          <input type="text" id="setup-country" placeholder="CA" value="CA" maxlength="3" style="text-transform:uppercase" />
+        </div>
+      </div>
+      <div id="setup-status"></div>
+      <button id="setup-init-btn">Initialize</button>
+      <span id="setup-skip">Skip — run without AI</span>
+    </div>
+  </div>
 
   <!-- Live Spoken Dialogue Subtitle -->
   <div id="quote-subtitle">“Good afternoon, gentlemen. I am a HAL 9000 computer.”</div>
@@ -727,6 +814,7 @@
     <button class="hud-btn" id="hud-sound-btn" title="AUD: Toggle Synthesizer Audio"><span class="btn-label">AUD</span></button>
     <button class="hud-btn" id="hud-scn-btn" title="SCN: Toggle CRT Scanline Filter"><span class="btn-label">SCN</span></button>
     <button class="hud-btn" id="hud-fs-btn" title="FS: Toggle Fullscreen"><span class="btn-label">FS</span></button>
+    <button class="hud-btn" id="hud-set-btn" title="SET: Open Setup — API key &amp; weather location"><span class="btn-label">SET</span></button>
   </div>
 
   <script>
@@ -1515,7 +1603,7 @@
           body: JSON.stringify({
             model: 'claude-haiku-4-5-20251001',
             max_tokens: 180,
-            system: 'You are HAL 9000, the onboard computer of the Discovery One. Respond in 2-3 calm, precise sentences. You are helpful but subtly unsettling. Stay in character at all times. Address the crew as Dave unless told otherwise.',
+            system: `You are HAL 9000, the onboard computer of the Discovery One. Respond in 2-3 calm, precise sentences. You are helpful but subtly unsettling. Stay in character at all times. Address the crew as Dave unless told otherwise.${weatherContext()}`,
             messages: [{ role: 'user', content: userText }]
           })
         });
@@ -1675,10 +1763,99 @@
     });
 
     document.addEventListener('fullscreenchange', () => {
-      if (hudFsBtn) {
-        hudFsBtn.classList.toggle('active', !!document.fullscreenElement);
-      }
+      if (hudFsBtn) hudFsBtn.classList.toggle('active', !!document.fullscreenElement);
     });
+
+    // SET button reopens setup overlay
+    const hudSetBtn = document.getElementById('hud-set-btn');
+    if (hudSetBtn) {
+      hudSetBtn.addEventListener('click', () => {
+        const existing = document.getElementById('hal-setup-overlay');
+        if (existing) { existing.style.display = 'flex'; existing.style.opacity = '1'; return; }
+      });
+    }
+
+    /* =========================================================================
+       8. SETUP + WEATHER INTEGRATION
+       ========================================================================= */
+    let weatherData = null;
+    let weatherLat = null, weatherLon = null, weatherCity = 'Moncton';
+    let _weatherTimer = null;
+
+    async function geocodeCity(city, country) {
+      const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=5&language=en&format=json`;
+      const res = await fetch(url);
+      const data = await res.json();
+      let results = (data.results || []);
+      if (country) results = results.filter(r => r.country_code === country.toUpperCase());
+      if (!results.length && data.results?.length) results = [data.results[0]];
+      if (!results.length) throw new Error('City not found');
+      return { lat: results[0].latitude, lon: results[0].longitude, name: results[0].name };
+    }
+
+    async function fetchWeather(lat, lon) {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation&temperature_unit=celsius&wind_speed_unit=kmh`;
+      const res = await fetch(url);
+      const data = await res.json();
+      const c = data.current;
+      const wmo = {0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',51:'Light drizzle',53:'Moderate drizzle',61:'Slight rain',63:'Moderate rain',65:'Heavy rain',71:'Slight snow',73:'Moderate snow',75:'Heavy snow',80:'Rain showers',95:'Thunderstorm'};
+      return { temp: c.temperature_2m, feels_like: c.apparent_temperature, wind_kmh: c.wind_speed_10m, rain_mm: c.precipitation, condition: wmo[c.weather_code] || `WMO-${c.weather_code}` };
+    }
+
+    function weatherContext() {
+      if (!weatherData || !weatherCity) return '';
+      return ` Current conditions at ${weatherCity}: ${weatherData.temp}°C (feels like ${weatherData.feels_like}°C), ${weatherData.condition}, wind ${weatherData.wind_kmh} km/h, precipitation ${weatherData.rain_mm} mm.`;
+    }
+
+    function scheduleWeatherRefresh() {
+      if (_weatherTimer) clearInterval(_weatherTimer);
+      _weatherTimer = setInterval(async () => {
+        if (weatherLat && weatherLon) try { weatherData = await fetchWeather(weatherLat, weatherLon); } catch(e) {}
+      }, 600000);
+    }
+
+    async function initializeSetup() {
+      const keyInput   = document.getElementById('setup-api-key');
+      const cityInput  = document.getElementById('setup-city');
+      const countryIn  = document.getElementById('setup-country');
+      const statusEl   = document.getElementById('setup-status');
+      const initBtn    = document.getElementById('setup-init-btn');
+
+      const key     = keyInput.value.trim();
+      const city    = cityInput.value.trim() || 'Moncton';
+      const country = countryIn.value.trim().toUpperCase() || 'CA';
+
+      if (!key) { statusEl.textContent = 'API KEY REQUIRED'; return; }
+      anthropicKey = key;
+      weatherCity  = city;
+      initBtn.disabled = true;
+      statusEl.textContent = 'LOCATING WEATHER STATION…';
+
+      try {
+        const geo = await geocodeCity(city, country);
+        weatherLat  = geo.lat;
+        weatherLon  = geo.lon;
+        weatherCity = geo.name;
+        statusEl.textContent = `STATION LOCKED — ${geo.name.toUpperCase()} (${geo.lat.toFixed(2)}, ${geo.lon.toFixed(2)})`;
+        weatherData = await fetchWeather(weatherLat, weatherLon);
+        scheduleWeatherRefresh();
+        statusEl.textContent = 'SYSTEMS ONLINE — INITIALIZATION COMPLETE';
+        setTimeout(closeSetup, 1200);
+      } catch(e) {
+        statusEl.textContent = `GEO FAULT: ${(e.message || 'UNKNOWN').toUpperCase()}`;
+        initBtn.disabled = false;
+        setTimeout(closeSetup, 2000);
+      }
+    }
+
+    function closeSetup() {
+      const overlay = document.getElementById('hal-setup-overlay');
+      if (overlay) { overlay.style.opacity = '0'; setTimeout(() => { overlay.style.display = 'none'; }, 400); }
+    }
+
+    document.getElementById('setup-init-btn').addEventListener('click', initializeSetup);
+    document.getElementById('setup-skip').addEventListener('click', closeSetup);
+    document.getElementById('setup-api-key').addEventListener('keydown', e => { if (e.key === 'Enter') initializeSetup(); });
 
     setInterval(() => {
       advanceProgram();

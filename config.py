@@ -136,10 +136,11 @@ FPS = 30                      # Pygame framerate cap
 # ---------------------------------------------------------------------------
 # Live Data Settings
 # ---------------------------------------------------------------------------
-WEATHER_LAT = 44.6488          # Halifax, NS (update for your location)
-WEATHER_LON = -63.5752
-WEATHER_CITY = "Halifax"
+WEATHER_LAT = 46.0878          # Moncton, NB
+WEATHER_LON = -64.7782
+WEATHER_CITY = "Moncton"
 WEATHER_COUNTRY = "CA"
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 CACHE_DIR = os.path.join(BASE_DIR, "cache")
 CACHE_WEA_PATH = os.path.join(CACHE_DIR, "wea.json")
 CACHE_MED_PATH = os.path.join(CACHE_DIR, "med.json")
