@@ -1226,8 +1226,9 @@
       const lw = lowCanvas.width;
       const lh = lowCanvas.height;
 
-      renderHighScreen(hw, hh);
-      if (!webcamActive) {
+      const hiCv = document.getElementById('high-screen-canvas');
+      if (!hiCv || !hiCv._voxActive) renderHighScreen(hw, hh);
+      if (!webcamActive && !voxActive) {
         renderLowScreen(lw, lh);
       }
 
@@ -1584,17 +1585,20 @@
       } catch (e) { console.error('Claude fetch error', e); return null; }
     }
 
-    // ── VOX Low-Screen VU Monitor ───────────────────────────────────────────
+    // ── VOX High-Screen VU Monitor + Low-Screen Webcam ─────────────────────
     let _voxMicStream = null, _voxMicAnalyser = null, _voxScreenRaf = null;
+    let _voxCamStream = null;
     let _voxMode = 'idle'; // 'listening' | 'thinking' | 'idle'
 
     function _startVoxScreen() {
-      const canvas = document.getElementById('low-screen-canvas');
+      // High screen → VU meters
+      const canvas = document.getElementById('high-screen-canvas');
       if (!canvas) return;
       canvas._voxActive = true;
       _voxMode = 'listening';
       const ctx = canvas.getContext('2d');
 
+      // Mic → AnalyserNode for VU bars (separate from SpeechRecognition)
       navigator.mediaDevices.getUserMedia({ audio: true, video: false })
         .then(stream => {
           _voxMicStream = stream;
@@ -1607,6 +1611,19 @@
           _drawVoxScreen(canvas, ctx);
         })
         .catch(() => { _drawVoxScreen(canvas, ctx); });
+
+      // Low screen → webcam
+      const lowCam = document.getElementById('low-screen-webcam');
+      const lowCanvas = document.getElementById('low-screen-canvas');
+      if (lowCam && !webcamActive) {
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+          .then(stream => {
+            _voxCamStream = stream;
+            lowCam.srcObject = stream;
+            lowCam.style.display = 'block';
+            if (lowCanvas) lowCanvas.style.display = 'none';
+          }).catch(() => {});
+      }
     }
 
     function _drawVoxScreen(canvas, ctx) {
@@ -1671,8 +1688,17 @@
       if (_voxMicStream) { _voxMicStream.getTracks().forEach(t => t.stop()); _voxMicStream = null; }
       _voxMicAnalyser = null;
       _voxMode = 'idle';
-      const canvas = document.getElementById('low-screen-canvas');
-      if (canvas) canvas._voxActive = false;
+      const hiCanvas = document.getElementById('high-screen-canvas');
+      if (hiCanvas) hiCanvas._voxActive = false;
+      // Restore low screen
+      if (_voxCamStream) {
+        _voxCamStream.getTracks().forEach(t => t.stop());
+        _voxCamStream = null;
+        const lowCam = document.getElementById('low-screen-webcam');
+        const lowCanvas = document.getElementById('low-screen-canvas');
+        if (lowCam) { lowCam.style.display = 'none'; lowCam.srcObject = null; }
+        if (lowCanvas) lowCanvas.style.display = 'block';
+      }
     }
 
     function startVoiceAI() {
@@ -1685,8 +1711,7 @@
       voxActive = true;
       _startVoxScreen();
       buttons.vox && buttons.vox.classList.add('active');
-      speakHAL("I'm listening, Dave.");
-      subtitleEl.innerText = '[ LISTENING... ]';
+      subtitleEl.innerText = `[ LISTENING — ${(crewName || 'CREW').toUpperCase()} ]`;
       subtitleEl.classList.add('visible');
 
       const rec = new SpeechRecognition();
