@@ -1,2 +1,2 @@
-pygame-ce>=2.4.0
+pygame-ce>=2.5.8
 opencv-python-headless>=4.9.0
