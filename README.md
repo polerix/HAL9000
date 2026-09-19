@@ -99,3 +99,9 @@ hal_viewscreen.py      Main application (Pygame)
 - The `set_function()` API in `FunctionController` is ready for external control (Arduino serial, network, etc.)
 - Cycle interval is configurable in `config.py` (`CYCLE_INTERVAL_SEC`)
 - Font rendering uses Eurostile KFB Bold Extended (matching the movie prop typography)
+
+## Licensing
+
+The source code in this repository is released under the [MIT License](LICENSE).
+
+Third-party material bundled in this repository (fonts, audio, video, artwork, saved web pages and similar files) is **not** covered by that license. It remains the property of its respective owners and is included under their own terms. If you are a rights holder and want something removed, please open an issue.
