@@ -105,3 +105,40 @@ hal_viewscreen.py      Main application (Pygame)
 The source code in this repository is released under the [MIT License](LICENSE).
 
 Third-party material bundled in this repository (fonts, audio, video, artwork, saved web pages and similar files) is **not** covered by that license. It remains the property of its respective owners and is included under their own terms. If you are a rights holder and want something removed, please open an issue.
+
+## Deployment & Repository Status
+
+- **Standardized Name**: `HAL9000`
+- **Remote Origin**: `https://github.com/polerix/HAL9000`
+- **License Level**: `MIT` ([`LICENSE`](LICENSE))
+- **Security Policy**: [`SECURITY.md`](SECURITY.md)
+- **GitHub Actions**: Static / Manual
+- **Last Compliance Audit**: `2026-10-18`
+
+### GitHub CleanUp Log
+- **Unused / Archive / Cache Items Moved to `/Volumes/Clay/GitHubCleanUp/HAL9000/`**: 25 item(s) (4405 files, 461.01 MB)
+  - `Video` — Legacy unsplit 4K videos superseded by Animations/ (86 files, 184 MB) (87 file(s), 183.59 MB)
+  - `Function_Scenes` — Unused split title-card videos (High Screen renders dynamically via Pygame) (85 file(s), 2.78 MB)
+  - `RaspberryPi 3` — 43-byte scratch file superseded by RaspberryPi 3.md (1 file(s), 0.0 KB)
+  - `Artwork/HAL9000_Console_UX.ai` — Unreferenced Illustrator source file (1 file(s), 128.7 KB)
+  - `Artwork/HAL 9000 Screens & Badge.pdf` — Unreferenced PDF file (1 file(s), 2.38 MB)
+  - `PCB/hal9000-keypad/hal9000-keypad-backups` — KiCad PCB backup zip directory (1 file(s), 42.2 KB)
+  - `Fonts/Futura-Font-main` — Unused commercial Futura font directory (173 file(s), 12.93 MB)
+  - `Fonts/Helvetica-Font-main` — Unused commercial Helvetica font directory (164 file(s), 15.13 MB)
+  - `Fonts/OnlineWebFonts_COM_87c39c0a0b710d515e8af4023784f55c` — Unused third-party webfont dump (10 file(s), 225.3 KB)
+  - `Fonts/artisan12.otf` — Unused third-party OTF font (1 file(s), 37.5 KB)
+  - `Fonts/Eurostile-Font-main/Alternate Version for Eurostile - Extended (Microgramma)` — Unused third-party font variant (2 file(s), 186.2 KB)
+  - `Fonts/Eurostile-Font-main/Eurostile (Original Version)` — Unused third-party font variant (2 file(s), 85.9 KB)
+  - `Fonts/Eurostile-Font-main/Eurostile (Pro Version)` — Unused commercial Pro font variant (19 file(s), 1.88 MB)
+  - `Fonts/Eurostile-Font-main/Eurostile LT (Linotype)` — Unused commercial Linotype font variant (10 file(s), 624.0 KB)
+  - `Fonts/Eurostile-Font-main/Eurostile LT (Pro Version, Unicode)` — Unused commercial Linotype Unicode font variant (6 file(s), 426.2 KB)
+  - `Fonts/Eurostile-Font-main/New Version of Eurostile - Extended (Michroma)` — Unused font variant (2 file(s), 122.3 KB)
+  - `Fonts/Eurostile-Font-main/Second Alternate Version for Eurostile - Extended (Gyrochrome)` — Unused font variant (6 file(s), 354.8 KB)
+  - `Fonts/Eurostile-Font-main/Square 721 BT (Eurostile's Bitstream Version)` — Unused commercial Bitstream font variant (10 file(s), 413.0 KB)
+  - `under-construction.html` — Unused placeholder HTML stub (1 file(s), 1.6 KB)
+  - `__pycache__` — Local dependency/build cache (__pycache__) (2 file(s), 27.5 KB)
+  - `.venv` — Local dependency/build cache (.venv) (3817 file(s), 239.68 MB)
+  - `.DS_Store` — OS metadata file (1 file(s), 14.0 KB)
+  - `Images/.DS_Store` — OS metadata file (1 file(s), 6.0 KB)
+  - `Fonts/.DS_Store` — OS metadata file (1 file(s), 8.0 KB)
+  - `Terminal_Parts/.DS_Store` — OS metadata file (1 file(s), 6.0 KB)

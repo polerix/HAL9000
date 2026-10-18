@@ -20,3 +20,7 @@ env/
 
 # Live data cache
 cache/*.json
+
+# Compliance hygiene
+node_modules/
+.env
