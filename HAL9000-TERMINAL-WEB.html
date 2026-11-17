@@ -710,14 +710,6 @@
       <div id="setup-header">HAL 9000 — System Initialization</div>
       <div id="setup-subheader">Discovery One · Node Configuration</div>
       <div class="setup-divider"></div>
-      <div class="setup-field" id="setup-apikey-wrap">
-        <label>Anthropic API Key</label>
-        <input type="password" id="setup-api-key" placeholder="sk-ant-api03-…" autocomplete="off" spellcheck="false" />
-      </div>
-      <div class="setup-field" id="setup-passphrase-wrap">
-        <label>Authorization Code</label>
-        <input type="password" id="setup-passphrase" placeholder="Create a passphrase to save settings" />
-      </div>
       <div class="setup-row" id="setup-weather-row">
         <div class="setup-field">
           <label>Weather City</label>
@@ -741,7 +733,7 @@
       </div>
       <div id="setup-status"></div>
       <button id="setup-init-btn">Initialize</button>
-      <span id="setup-skip">Skip — run without AI</span>
+      <span id="setup-skip">Skip</span>
       <span id="setup-purge">⚠ Purge Memory</span>
     </div>
   </div>
@@ -1548,7 +1540,6 @@
     /* =========================================================================
        7. VOX — CLAUDE AI VOICE MODE
        ========================================================================= */
-    let anthropicKey = '';
     let voxActive = false;
 
     function stopAllActivity() {
@@ -1561,31 +1552,21 @@
       }
     }
 
-    async function callClaude(userText) {
-      if (!anthropicKey) {
-        anthropicKey = prompt('Enter your Anthropic API key to activate HAL Voice AI:') || '';
-        if (!anthropicKey) return null;
-      }
-      try {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'x-api-key': anthropicKey,
-            'anthropic-version': '2023-06-01',
-            'content-type': 'application/json',
-            'anthropic-dangerous-direct-browser-access': 'true'
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5-20251001',
-            max_tokens: 180,
-            system: `You are HAL 9000, the onboard computer of the Discovery One. Respond in 2-3 calm, precise sentences. You are helpful but subtly unsettling. Stay in character at all times. Address the crew as ${crewName} unless told otherwise.${weatherContext()}`,
-            messages: [{ role: 'user', content: userText }]
-          })
-        });
-        if (!res.ok) { console.error('Claude API error', res.status); return null; }
-        const data = await res.json();
-        return data.content?.[0]?.text || null;
-      } catch (e) { console.error('Claude fetch error', e); return null; }
+    /* ── askHal dispatcher ───────────────────────────────────────────────────
+       Contract: (utterance: string, ctx: object) -> Promise<string|null>
+       null  =>  no AI backend answered; the caller speaks a HAL_QUOTES line.
+       This build holds no API key of any kind. Tier routing is added in
+       `halTier` below; with no tier available askHal always returns null. */
+    function halContext() {
+      return {
+        crewName: crewName || 'Dave',
+        weather: weatherSnapshot()
+      };
+    }
+
+    async function askHal(utterance, ctx) {
+      if (!utterance) return null;
+      return null;   // no backend in the stripped web build
     }
 
     // ── VOX High-Screen VU Monitor + Low-Screen Webcam ─────────────────────
@@ -1726,11 +1707,12 @@
         _voxMode = 'thinking';
         const transcript = e.results[0][0].transcript;
         subtitleEl.innerText = `[ PROCESSING: "${transcript}" ]`;
-        const reply = await callClaude(transcript);
+        const reply = await askHal(transcript, halContext());
         voxActive = false;
         buttons.vox && buttons.vox.classList.remove('active');
         _stopVoxScreen();
-        speakHAL(reply || "I'm sorry, Dave. I was unable to process that request.");
+        // reply === null -> speakHAL() rotates HAL_QUOTES
+        speakHAL(reply);
       };
 
       rec.onerror = () => {
@@ -1899,6 +1881,19 @@
       return { temp: c.temperature_2m, feels_like: c.apparent_temperature, wind_kmh: c.wind_speed_10m, rain_mm: c.precipitation, condition: wmo[c.weather_code] || `WMO-${c.weather_code}` };
     }
 
+    // Plain-data weather for the askHal payload (no prompt text in the browser).
+    function weatherSnapshot() {
+      if (!weatherData || !weatherCity) return null;
+      return {
+        city: weatherCity,
+        temp_c: weatherData.temp,
+        feels_like_c: weatherData.feels_like,
+        condition: weatherData.condition,
+        wind_kmh: weatherData.wind_kmh,
+        rain_mm: weatherData.rain_mm
+      };
+    }
+
     function weatherContext() {
       if (!weatherData || !weatherCity) return '';
       return ` Current conditions at ${weatherCity}: ${weatherData.temp}°C (feels like ${weatherData.feels_like}°C), ${weatherData.condition}, wind ${weatherData.wind_kmh} km/h, precipitation ${weatherData.rain_mm} mm.`;
@@ -1912,6 +1907,8 @@
     }
 
     // ── Voice selector helpers ──────────────────────────────────────────────
+    let _pendingVoiceName = '';
+
     function populateVoices() {
       const sel = document.getElementById('setup-voice-select');
       if (!sel) return;
@@ -1926,7 +1923,10 @@
         sel.appendChild(opt);
       });
       // Restore previous selection or pick a sensible default
-      if (cur !== '') { sel.value = cur; }
+      const savedIdx = _pendingVoiceName
+        ? voices.findIndex(v => v.name === _pendingVoiceName) : -1;
+      if (savedIdx >= 0) { sel.value = savedIdx; halVoice = voices[savedIdx]; }
+      else if (cur !== '') { sel.value = cur; }
       else {
         // Prefer a male English voice as HAL default
         const prefer = voices.findIndex(v =>
@@ -1949,70 +1949,38 @@
       window.speechSynthesis.speak(utter);
     });
 
-    // ── Encrypted Settings Persistence (AES-GCM / PBKDF2) ──────────────────
-    const _HAL_STORE = 'hal9000_cfg_v1';
-    let _unlockMode = false;
+    // ── Plain settings persistence (no secrets) ───────────────────────
+    // Nothing stored here is sensitive: crew name, city, country, voice name.
+    // There is no API key in this build, so there is nothing to encrypt and
+    // no passphrase to prompt for.
+    const _HAL_STORE = 'hal9000_cfg_v2';
 
-    async function _deriveKey(pass, salt) {
-      const base = await crypto.subtle.importKey(
-        'raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']
-      );
-      return crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
-        base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
-      );
+    function _saveSettings(payload) {
+      try { localStorage.setItem(_HAL_STORE, JSON.stringify(payload)); } catch (e) {}
     }
 
-    async function _saveSettings(pass, payload) {
-      const salt = crypto.getRandomValues(new Uint8Array(16));
-      const iv   = crypto.getRandomValues(new Uint8Array(12));
-      const k    = await _deriveKey(pass, salt);
-      const ct   = await crypto.subtle.encrypt(
-        { name: 'AES-GCM', iv }, k,
-        new TextEncoder().encode(JSON.stringify(payload))
-      );
-      localStorage.setItem(_HAL_STORE, JSON.stringify(
-        { s: [...salt], i: [...iv], c: [...new Uint8Array(ct)] }
-      ));
+    function _loadSettings() {
+      try { return JSON.parse(localStorage.getItem(_HAL_STORE) || 'null'); }
+      catch { return null; }
     }
 
-    async function _loadSettings(pass) {
-      const raw = localStorage.getItem(_HAL_STORE);
-      if (!raw) return null;
-      try {
-        const { s, i, c } = JSON.parse(raw);
-        const k  = await _deriveKey(pass, new Uint8Array(s));
-        const pt = await crypto.subtle.decrypt(
-          { name: 'AES-GCM', iv: new Uint8Array(i) }, k, new Uint8Array(c)
-        );
-        return JSON.parse(new TextDecoder().decode(pt));
-      } catch { return null; }
-    }
-
-    // Switch to unlock-mode if encrypted config exists
-    (function _checkStorage() {
-      if (!localStorage.getItem(_HAL_STORE)) return;
-      _unlockMode = true;
-      document.getElementById('setup-header').textContent    = 'HAL 9000 — Authorization Required';
-      document.getElementById('setup-subheader').textContent = 'Enter Code to Restore Session';
-      document.getElementById('setup-init-btn').textContent  = 'UNLOCK';
-      document.getElementById('setup-purge').style.display   = 'block';
-      const pp = document.getElementById('setup-passphrase');
-      if (pp) pp.placeholder = 'Enter authorization code';
-      // Hide full-setup fields not needed for unlock
-      ['setup-apikey-wrap', 'setup-weather-row'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-      });
-      // Hide crew & voice rows
-      const crewWrap = document.getElementById('setup-crew-name');
-      if (crewWrap && crewWrap.closest('.setup-field')) crewWrap.closest('.setup-field').style.display = 'none';
-      const voiceRow = document.querySelector('.setup-voice-row');
-      if (voiceRow) voiceRow.style.display = 'none';
+    // Prefill the setup panel from any saved config.
+    (function _prefillSetup() {
+      const cfg = _loadSettings();
+      if (!cfg) {
+        document.getElementById('setup-purge').style.display = 'none';
+        return;
+      }
+      const set = (id, v) => { const el = document.getElementById(id); if (el && v) el.value = v; };
+      set('setup-city', cfg.city);
+      set('setup-country', cfg.country);
+      set('setup-crew-name', cfg.crewName);
+      document.getElementById('setup-purge').style.display = 'block';
+      if (cfg.voiceName) { _pendingVoiceName = cfg.voiceName; populateVoices(); }
     })();
 
     document.getElementById('setup-purge').addEventListener('click', () => {
-      if (!confirm('Purge all saved HAL settings? You will need to re-enter your API key.')) return;
+      if (!confirm('Purge saved HAL settings (crew name, city, voice)?')) return;
       localStorage.removeItem(_HAL_STORE);
       location.reload();
     });
@@ -2020,55 +1988,18 @@
     async function initializeSetup() {
       const statusEl  = document.getElementById('setup-status');
       const initBtn   = document.getElementById('setup-init-btn');
-      const passEl    = document.getElementById('setup-passphrase');
-      const passphrase = passEl ? passEl.value.trim() : '';
+      const cityInput = document.getElementById('setup-city');
+      const countryIn = document.getElementById('setup-country');
 
-      if (_unlockMode) {
-        if (!passphrase) { statusEl.textContent = 'AUTHORIZATION CODE REQUIRED'; return; }
-        statusEl.textContent = 'DECRYPTING…';
-        initBtn.disabled = true;
-        const cfg = await _loadSettings(passphrase);
-        if (!cfg) {
-          statusEl.textContent = 'AUTHORIZATION FAILED — INCORRECT CODE';
-          initBtn.disabled = false;
-          return;
-        }
-        anthropicKey = cfg.key || '';
-        crewName     = cfg.crewName || 'Dave';
-        weatherCity  = cfg.city    || 'Moncton';
-        const vName = cfg.voiceName;
-        if (vName) {
-          const vs = window.speechSynthesis.getVoices();
-          halVoice = vs.find(v => v.name === vName) || null;
-        }
-        statusEl.textContent = 'AUTHORIZATION CONFIRMED';
-        try {
-          const geo = await geocodeCity(cfg.city || 'Moncton', cfg.country || 'CA');
-          weatherLat = geo.lat; weatherLon = geo.lon; weatherCity = geo.name;
-          weatherData = await fetchWeather(weatherLat, weatherLon);
-          scheduleWeatherRefresh();
-        } catch { /* weather optional */ }
-        setTimeout(closeSetup, 800);
-        return;
-      }
-
-      // ── Full setup path ────────────────────────────────────────────────────
-      const keyInput   = document.getElementById('setup-api-key');
-      const cityInput  = document.getElementById('setup-city');
-      const countryIn  = document.getElementById('setup-country');
-
-      const key     = keyInput.value.trim();
       const city    = cityInput.value.trim() || 'Moncton';
       const country = countryIn.value.trim().toUpperCase() || 'CA';
       const nameVal = (document.getElementById('setup-crew-name').value.trim() || 'Dave');
       const voiceIdx = parseInt(document.getElementById('setup-voice-select').value, 10);
 
-      if (!key) { statusEl.textContent = 'API KEY REQUIRED'; return; }
-      anthropicKey = key;
-      crewName     = nameVal;
+      crewName = nameVal;
       const _voices = window.speechSynthesis.getVoices();
       if (!isNaN(voiceIdx) && _voices[voiceIdx]) halVoice = _voices[voiceIdx];
-      weatherCity  = city;
+      weatherCity = city;
       initBtn.disabled = true;
       statusEl.textContent = 'LOCATING WEATHER STATION…';
 
@@ -2080,18 +2011,12 @@
         statusEl.textContent = `STATION LOCKED — ${geo.name.toUpperCase()} (${geo.lat.toFixed(2)}, ${geo.lon.toFixed(2)})`;
         weatherData = await fetchWeather(weatherLat, weatherLon);
         scheduleWeatherRefresh();
-        if (passphrase) {
-          try {
-            await _saveSettings(passphrase, {
-              key, crewName: nameVal,
-              voiceName: halVoice ? halVoice.name : '',
-              city: geo.name, country, lat: geo.lat, lon: geo.lon
-            });
-            statusEl.textContent = 'SYSTEMS ONLINE — SETTINGS ENCRYPTED & SAVED';
-          } catch { statusEl.textContent = 'SYSTEMS ONLINE — INITIALIZATION COMPLETE'; }
-        } else {
-          statusEl.textContent = 'SYSTEMS ONLINE — INITIALIZATION COMPLETE';
-        }
+        _saveSettings({
+          crewName: nameVal,
+          voiceName: halVoice ? halVoice.name : '',
+          city: geo.name, country, lat: geo.lat, lon: geo.lon
+        });
+        statusEl.textContent = 'SYSTEMS ONLINE — INITIALIZATION COMPLETE';
         setTimeout(closeSetup, 1200);
       } catch(e) {
         statusEl.textContent = `GEO FAULT: ${(e.message || 'UNKNOWN').toUpperCase()}`;
@@ -2100,6 +2025,7 @@
       }
     }
 
+
     function closeSetup() {
       const overlay = document.getElementById('hal-setup-overlay');
       if (overlay) { overlay.style.opacity = '0'; setTimeout(() => { overlay.style.display = 'none'; }, 400); }
@@ -2107,7 +2033,7 @@
 
     document.getElementById('setup-init-btn').addEventListener('click', initializeSetup);
     document.getElementById('setup-skip').addEventListener('click', closeSetup);
-    document.getElementById('setup-api-key').addEventListener('keydown', e => { if (e.key === 'Enter') initializeSetup(); });
+    document.getElementById('setup-crew-name').addEventListener('keydown', e => { if (e.key === 'Enter') initializeSetup(); });
 
     setInterval(() => {
       advanceProgram();
