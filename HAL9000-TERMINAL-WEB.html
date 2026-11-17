@@ -1564,9 +1564,57 @@
       };
     }
 
+    /* ── Tier 2: the localhost sidecar ───────────────────────────────────── */
+    const HAL_SIDECAR  = 'http://127.0.0.1:3001';
+    const HAL_PROBE_MS = 400;
+    let halTier = 'quotes';                  // 'quotes' | 'sidecar' | 'direct'
+
+    async function probeSidecar() {
+      try {
+        const ac = new AbortController();
+        const t = setTimeout(() => ac.abort(), HAL_PROBE_MS);
+        const res = await fetch(`${HAL_SIDECAR}/api/health`,
+                                { signal: ac.signal, cache: 'no-store' });
+        clearTimeout(t);
+        if (!res.ok) return false;
+        const h = await res.json();
+        return h && h.ok === true;           // up but keyless => not usable
+      } catch { return false; }
+    }
+
+    async function refreshHalTier() {
+      halTier = (await probeSidecar()) ? 'sidecar' : 'quotes';
+      console.info(`[hal] voice tier: ${halTier}`);
+      return halTier;
+    }
+    refreshHalTier();                        // probe once on load
+
+    async function askSidecar(utterance, ctx) {
+      try {
+        const res = await fetch(`${HAL_SIDECAR}/api/ask`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            utterance,
+            crewName: ctx && ctx.crewName || 'Dave',
+            weather:  ctx && ctx.weather  || null
+          })
+        });
+        if (!res.ok) { console.error('[hal] sidecar HTTP', res.status); return null; }
+        const data = await res.json();
+        return (typeof data.reply === 'string' && data.reply) ? data.reply : null;
+      } catch (e) { console.error('[hal] sidecar unreachable'); return null; }
+    }
+
+    /* ── The dispatcher ──────────────────────────────────────────────────── */
     async function askHal(utterance, ctx) {
       if (!utterance) return null;
-      return null;   // no backend in the stripped web build
+      // Sidecar may have been started after page load; one bounded re-probe.
+      if (halTier !== 'sidecar' && !(await probeSidecar())) return null;
+      halTier = 'sidecar';
+      const reply = await askSidecar(utterance, ctx);
+      if (reply === null) halTier = 'quotes';
+      return reply;                          // null => caller speaks a HAL_QUOTE
     }
 
     // ── VOX High-Screen VU Monitor + Low-Screen Webcam ─────────────────────
@@ -1977,6 +2025,17 @@
       set('setup-crew-name', cfg.crewName);
       document.getElementById('setup-purge').style.display = 'block';
       if (cfg.voiceName) { _pendingVoiceName = cfg.voiceName; populateVoices(); }
+
+      // Apply saved config to the running session too, so Skip still gives
+      // HAL the right crew name and live weather.
+      if (cfg.crewName) crewName = cfg.crewName;
+      if (cfg.city)     weatherCity = cfg.city;
+      if (typeof cfg.lat === 'number' && typeof cfg.lon === 'number') {
+        weatherLat = cfg.lat; weatherLon = cfg.lon;
+        fetchWeather(cfg.lat, cfg.lon)
+          .then(w => { weatherData = w; scheduleWeatherRefresh(); })
+          .catch(() => {});
+      }
     })();
 
     document.getElementById('setup-purge').addEventListener('click', () => {
