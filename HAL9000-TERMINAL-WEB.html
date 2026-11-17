@@ -1564,6 +1564,48 @@
       };
     }
 
+    /* ── Tier 3 (dev only): ?direct ──────────────────────────────────────────
+       Reached only by putting ?direct in the URL. The key lives in this
+       closure for the life of the tab: it is never written to localStorage
+       or sessionStorage, never rendered into the DOM, and there is no UI
+       that offers it. Present so the author can test against the API
+       without running the sidecar. Not a supported deployment mode. */
+    const halDirect = (() => {
+      let _key = null;                       // closure-scoped; never persisted
+      const enabled = () => new URLSearchParams(location.search).has('direct');
+
+      async function ask(utterance, ctx) {
+        if (!enabled()) return null;
+        if (!_key) {
+          _key = window.prompt(
+            '[DEV ?direct] Anthropic API key — kept in memory for this tab only, never saved:'
+          ) || null;
+          if (!_key) return null;
+        }
+        try {
+          const res = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+              'x-api-key': _key,
+              'anthropic-version': '2023-06-01',
+              'content-type': 'application/json',
+              'anthropic-dangerous-direct-browser-access': 'true'
+            },
+            body: JSON.stringify({
+              model: 'claude-haiku-4-5-20251001',
+              max_tokens: 180,
+              system: `You are HAL 9000, the onboard computer of the Discovery One. Respond in 2-3 calm, precise sentences. You are helpful but subtly unsettling. Stay in character at all times. Address the crew as ${ctx && ctx.crewName || 'Dave'} unless told otherwise.${weatherContext()}`,
+              messages: [{ role: 'user', content: utterance }]
+            })
+          });
+          if (!res.ok) { console.error('[hal] direct tier HTTP', res.status); return null; }
+          const data = await res.json();
+          return data.content?.[0]?.text || null;
+        } catch (e) { console.error('[hal] direct tier failed'); return null; }
+      }
+      return { enabled, ask };
+    })();
+
     /* ── Tier 2: the localhost sidecar ───────────────────────────────────── */
     const HAL_SIDECAR  = 'http://127.0.0.1:3001';
     const HAL_PROBE_MS = 400;
@@ -1583,7 +1625,8 @@
     }
 
     async function refreshHalTier() {
-      halTier = (await probeSidecar()) ? 'sidecar' : 'quotes';
+      if (halDirect.enabled()) { halTier = 'direct'; }
+      else { halTier = (await probeSidecar()) ? 'sidecar' : 'quotes'; }
       console.info(`[hal] voice tier: ${halTier}`);
       return halTier;
     }
@@ -1609,6 +1652,7 @@
     /* ── The dispatcher ──────────────────────────────────────────────────── */
     async function askHal(utterance, ctx) {
       if (!utterance) return null;
+      if (halDirect.enabled()) return await halDirect.ask(utterance, ctx);
       // Sidecar may have been started after page load; one bounded re-probe.
       if (halTier !== 'sidecar' && !(await probeSidecar())) return null;
       halTier = 'sidecar';
