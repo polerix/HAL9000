@@ -1,0 +1,46 @@
+[Unit]
+Description=HAL 9000 Localhost AI Sidecar
+Documentation=file:///home/pi/HAL9000/docs/ADR-001-ai-backend.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=INSTALL_DIR
+ExecStart=/usr/bin/python3 INSTALL_DIR/hal_sidecar.py --port 3001
+
+# The API key lives here and nowhere else on the machine.
+# Root-owned, mode 0600. systemd reads it before dropping to User=.
+EnvironmentFile=/etc/hal9000/env
+
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# ---------------------------------------------------------------------------
+# Hardening. The sidecar binds loopback and reads one env file; it has no
+# business doing anything else.
+# ---------------------------------------------------------------------------
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectClock=true
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+# The key must never reach a core dump.
+LimitCORE=0
+
+[Install]
+WantedBy=multi-user.target
