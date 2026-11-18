@@ -25,6 +25,8 @@ import threading
 import subprocess
 import urllib.request as _urllib
 
+import hal_claude
+
 import cv2
 import pygame
 import pygame.gfxdraw
@@ -39,7 +41,6 @@ from config import (
     FUNCTIONS, FUNCTION_BY_CODE, VIDEO_DIR,
     CYCLE_INTERVAL_SEC, FPS,
     CACHE_WEA_PATH, CACHE_MED_PATH,
-    ANTHROPIC_API_KEY,
     WEATHER_LAT, WEATHER_LON, WEATHER_CITY,
 )
 
@@ -559,7 +560,6 @@ class VoxController:
     def __init__(self):
         self._active  = False
         self._thread  = None
-        self._api_key = ANTHROPIC_API_KEY
         self._weather = self._fetch_weather()
 
     # ------------------------------------------------------------------
@@ -614,42 +614,27 @@ class VoxController:
             print(f"[VOX] STT error: {e}")
             return ''
 
-    def _weather_context(self) -> str:
+    def _weather_payload(self) -> dict:
+        """Weather as plain data for hal_claude's prompt builder."""
         if not self._weather:
-            return ''
-        w = self._weather
-        return (f" Current conditions at {WEATHER_CITY}: "
-                f"{w['temp']}°C (feels like {w['feels']}°C), "
-                f"{w['condition']}, wind {w['wind']} km/h.")
+            return {}
+        return dict(self._weather, city=WEATHER_CITY)
 
     def _ask_claude(self, text: str) -> str:
-        if not self._api_key:
-            return ("I'm sorry, Dave. The Anthropic API key has not been "
-                    "configured. Please set the ANTHROPIC_API_KEY environment variable.")
-        system = (
-            "You are HAL 9000, the onboard computer of the Discovery One. "
-            "Respond in 2-3 calm, precise sentences. You are helpful but subtly "
-            "unsettling. Stay in character at all times. Address the crew as Dave "
-            "unless told otherwise." + self._weather_context()
-        )
-        payload = json.dumps({
-            'model': 'claude-haiku-4-5-20251001',
-            'max_tokens': 180,
-            'system': system,
-            'messages': [{'role': 'user', 'content': text}]
-        }).encode()
-        req = _urllib.Request(
-            'https://api.anthropic.com/v1/messages',
-            data=payload,
-            headers={
-                'x-api-key': self._api_key,
-                'anthropic-version': '2023-06-01',
-                'content-type': 'application/json',
-            }
-        )
-        with _urllib.urlopen(req, timeout=20) as resp:
-            data = json.loads(resp.read())
-            return data['content'][0]['text']
+        """Delegate to the shared client in hal_claude.
+
+        The API call and HAL's system prompt live in exactly one place,
+        shared with hal_sidecar.py, so the two consumers cannot drift.
+        """
+        try:
+            return hal_claude.ask(text, crew_name='Dave',
+                                  weather=self._weather_payload())
+        except hal_claude.HalClaudeError as e:
+            print(f"[VOX] Claude error: {hal_claude.redact(str(e))}")
+            if not hal_claude.api_key():
+                return ("I'm sorry, Dave. The Anthropic API key has not been "
+                        "configured. Please set the ANTHROPIC_API_KEY environment variable.")
+            return "I'm sorry, Dave. I encountered a difficulty."
 
     def _speak(self, text: str):
         subprocess.run(
