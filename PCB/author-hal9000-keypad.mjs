@@ -11,13 +11,28 @@
  * Follows the exact pattern of author-vk-power-carrier.mjs.
  */
 
+import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
 // ─── Paths ────────────────────────────────────────────────────────────────────
-const serverRoot  = "/Users/polerixsys/Documents/kicad9-mcp-backend";
+// The kicad9-mcp-backend checkout whose dist/index.js is spawned as the MCP server.
+// It lives outside this repo, so its location cannot be derived from this file:
+// set KICAD_MCP_ROOT when the checkout is not at the default below.
+const DEFAULT_SERVER_ROOT = "/Users/polerixsys/Documents/kicad9-mcp-backend";
+const serverRoot  = path.resolve(process.env.KICAD_MCP_ROOT ?? DEFAULT_SERVER_ROOT);
+const serverEntry = path.join(serverRoot, "dist/index.js");
+if (!existsSync(serverEntry)) {
+  console.error(
+    "FATAL: the kicad9-mcp-backend MCP server was not found.\n" +
+    `  looked for: ${serverEntry}\n` +
+    `  source:     ${process.env.KICAD_MCP_ROOT ? "KICAD_MCP_ROOT=" + process.env.KICAD_MCP_ROOT : "built-in default"}\n` +
+    "Set KICAD_MCP_ROOT to the kicad9-mcp-backend directory that contains dist/index.js.",
+  );
+  process.exit(1);
+}
 const projectRoot = "/Users/polerixsys/Documents/hal9000-keypad";
 const projectName = "hal9000-keypad";
 const schematicPath = path.join(projectRoot, `${projectName}.kicad_sch`);
@@ -30,7 +45,7 @@ const transcript = { projectRoot, schematicPath, boardPath, kicad: "9.0.9", step
 const client     = new Client({ name: "hal9000-keypad-author", version: "1.0.0" });
 const transport  = new StdioClientTransport({
   command: process.execPath,
-  args:    [path.join(serverRoot, "dist/index.js")],
+  args:    [serverEntry],
   cwd:     serverRoot,
   stderr:  "pipe",
   env: {
