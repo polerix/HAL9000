@@ -22,7 +22,7 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 // The kicad9-mcp-backend checkout whose dist/index.js is spawned as the MCP server.
 // It lives outside this repo, so its location cannot be derived from this file:
 // set KICAD_MCP_ROOT when the checkout is not at the default below.
-const DEFAULT_SERVER_ROOT = "/Users/polerixsys/Documents/kicad9-mcp-backend";
+const DEFAULT_SERVER_ROOT = path.join(os.homedir(), "Documents/kicad9-mcp-backend");
 const serverRoot  = path.resolve(process.env.KICAD_MCP_ROOT ?? DEFAULT_SERVER_ROOT);
 const serverEntry = path.join(serverRoot, "dist/index.js");
 if (!existsSync(serverEntry)) {
