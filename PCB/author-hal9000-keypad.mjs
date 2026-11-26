@@ -14,6 +14,7 @@
 import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import os from "node:os";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
@@ -33,12 +34,39 @@ if (!existsSync(serverEntry)) {
   );
   process.exit(1);
 }
-const projectRoot = "/Users/polerixsys/Documents/hal9000-keypad";
+// Three further paths outside this repo, same reasoning as KICAD_MCP_ROOT above.
+// Defaults resolve under the running user's home rather than a literal
+// /Users/polerixsys, so the script is not pinned to one account.
+const DOCS = path.join(os.homedir(), "Documents");
+
+const projectRoot = path.resolve(
+  process.env.KICAD_KEYPAD_ROOT ?? path.join(DOCS, "hal9000-keypad"),
+);
 const projectName = "hal9000-keypad";
 const schematicPath = path.join(projectRoot, `${projectName}.kicad_sch`);
 const boardPath     = path.join(projectRoot, `${projectName}.kicad_pcb`);
 const reportPath    = path.join(projectRoot, "mcp-authoring.json");
-const venvPython    = "/Users/polerixsys/Documents/kicad-mcp-server/venv/bin/python3";
+const venvPython = path.resolve(
+  process.env.KICAD_VENV_PYTHON ?? path.join(DOCS, "kicad-mcp-server/venv/bin/python3"),
+);
+const kicadBinDir = process.env.KICAD_BIN_DIR ?? "/Applications/KiCad9/KiCad.app/Contents/MacOS";
+
+// Same early-failure contract as the server entry above: name the variable
+// rather than let KiCad or python fail opaquely deep inside an MCP tool call.
+for (const [envVar, target, what] of [
+  ["KICAD_VENV_PYTHON", venvPython,  "kicad-mcp-server venv python3"],
+  ["KICAD_BIN_DIR",     kicadBinDir, "KiCad binary directory"],
+]) {
+  if (!existsSync(target)) {
+    console.error(
+      `FATAL: ${what} was not found.\n` +
+      `  looked for: ${target}\n` +
+      `  source:     ${process.env[envVar] ? `${envVar}=${process.env[envVar]}` : "built-in default"}\n` +
+      `Set ${envVar} to override.`,
+    );
+    process.exit(1);
+  }
+}
 
 // ─── MCP client setup ─────────────────────────────────────────────────────────
 const transcript = { projectRoot, schematicPath, boardPath, kicad: "9.0.9", steps: [] };
@@ -51,7 +79,7 @@ const transport  = new StdioClientTransport({
   env: {
     ...process.env,
     KICAD_PYTHON: venvPython,
-    PATH: `/Applications/KiCad9/KiCad.app/Contents/MacOS:${process.env.PATH}`,
+    PATH: `${kicadBinDir}:${process.env.PATH}`,
     LOG_LEVEL: "info",
   },
 });
